@@ -30,5 +30,4 @@ before_script:
 
 script:
   - composer validate --strict
-  - vendor/bin/codecept run unit -c backend
-  - exit
+  - vendor/bin/codecept run -c backend
