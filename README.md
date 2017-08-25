@@ -11,7 +11,7 @@ FeehiCMS没有对yii2做任何的修改、封装，但是把yii2的一些优秀�
 
 帮助
 ---------------
-开发文档 [http://doc.feehi.com](http://doc.feehi.com)
+开发文档 ![http://doc.feehi.com](http://doc.feehi.com)
 
 QQ群 258780872
 
@@ -35,8 +35,8 @@ QQ群 258780872
 1. 使用演示站点
 演示站点后台   **用户名:feehicms 密码123456**
       * php7.0.0
-        * 后台 [http://demo.cms.feehi.com/admin](http://demo.cms.feehi.com/admin)
-        * 前台 [http://demo.cms.feehi.com](http://demo.cms.feehi.com/)
+        * 后台 ![http://demo.cms.feehi.com/admin](http://demo.cms.feehi.com/admin)
+        * 前台 ![http://demo.cms.feehi.com](http://demo.cms.feehi.com/)
       * swoole (docker)
         * swoole演示前台[http://swoole.demo.cms.qq.feehi.com](http://swoole.demo.cms.qq.feehi.com)
         * swoole演示后台[http://swoole-admin.demo.cms.qq.feehi.com](http://swoole-admin.demo.cms.qq.feehi.com)
