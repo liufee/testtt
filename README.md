@@ -4,10 +4,15 @@ FeehiCMS __[(English)](docs/README_EN.md)__
 基于yii2的CMS系统，运行环境与yii2(php>=5.4)一致。FeehiCMS旨在为yii2爱好者提供一个基础功能完善的CMS系统，使开发者更专注于业务功能开发。
 FeehiCMS没有对yii2做任何的修改、封装，但是把yii2的一些优秀特性几乎都用在了FeehiCMS上，对于学习yii2框架提供了良好的实例。
 
+[![Latest Stable Version](https://poser.pugx.org/feehi/cms/v/stable)](https://packagist.org/packages/feehi/cms)
+[![License](https://poser.pugx.org/feehi/cms/license)](https://packagist.org/packages/feehi/cms)
+[![Build Status](https://www.travis-ci.org/liufee/cms.svg?branch=master)](https://www.travis-ci.org/liufee/cms)
+
 
 更新记录
 ---------------
-0.1.3版本已经集成swoole作为FeehiCMS应用服务器，详细配置及使用参见[yii2-swoole](https://www.github.com/liufee/yii2-swoole)
+0.1.3版本已经集成swoole作为FeehiCMS应用服务器，详细配置及使用参见![yii2-swoole](https://www.github.com/liufee/yii2-swoole)
+
 
 帮助
 ---------------
@@ -15,7 +20,7 @@ FeehiCMS没有对yii2做任何的修改、封装，但是把yii2的一些优秀�
 
 QQ群 258780872
 
-[bug反馈](http://www.github.com/liufee/cms/issues)
+![bug反馈](http://www.github.com/liufee/cms/issues)
 
 
 功能
@@ -38,14 +43,14 @@ QQ群 258780872
         * 后台 ![http://demo.cms.feehi.com/admin](http://demo.cms.feehi.com/admin)
         * 前台 ![http://demo.cms.feehi.com](http://demo.cms.feehi.com/)
       * swoole (docker)
-        * swoole演示前台[http://swoole.demo.cms.qq.feehi.com](http://swoole.demo.cms.qq.feehi.com)
-        * swoole演示后台[http://swoole-admin.demo.cms.qq.feehi.com](http://swoole-admin.demo.cms.qq.feehi.com)
+        * swoole演示前台 ![http://swoole.demo.cms.qq.feehi.com](http://swoole.demo.cms.qq.feehi.com)
+        * swoole演示后台 ![http://swoole-admin.demo.cms.qq.feehi.com](http://swoole-admin.demo.cms.qq.feehi.com)
       * php7.1.8 (docker)
-        * 备用演示前台1[http://demo.cms.qq.feehi.com/admin](http://demo.cms.qq.feehi.com/admin)
-        * 备用演示后台1[http://demo.cms.qq.feehi.com/admin](http://demo.cms.qq.feehi.com/admin)
+        * 备用演示前台1 ![http://demo.cms.qq.feehi.com/admin](http://demo.cms.qq.feehi.com/admin)
+        * 备用演示后台1 ![http://demo.cms.qq.feehi.com/admin](http://demo.cms.qq.feehi.com/admin)
       * php5.4 (docker)
-        * 备用演示前台2[http://php54.demo.cms.qq.feehi.com](http://php54.demo.cms.qq.feehi.com/)
-        * 备用演示后台2[http://php54.demo.cms.qq.feehi.com/admin](http://php54.demo.cms.qq.feehi.com/admin)
+        * 备用演示前台2 ![http://php54.demo.cms.qq.feehi.com](http://php54.demo.cms.qq.feehi.com/)
+        * 备用演示后台2 ![http://php54.demo.cms.qq.feehi.com/admin](http://php54.demo.cms.qq.feehi.com/admin)
       
 2. 使用Docker容器
     ```bash
@@ -59,7 +64,7 @@ QQ群 258780872
 前置条件: 如未特别说明，已默认您把php命令加入了环境变量
 1. 使用归档文件
     >使用此方式安装，后台超管用户名和密码会在安装过程中让您填入
-    1. 下载FeehiCMS源码 [点击此处下载最新版](http://7xjkuy.com1.z0.glb.clouddn.com/Feehi_CMS.zip)
+    1. 下载FeehiCMS源码 ![点击此处下载最新版](http://7xjkuy.com1.z0.glb.clouddn.com/Feehi_CMS.zip)
     2. 解压到目录 
     3. 配置web服务器(参见下面)
     4. 浏览器打开 http://localhost/install.php 按照提示完成安装(若使用php内置web服务器则地址为 http://localhost:8080/install.php )
@@ -67,7 +72,7 @@ QQ群 258780872
     
 2. 使用composer (推荐使用此方式安装)
     >使用此方式安装，默认的后台超级管理员用户名admin密码123456
-     composer的安装以及国内镜像设置请点击[此处](http://www.phpcomposer.com/)
+     composer的安装以及国内镜像设置请点击 ![此处](http://www.phpcomposer.com/)
      1. 依次执行以下命令
          ```bash
          $ composer create-project feehi/cms webApp
@@ -127,6 +132,6 @@ QQ群 258780872
 运行效果
 ---------
 
-![](docs/backend.png)
+![后台](docs/backend.png)
 
-![](docs/frontend.png)
+![前台](docs/frontend.png)
