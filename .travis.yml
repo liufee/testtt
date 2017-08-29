@@ -27,6 +27,8 @@ install:
     sed -i "s/'cookieValidationKey' => ''/'cookieValidationKey' => 'testkey'/" backend/config/main.php
 before_script:
   - mysql -e 'CREATE DATABASE cms_test;'
+  - echo "extension = imagick.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+  - printf "\n" | pecl install -f imagick
   - php yii_test migrate --interactive=0
 
 script:
