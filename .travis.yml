@@ -28,6 +28,7 @@ install:
 before_script:
   - mysql -e 'CREATE DATABASE cms_test;'
   - php yii_test migrate --interactive=0
+  - php -S localhost:80
 
 script:
   - vendor/bin/codecept run
