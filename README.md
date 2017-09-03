@@ -16,11 +16,11 @@ FeehiCMS没有对yii2做任何的修改、封装，但是把yii2的一些优秀�
 
 帮助
 ---------------
-开发文档 ![http://doc.feehi.com](http://doc.feehi.com)
+开发文档 [!http://doc.feehi.com](http://doc.feehi.com)
 
 QQ群 258780872
 
-![bug反馈](http://www.github.com/liufee/cms/issues)
+[! bug反馈](http://www.github.com/liufee/cms/issues)
 
 
 功能
