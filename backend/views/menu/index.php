@@ -22,6 +22,7 @@ use backend\grid\CheckboxColumn;
 use backend\grid\ActionColumn;
 
 $this->title = "Backend Menus";
+$this->params['breadcrumbs'][] = yii::t('app', 'Backend Menus');
 ?>
 <div class="row">
     <div class="col-sm-12">
@@ -63,14 +64,6 @@ $this->title = "Backend Menus";
                             'value' => function ($model) {
                                 return Html::input('number', "sort[{$model['id']}]", $model['sort']);
                             }
-                        ],
-                        [
-                            'attribute' => 'method',
-                            'label' => yii::t('app', 'HTTP Method'),
-                            'value' => function ($model) {
-                                return Constants::getHttpMethodItems($model['method']);
-                            },
-                            'filter' => Constants::getHttpMethodItems(),
                         ],
                         [
                             'attribute' => 'is_display',

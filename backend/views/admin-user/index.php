@@ -9,12 +9,12 @@
 /**
  * @var $this yii\web\View
  * @var $dataProvider yii\data\ActiveDataProvider
+ * @var $searchModel backend\models\UserSearch
  */
 
 use backend\grid\GridView;
 use yii\helpers\Url;
 use yii\helpers\Html;
-use backend\models\AdminRoles;
 use backend\widgets\Bar;
 use backend\grid\CheckboxColumn;
 use backend\grid\ActionColumn;
@@ -30,7 +30,8 @@ $assignment = function ($url, $model) {
     ]);
 };
 
-$this->title = "Admin";
+$this->title = "Admin Users";
+$this->params['breadcrumbs'][] = yii::t('app', 'Admin Users');
 ?>
 <div class="row">
     <div class="col-sm-12">
@@ -55,7 +56,7 @@ $this->title = "Admin";
                             'attribute' => 'role',
                             'label' => yii::t('app', 'Role'),
                             'value' => function ($model) {
-                                return AdminRoles::getRoleNameByUid($model->id);
+                                return $model->getRoleName();
                             },
                         ],
                         [
@@ -101,7 +102,7 @@ $this->title = "Admin";
                         ],
                         [
                             'class' => ActionColumn::className(),
-                            'template' => '{assignment}{update}{delete}',
+                            'template' => '{update}{delete}',
                             'buttons' => ['assignment' => $assignment],
                         ],
                     ]

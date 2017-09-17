@@ -82,9 +82,17 @@ class ActiveField extends \yii\widgets\ActiveField
     /**
      * @inheritdoc
      */
-    public function checkbox($options = [], $enclosedByLabel = true)
+    public function checkbox($options = [], $enclosedByLabel = false)
     {
-        $options = array_merge($this->inputOptions, $options);
+        $unique = uniqid();
+        $for = 'inlineCheckbox' . $unique;
+        $options['id'] = $for;
+        $options['tag'] = 'a';
+        $this->labelOptions = [];
+        $this->options['class'] = '';
+        $this->template = "<span class=\"checkbox checkbox-success checkbox-inline\">{input}
+                              {label}
+                            </span>";
         return parent::checkbox($options, $enclosedByLabel);
     }
 
@@ -160,13 +168,20 @@ class ActiveField extends \yii\widgets\ActiveField
         $encode = ! isset($options['encode']) || $options['encode'];
         $itemOptions = isset($options['itemOptions']) ? $options['itemOptions'] : [];
 
-        $options['item'] = function ($index, $label, $name, $checked, $value) use ($encode, $itemOptions) {
+        $unique = uniqid();
+        $options['item'] = function ($index, $label, $name, $checked, $value) use ($encode, $itemOptions, $unique){
+            static $i = 1;
+            $unique .= $i;
+            $i++;
             $checkbox = Html::checkbox($name, $checked, array_merge($itemOptions, [
                 'value' => $value,
-                'label' => $encode ? Html::encode($label) : $label,
+                'id' => 'inlineCheckbox' . $unique,
             ]));
 
-            return '<li>' . $checkbox . '</li>';
+            return "<li class='checkbox checkbox-success checkbox-inline'>
+                        $checkbox
+                        <label for='inlineCheckbox{$unique}'> {$label} </label>
+                    </li>";
         };
         return parent::checkboxList($items, $options);
     }

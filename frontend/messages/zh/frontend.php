@@ -66,6 +66,10 @@ return [
     "Only commented user can visit this article" => "文章仅对评论过的用户可见,可以点击下方评论后查看",
     'Like' => '赞',
     'Share' => '分享',
+    "Please input the password of article id {id} : {article}" => "请输入文章ID {id} : {article} 的密码",
+    "Password error" => '密码错误',
+    'Go' => '确认',
+    'Only login user can visit this article' => '本文章仅对登陆用户可见',
     /*article*/
 
     /*comment*/
