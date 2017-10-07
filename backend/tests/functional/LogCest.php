@@ -37,6 +37,8 @@ class LogCest
 
     public function checkView(FunctionalTester $I)
     {
+        $a=\backend\models\AdminLog::find()->all()->asArray();
+        var_dump($a);exit;
         $I->amOnPage(Url::toRoute(['/log/view-layer', 'id'=>1]));
         $I->see('管理员');
         $I->see("通过");
