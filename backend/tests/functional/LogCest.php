@@ -37,7 +37,7 @@ class LogCest
 
     public function checkView(FunctionalTester $I)
     {
-        $a=\backend\models\AdminLog::find()->all()->asArray();
+        $a=\backend\models\AdminLog::findOne(1);
         var_dump($a);exit;
         $I->amOnPage(Url::toRoute(['/log/view-layer', 'id'=>1]));
         $I->see('管理员');
