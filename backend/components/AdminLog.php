@@ -11,7 +11,7 @@ namespace backend\components;
 use yii;
 use backend\models\AdminLog as AdminLogModel;
 
-class AdminLog extends \yii\base\Object
+class AdminLog extends \yii\base\Event
 {
 
     /**
@@ -35,7 +35,7 @@ class AdminLog extends \yii\base\Object
             }
             $model->description = '{{%ADMIN_USER%}} [ ' . yii::$app->getUser()->getIdentity()->username . ' ] {{%BY%}} ' . $class . ' [ ' . $class::tableName() . ' ] ' . " {{%CREATED%}} {$id_des} {{%RECORD%}}: " . $desc;
             $model->route = Yii::$app->controller->id . '/' . Yii::$app->controller->action->id;
-            $model->user_id = yii::$app->user->id;
+            $model->user_id = yii::$app->getUser()->getId();
             $model->save();
         }
     }
@@ -89,6 +89,15 @@ class AdminLog extends \yii\base\Object
         $model->description = '{{%ADMIN_USER%}} [ ' . yii::$app->getUser()->getIdentity()->username . ' ] {{%BY%}} ' . $class . ' [ ' . $class::tableName() . ' ] ' . " {{%DELETED%}} {$id_des} {{%RECORD%}}: " . $desc;
         $model->route = Yii::$app->controller->id . '/' . Yii::$app->controller->action->id;
         $model->user_id = yii::$app->getUser()->id;
+        $model->save();
+    }
+
+    public static function custom(CustomLog $event)
+    {
+        $model = new AdminLogModel();
+        $model->description = $event->getDescription();
+        $model->route = Yii::$app->controller->id . '/' . Yii::$app->controller->action->id;
+        $model->user_id = yii::$app->getUser()->getId();
         $model->save();
     }
 

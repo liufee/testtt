@@ -12,12 +12,14 @@
  * @var $searchModel backend\models\MenuSearch
  */
 
+use backend\grid\DateColumn;
 use backend\grid\GridView;
+use backend\grid\SortColumn;
+use backend\grid\StatusColumn;
+use backend\models\Menu;
 use backend\widgets\Bar;
 use yii\helpers\Html;
 use yii\helpers\Url;
-use common\libs\Constants;
-use backend\models\Menu;
 use backend\grid\CheckboxColumn;
 use backend\grid\ActionColumn;
 
@@ -33,6 +35,7 @@ $this->params['breadcrumbs'][] = yii::t('app', 'Backend Menus');
                 <?= GridView::widget([
                     'dataProvider' => $dataProvider,
                     'filterModel' => $searchModel,
+                    'layout' => '{items}',
                     'columns' => [
                         [
                             'class' => CheckboxColumn::className(),
@@ -58,56 +61,23 @@ $this->params['breadcrumbs'][] = yii::t('app', 'Backend Menus');
                             'label' => yii::t('app', 'Url'),
                         ],
                         [
-                            'attribute' => 'sort',
-                            'label' => yii::t('app', 'Sort'),
-                            'format' => 'raw',
-                            'value' => function ($model) {
-                                return Html::input('number', "sort[{$model['id']}]", $model['sort']);
-                            }
+                            'class' => SortColumn::className()
                         ],
                         [
+                            'class' => StatusColumn::className(),
                             'attribute' => 'is_display',
+                            'formName' => (new Menu)->formName() . '[is_display]',
                             'label' => yii::t('app', 'Is Display'),
-                            'format' => 'raw',
-                            'value' => function ($model, $key, $index, $column) {
-                                if ($model['is_display'] == Menu::DISPLAY_YES) {
-                                    $url = Url::to([
-                                        'status',
-                                        'id' => $model['id'],
-                                        'status' => Menu::DISPLAY_NO,
-                                        'field' => 'is_display'
-                                    ]);
-                                    $class = 'btn btn-info btn-xs btn-rounded';
-                                    $confirm = Yii::t('app', 'Are you sure you want to disable this item?');
-                                } else {
-                                    $url = Url::to([
-                                        'status',
-                                        'id' => $model['id'],
-                                        'status' => Menu::DISPLAY_YES,
-                                        'field' => 'is_display'
-                                    ]);
-                                    $class = 'btn btn-default btn-xs btn-rounded';
-                                    $confirm = Yii::t('app', 'Are you sure you want to enable this item?');
-                                }
-                                return Html::a(Constants::getYesNoItems($model['is_display']), $url, [
-                                    'class' => $class,
-                                    'data-confirm' => $confirm,
-                                    'data-method' => 'post',
-                                    'data-pjax' => '0',
-                                ]);
-
-                            },
-                            'filter' => Constants::getYesNoItems(),
                         ],
                         [
+                            'class' => DateColumn::className(),
                             'attribute' => 'created_at',
                             'label' => yii::t('app', 'Created At'),
-                            'format' => 'date'
                         ],
                         [
+                            'class' => DateColumn::className(),
                             'attribute' => 'updated_at',
                             'label' => yii::t('app', 'Updated At'),
-                            'format' => 'date',
                         ],
                         [
                             'class' => ActionColumn::className(),

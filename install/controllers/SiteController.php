@@ -197,7 +197,7 @@ class SiteController extends \yii\web\Controller
                 Yii::$app->response->format = Response::FORMAT_JSON;
                 $dbtype = $request->post('dbtype', 'mysql');
                 $dbhost = $request->post('dbhost', 'dbhost');
-                $dbuser = $request->post('dbuer', 'root');
+                $dbuser = $request->post('dbuser', 'root');
                 $dbpassword = $request->post('dbpw', '');
                 $dbport = $request->post('dbport', '3306');
                 $dbname = $request->post('dbname', '');
@@ -220,11 +220,12 @@ class SiteController extends \yii\web\Controller
                 $this->importDb(yii::$app->db, $table_prefix);
 
                 //更新配置信息
-                $userModel = User::findOne(['id' => 1]);
-                $userModel->username = $request->post('manager', 'admin');
-                $userModel->password = $userModel->setPassword($request->post('manager_pwd'));
-                $userModel->email = $request->post('manager_email');
-                $userModel->save();
+                $data = [
+                    'username' => $request->post('manager', 'admin'),
+                    'password_hash' => Yii::$app->security->generatePasswordHash($request->post('manager_pwd')),
+                    'email' => $request->post('manager_email'),
+                ];
+                yii::$app->getDb()->createCommand()->update(User::tableName(), $data, 'id = 1')->execute();
 
                 $model = Options::findOne(['name' => 'website_title']);
                 $model->value = $request->post('sitename', 'Feehi CMS');

@@ -8,7 +8,9 @@
 
 namespace backend\models;
 
+use backend\components\CustomLog;
 use Yii;
+use yii\base\Event;
 use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
@@ -293,7 +295,7 @@ class User extends ActiveRecord implements IdentityInterface
         return parent::beforeSave($insert);
     }
 
-    public function afterSave($insert, $changedAttributes)
+    public function assignPermission()
     {
         $authManager = yii::$app->getAuthManager();
         $assignments = $authManager->getAssignments($this->id);
@@ -308,34 +310,62 @@ class User extends ActiveRecord implements IdentityInterface
         $roles = array_keys($roles);
         $permissions = array_keys($permissions);
 
+        $str = '';
+
         //角色roles
         if( !is_array( $this->roles ) ) $this->roles = [];
 
         $needAdds = array_diff($this->roles, $roles);
-        foreach ($needAdds as $role){
-            $authManager->assign($authManager->getRole($role), $this->id);
-        }
-
         $needRemoves = array_diff($roles, $this->roles);
-        foreach ($needRemoves as $role){
-            $authManager->revoke($authManager->getRole($role), $this->id);
+        if( !empty($needAdds) ) {
+            $str .= " 增加了角色: ";
+            foreach ($needAdds as $role) {
+                $roleItem = $authManager->getRole($role);
+                $authManager->assign($roleItem, $this->id);
+                $str .= " {$roleItem->name},";
+            }
+        }
+        if( !empty($needRemoves) ) {
+            $str .= ' 删除了角色: ';
+            foreach ($needRemoves as $role) {
+                $roleItem = $authManager->getRole($role);
+                $authManager->revoke($roleItem, $this->id);
+                $str .= " {$roleItem->name},";
+            }
         }
 
        //权限permission
-        $this->permissions = explode(',', $this->permissions);
-        if($this->permissions[0] == '') $this->permissions = [];
-        if( !is_array( $this->permissions ) ) $this->permissions = [];
+        if( $this->permissions === null ){
+            $this->permissions = [];
+        }else if( !is_array( $this->permissions ) ) {
+            $this->permissions = explode(',', $this->permissions);
+        }
 
         $needAdds = array_diff($this->permissions, $permissions);
-
-        foreach ($needAdds as $permission){
-            $authManager->assign($authManager->getPermission($permission), $this->id);
-        }
-
         $needRemoves = array_diff($permissions, $this->permissions);
-        foreach ($needRemoves as $permission){
-            $authManager->revoke($authManager->getPermission($permission), $this->id);
+        if( !empty($needAdds) ) {
+            $str .= ' 增加了权限: ';
+            foreach ($needAdds as $permission) {
+                $permissionItem = $authManager->getPermission($permission);
+                $authManager->assign($permissionItem, $this->id);
+                $str .= " {$permissionItem->name},";
+            }
         }
+        if( !empty($needRemoves) ) {
+            $str .= ' 删除了权限: ';
+            foreach ($needRemoves as $permission) {
+                $permissionItem = $authManager->getPermission($permission);
+                $authManager->revoke($permissionItem, $this->id);
+                $str .= " {$permissionItem->name},";
+            }
+        }
+
+        Event::trigger(CustomLog::className(), CustomLog::EVENT_CUSTOM, new CustomLog([
+            'sender' => $this,
+            'description' => "修改了 用户(uid {$this->id}) {$this->username} 的权限: {$str}",
+        ]));
+
+        return true;
 
     }
 

@@ -10,14 +10,13 @@ namespace backend\controllers;
 
 use yii;
 use backend\models\Article;
-use backend\models\ArticleSearch;
+use backend\models\search\ArticleSearch;
 use backend\actions\CreateAction;
 use backend\actions\UpdateAction;
 use backend\actions\IndexAction;
 use backend\actions\ViewAction;
 use backend\actions\DeleteAction;
 use backend\actions\SortAction;
-use backend\actions\StatusAction;
 
 class PageController extends \yii\web\Controller
 {
@@ -56,10 +55,6 @@ class PageController extends \yii\web\Controller
             ],
             'sort' => [
                 'class' => SortAction::className(),
-                'modelClass' => Article::className(),
-            ],
-            'status' => [
-                'class' => StatusAction::className(),
                 'modelClass' => Article::className(),
             ],
         ];

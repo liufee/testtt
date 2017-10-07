@@ -32,4 +32,4 @@ before_script:
   - php yii_test migrate --interactive=0
 
 script:
-  - vendor/bin/codecept run
+  - vendor/bin/codecept run --debug

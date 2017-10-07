@@ -11,7 +11,9 @@
  * @var $searchModel backend\models\ArticleSearch
  */
 
+use backend\grid\DateColumn;
 use backend\grid\GridView;
+use backend\grid\SortColumn;
 use common\widgets\JsBlock;
 use yii\helpers\Url;
 use common\models\Category;
@@ -19,9 +21,9 @@ use common\libs\Constants;
 use yii\helpers\Html;
 use backend\widgets\Bar;
 use common\widgets\Pjax;
-use backend\models\Article;
 use backend\grid\CheckboxColumn;
 use backend\grid\ActionColumn;
+use backend\grid\StatusColumn;
 
 $this->title = 'Articles';
 $this->params['breadcrumbs'][] = yii::t('app', 'Articles');
@@ -42,7 +44,6 @@ $this->params['breadcrumbs'][] = yii::t('app', 'Articles');
                 <?= GridView::widget([
                     'dataProvider' => $dataProvider,
                     'filterModel' => $searchModel,
-                    'layout' => "{items}\n{pager}",
                     'columns' => [
                         [
                             'class' => CheckboxColumn::className(),
@@ -59,298 +60,85 @@ $this->params['breadcrumbs'][] = yii::t('app', 'Articles');
                             'filter' => Category::getCategoriesName(),
                         ],
                         [
-                            'attribute' => 'sort',
-                            'format' => 'raw',
-                            'value' => function ($model) {
-                                return Html::input('number', "sort[{$model['id']}]", $model['sort'], ['style' => 'width:50px']);
-                            }
+                            'class' => SortColumn::className(),
                         ],
                         [
                             'attribute' => 'title',
-                            'format' => 'html',
                             'width' => '170',
-                            'value' => function ($model, $key, $index, $column) {
-                                return Html::a($model->title, 'javascript:void(0)', [
-                                    'title' => $model->thumb,
-                                    'class' => 'title'
-                                ]);
-                            }
                         ],
                         [
                             'attribute' => 'author_name',
                         ],
                         [
                             'attribute' => 'thumb',
-                            'filter' => Constants::getYesNoItems(),
+                            'format' => 'raw',
                             'value' => function ($model, $key, $index, $column) {
                                 if ($model->thumb == '') {
-                                    $num = 0;
+                                    $num = Constants::YesNo_No;
                                 } else {
-                                    $num = 1;
+                                    $num = Constants::YesNo_Yes;
                                 }
-                                return Constants::getYesNoItems($num);
-                            },
+                                return Html::a(Constants::getYesNoItems($num), 'javascript:void(0)', [
+                                    'img' => $model->thumb,
+                                    'class' => 'thumbImg'
+                                ]);
+                           },
+                            'filter' => Constants::getYesNoItems(),
                         ],
                         [
+                            'class' => StatusColumn::className(),
                             'attribute' => 'flag_headline',
                             'filter' => Constants::getYesNoItems(),
-                            'format' => 'raw',
-                            'value' => function ($model, $key, $index, $column) {
-                                if ($model->flag_headline) {
-                                    $url = Url::to([
-                                        'status',
-                                        'id' => $model->id,
-                                        'status' => 0,
-                                        'field' => 'flag_headline'
-                                    ]);
-                                    $class = 'btn btn-info btn-xs btn-rounded';
-                                    $confirm = Yii::t('app', 'Are you sure you want to disable this item?');
-                                } else {
-                                    $url = Url::to([
-                                        'status',
-                                        'id' => $model->id,
-                                        'status' => 1,
-                                        'field' => 'flag_headline'
-                                    ]);
-                                    $class = 'btn btn-default btn-xs btn-rounded';
-                                    $confirm = Yii::t('app', 'Are you sure you want to enable this item?');
-                                }
-                                return Html::a(Constants::getYesNoItems($model->flag_headline), $url, [
-                                    'class' => $class,
-                                    'data-confirm' => $confirm,
-                                    'data-method' => 'post',
-                                    'data-pjax' => '0',
-                                ]);
-                            },
                         ],
                         [
+                            'class' =>StatusColumn::className(),
                             'attribute' => 'flag_recommend',
                             'filter' => Constants::getYesNoItems(),
-                            'format' => 'raw',
-                            'value' => function ($model, $key, $index, $column) {
-                                if ($model->flag_recommend) {
-                                    $url = Url::to([
-                                        'status',
-                                        'id' => $model->id,
-                                        'status' => 0,
-                                        'field' => 'flag_recommend'
-                                    ]);
-                                    $class = 'btn btn-info btn-xs btn-rounded';
-                                    $confirm = Yii::t('app', 'Are you sure you want to disable this item?');
-                                } else {
-                                    $url = Url::to([
-                                        'status',
-                                        'id' => $model->id,
-                                        'status' => 1,
-                                        'field' => 'flag_recommend'
-                                    ]);
-                                    $class = 'btn btn-default btn-xs btn-rounded';
-                                    $confirm = Yii::t('app', 'Are you sure you want to enable this item?');
-                                }
-                                return Html::a(Constants::getYesNoItems($model->flag_recommend), $url, [
-                                    'class' => $class,
-                                    'data-confirm' => $confirm,
-                                    'data-method' => 'post',
-                                    'data-pjax' => '0',
-                                ]);
-                            },
                         ],
                         [
+                            'class' =>StatusColumn::className(),
                             'attribute' => 'flag_slide_show',
                             'filter' => Constants::getYesNoItems(),
-                            'format' => 'raw',
-                            'value' => function ($model, $key, $index, $column) {
-                                if ($model->flag_slide_show) {
-                                    $url = Url::to([
-                                        'status',
-                                        'id' => $model->id,
-                                        'status' => 0,
-                                        'field' => 'flag_slide_show'
-                                    ]);
-                                    $class = 'btn btn-info btn-xs btn-rounded';
-                                    $confirm = Yii::t('app', 'Are you sure you want to disable this item?');
-                                } else {
-                                    $url = Url::to([
-                                        'status',
-                                        'id' => $model->id,
-                                        'status' => 1,
-                                        'field' => 'flag_slide_show'
-                                    ]);
-                                    $class = 'btn btn-default btn-xs btn-rounded';
-                                    $confirm = Yii::t('app', 'Are you sure you want to enable this item?');
-                                }
-                                return Html::a(Constants::getYesNoItems($model->flag_slide_show), $url, [
-                                    'class' => $class,
-                                    'data-confirm' => $confirm,
-                                    'data-method' => 'post',
-                                    'data-pjax' => '0',
-                                ]);
-                            },
                         ],
                         [
+                            'class' =>StatusColumn::className(),
                             'attribute' => 'flag_special_recommend',
                             'filter' => Constants::getYesNoItems(),
-                            'format' => 'raw',
-                            'value' => function ($model, $key, $index, $column) {
-                                if ($model->flag_special_recommend) {
-                                    $url = Url::to([
-                                        'status',
-                                        'id' => $model->id,
-                                        'status' => 0,
-                                        'field' => 'flag_special_recommend'
-                                    ]);
-                                    $class = 'btn btn-info btn-xs btn-rounded';
-                                    $confirm = Yii::t('app', 'Are you sure you want to disable this item?');
-                                } else {
-                                    $url = Url::to([
-                                        'status',
-                                        'id' => $model->id,
-                                        'status' => 1,
-                                        'field' => 'flag_special_recommend'
-                                    ]);
-                                    $class = 'btn btn-default btn-xs btn-rounded';
-                                    $confirm = Yii::t('app', 'Are you sure you want to enable this item?');
-                                }
-                                return Html::a(Constants::getYesNoItems($model->flag_special_recommend), $url, [
-                                    'class' => $class,
-                                    'data-confirm' => $confirm,
-                                    'data-method' => 'post',
-                                    'data-pjax' => '0',
-                                ]);
-                            },
                         ],
                         [
+                            'class' =>StatusColumn::className(),
                             'attribute' => 'flag_roll',
                             'filter' => Constants::getYesNoItems(),
-                            'format' => 'raw',
-                            'value' => function ($model, $key, $index, $column) {
-                                if ($model->flag_roll) {
-                                    $url = Url::to([
-                                        'status',
-                                        'id' => $model->id,
-                                        'status' => 0,
-                                        'field' => 'flag_roll'
-                                    ]);
-                                    $class = 'btn btn-info btn-xs btn-rounded';
-                                    $confirm = Yii::t('app', 'Are you sure you want to disable this item?');
-                                } else {
-                                    $url = Url::to([
-                                        'status',
-                                        'id' => $model->id,
-                                        'status' => 1,
-                                        'field' => 'flag_roll'
-                                    ]);
-                                    $class = 'btn btn-default btn-xs btn-rounded';
-                                    $confirm = Yii::t('app', 'Are you sure you want to enable this item?');
-                                }
-                                return Html::a(Constants::getYesNoItems($model->flag_roll), $url, [
-                                    'class' => $class,
-                                    'data-confirm' => $confirm,
-                                    'data-method' => 'post',
-                                    'data-pjax' => '0',
-                                ]);
-                            },
                         ],
                         [
+                            'class' =>StatusColumn::className(),
                             'attribute' => 'flag_bold',
                             'filter' => Constants::getYesNoItems(),
-                            'format' => 'raw',
-                            'value' => function ($model, $key, $index, $column) {
-                                if ($model->flag_bold) {
-                                    $url = Url::to([
-                                        'status',
-                                        'id' => $model->id,
-                                        'status' => 0,
-                                        'field' => 'flag_bold'
-                                    ]);
-                                    $class = 'btn btn-info btn-xs btn-rounded';
-                                    $confirm = Yii::t('app', 'Are you sure you want to disable this item?');
-                                } else {
-                                    $url = Url::to([
-                                        'status',
-                                        'id' => $model->id,
-                                        'status' => 1,
-                                        'field' => 'flag_bold'
-                                    ]);
-                                    $class = 'btn btn-default btn-xs btn-rounded';
-                                    $confirm = Yii::t('app', 'Are you sure you want to enable this item?');
-                                }
-                                return Html::a(Constants::getYesNoItems($model->flag_bold), $url, [
-                                    'class' => $class,
-                                    'data-confirm' => $confirm,
-                                    'data-method' => 'post',
-                                    'data-pjax' => '0',
-                                ]);
-                            },
                         ],
                         [
+                            'class' =>StatusColumn::className(),
                             'attribute' => 'flag_picture',
                             'filter' => Constants::getYesNoItems(),
-                            'format' => 'raw',
-                            'value' => function ($model, $key, $index, $column) {
-                                if ($model->flag_picture) {
-                                    $url = Url::to([
-                                        'status',
-                                        'id' => $model->id,
-                                        'status' => 0,
-                                        'field' => 'flag_picture'
-                                    ]);
-                                    $class = 'btn btn-info btn-xs btn-rounded';
-                                    $confirm = Yii::t('app', 'Are you sure you want to disable this item?');
-                                } else {
-                                    $url = Url::to([
-                                        'status',
-                                        'id' => $model->id,
-                                        'status' => 1,
-                                        'field' => 'flag_picture'
-                                    ]);
-                                    $class = 'btn btn-default btn-xs btn-rounded';
-                                    $confirm = Yii::t('app', 'Are you sure you want to enable this item?');
-                                }
-                                return Html::a(Constants::getYesNoItems($model->flag_picture), $url, [
-                                    'class' => $class,
-                                    'data-confirm' => $confirm,
-                                    'data-method' => 'post',
-                                    'data-pjax' => '0',
-                                ]);
-                            },
                         ],
                         [
                             'attribute' => 'status',
                             'format' => 'raw',
                             'value' => function ($model, $key, $index, $column) {
-                                if ($model->status == Article::ARTICLE_PUBLISHED) {
-                                    $url = Url::to([
-                                        'status',
-                                        'id' => $model->id,
-                                        'status' => 0,
-                                        'field' => 'status'
-                                    ]);
-                                    $class = 'btn btn-info btn-xs btn-rounded';
-                                    $confirm = Yii::t('app', 'Are you sure you want to cancel release?');
-                                } else {
-                                    $url = Url::to([
-                                        'status',
-                                        'id' => $model->id,
-                                        'status' => 1,
-                                        'field' => 'status'
-                                    ]);
-                                    $class = 'btn btn-default btn-xs btn-rounded';
-                                    $confirm = Yii::t('app', 'Are you sure you want to publish?');
-                                }
-                                return Html::a(Constants::getArticleStatus($model->status), $url, [
-                                    'class' => $class,
-                                    'data-confirm' => $confirm,
+                                return Html::a(Constants::getArticleStatus($model['status']), ['update', 'id' => $model['id']], [
+                                    'class' => 'btn btn-xs btn-rounded ' . ( $model['status'] == Constants::YesNo_Yes ? 'btn-info' : 'btn-default' ),
+                                    'data-confirm' => $model['status'] == Constants::YesNo_Yes ? Yii::t('app', 'Are you sure you want to cancel release?') : Yii::t('app', 'Are you sure you want to publish?'),
                                     'data-method' => 'post',
                                     'data-pjax' => '0',
+                                    'data-params' => [
+                                        $model->formName() . '[status]' => $model['status'] == Constants::YesNo_Yes ? Constants::YesNo_No : Constants::YesNo_Yes
+                                    ]
                                 ]);
-
                             },
                             'filter' => Constants::getArticleStatus(),
                         ],
                         [
+                            'class' => DateColumn::className(),
                             'attribute' => 'created_at',
-                            'format' => ['date'],
                             'filter' => Html::activeInput('text', $searchModel, 'create_start_at', [
                                     'class' => 'form-control layer-date',
                                     'placeholder' => '',
@@ -362,8 +150,8 @@ $this->params['breadcrumbs'][] = yii::t('app', 'Articles');
                                 ]),
                         ],
                         [
+                            'class' => DateColumn::className(),
                             'attribute' => 'updated_at',
-                            'format' => ['date'],
                             'filter' => Html::activeInput('text', $searchModel, 'update_start_at', [
                                     'class' => 'form-control layer-date',
                                     'placeholder' => '',
@@ -402,16 +190,16 @@ $this->params['breadcrumbs'][] = yii::t('app', 'Articles');
     function showImg() {
         t = setTimeout(function () {
         }, 200);
-        var node = $(this).attr('title');
-        if (node.length == 0) {
+        var url = $(this).attr('img');
+        if (url.length == 0) {
             layer.tips('<?=yii::t('app', 'No picture')?>', $(this));
         } else {
-            layer.tips('<img src=' + node + '>', $(this));
+            layer.tips('<img src=' + url + '>', $(this));
         }
     }
     $(document).ready(function(){
         var t;
-        $('table tr td a.title').hover(showImg,function(){
+        $('table tr td a.thumbImg').hover(showImg,function(){
             clearTimeout(t);
         });
     });
@@ -421,7 +209,7 @@ $this->params['breadcrumbs'][] = yii::t('app', 'Articles');
     });
     container.on('pjax:complete',function(args){
         layer.closeAll('loading');
-        $('table tr td a.title').bind('mouseover mouseout', showImg);
+        $('table tr td a.thumbImg').bind('mouseover mouseout', showImg);
     });
 </script>
 <?php JsBlock::end()?>

@@ -84,7 +84,9 @@ class ActiveField extends \yii\widgets\ActiveField
      */
     public function checkbox($options = [], $enclosedByLabel = false)
     {
-        $unique = uniqid();
+        static $i = 1;
+        $unique = uniqid() . $i;
+        $i++;
         $for = 'inlineCheckbox' . $unique;
         $options['id'] = $for;
         $options['tag'] = 'a';
@@ -145,7 +147,7 @@ class ActiveField extends \yii\widgets\ActiveField
                 //'label' => $encode ? Html::encode($label) : $label,
             ]));
             $radio .= "<label for=\"$name$i\"> $label </label>";
-            $radio = "<div class='radio radio-info radio-inline'>{$radio}</div>";
+            $radio = "<div class='radio radio-success radio-inline'>{$radio}</div>";
             //var_dump($radio);die;
             $i++;
             return $radio;
@@ -171,7 +173,7 @@ class ActiveField extends \yii\widgets\ActiveField
         $unique = uniqid();
         $options['item'] = function ($index, $label, $name, $checked, $value) use ($encode, $itemOptions, $unique){
             static $i = 1;
-            $unique .= $i;
+            $unique .= rand(1, 99999) . $i;
             $i++;
             $checkbox = Html::checkbox($name, $checked, array_merge($itemOptions, [
                 'value' => $value,

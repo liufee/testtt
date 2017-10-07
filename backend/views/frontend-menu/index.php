@@ -11,12 +11,14 @@
  * @var $dataProvider frontend\models\Menu
  */
 
+use backend\grid\DateColumn;
 use backend\grid\GridView;
+use backend\grid\SortColumn;
+use backend\grid\StatusColumn;
 use backend\widgets\Bar;
+use frontend\models\Menu;
 use yii\helpers\Html;
 use yii\helpers\Url;
-use common\libs\Constants;
-use frontend\models\Menu;
 use backend\grid\CheckboxColumn;
 use backend\grid\ActionColumn;
 
@@ -31,6 +33,7 @@ $this->params['breadcrumbs'][] = yii::t('app', 'Frontend Menus');
                 <?= Bar::widget() ?>
                 <?= GridView::widget([
                     'dataProvider' => $dataProvider,
+                    'layout' => '{items}',
                     'columns' => [
                         [
                             'class' => CheckboxColumn::className(),
@@ -60,55 +63,23 @@ $this->params['breadcrumbs'][] = yii::t('app', 'Frontend Menus');
                             'label' => yii::t('app', 'Url'),
                         ],
                         [
-                            'attribute' => 'Sort',
-                            'label' => yii::t('app', 'Sort'),
-                            'format' => 'raw',
-                            'value' => function ($model) {
-                                return Html::input('number', "sort[{$model['id']}]", $model['sort']);
-                            }
+                            'class' => SortColumn::className(),
                         ],
                         [
                             'attribute' => 'is_display',
+                            'class' => StatusColumn::className(),
                             'label' => yii::t('app', 'Is Display'),
-                            'format' => 'raw',
-                            'value' => function ($model, $key, $index, $column) {
-                                if ($model['is_display'] == Menu::DISPLAY_YES) {
-                                    $url = Url::to([
-                                        'status',
-                                        'id' => $model['id'],
-                                        'status' => Menu::DISPLAY_NO,
-                                        'field' => 'is_display'
-                                    ]);
-                                    $class = 'btn btn-info btn-xs btn-rounded';
-                                    $confirm = Yii::t('app', 'Are you sure you want to disable this item?');
-                                } else {
-                                    $url = Url::to([
-                                        'status',
-                                        'id' => $model['id'],
-                                        'status' => Menu::DISPLAY_YES,
-                                        'field' => 'is_display'
-                                    ]);
-                                    $class = 'btn btn-default btn-xs btn-rounded';
-                                    $confirm = Yii::t('app', 'Are you sure you want to enable this item?');
-                                }
-                                return Html::a(Constants::getYesNoItems($model['is_display']), $url, [
-                                    'class' => $class,
-                                    'data-confirm' => $confirm,
-                                    'data-method' => 'post',
-                                    'data-pjax' => '0',
-                                ]);
-
-                            },
+                            'formName' => (new Menu)->formName() . '[is_display]',
                         ],
                         [
+                            'class' => DateColumn::className(),
                             'attribute' => 'created_at',
                             'label' => yii::t('app', 'Created At'),
-                            'format' => 'date',
                         ],
                         [
+                            'class' => DateColumn::className(),
                             'attribute' => 'updated_at',
                             'label' => yii::t('app', 'Updated At'),
-                            'format' => 'date',
                         ],
                         [
                             'class' => ActionColumn::className(),

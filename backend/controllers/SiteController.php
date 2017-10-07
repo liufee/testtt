@@ -11,7 +11,7 @@ namespace backend\controllers;
 use yii;
 use Exception;
 use common\models\Comment;
-use backend\models\LoginForm;
+use backend\models\form\LoginForm;
 use common\libs\ServerInfo;
 use backend\models\Article as ArticleModel;
 use backend\models\Comment as BackendComment;
@@ -20,6 +20,7 @@ use frontend\models\User;
 use yii\base\UserException;
 use yii\db\Query;
 use yii\filters\AccessControl;
+use yii\filters\VerbFilter;
 use yii\web\HttpException;
 use yii\captcha\CaptchaAction;
 
@@ -34,12 +35,18 @@ class SiteController extends \yii\web\Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'except' =>['login','signup', 'captcha'],
+                'except' =>['login', 'captcha', 'language'],
                 'rules' => [
                     [
                         'allow' => true,
                         'roles' => ['@'],
                     ],
+                ],
+            ],
+            'verbs' => [
+                'class' => VerbFilter::className(),
+                'actions' => [
+                    'logout' => ['post'],
                 ],
             ],
         ];

@@ -8,12 +8,15 @@
 namespace backend\controllers;
 
 use yii;
+use backend\models\form\PasswordResetRequestForm;
+use backend\models\form\ResetPasswordForm;
 use backend\models\User;
-use backend\models\UserSearch;
+use backend\models\search\UserSearch;
 use backend\actions\IndexAction;
 use backend\actions\DeleteAction;
 use backend\actions\SortAction;
-use backend\actions\StatusAction;
+use yii\base\InvalidParamException;
+use yii\web\BadRequestHttpException;
 
 class AdminUserController extends \yii\web\Controller
 {
@@ -40,10 +43,6 @@ class AdminUserController extends \yii\web\Controller
                 'class' => SortAction::className(),
                 'modelClass' => User::className(),
             ],
-            'status' => [
-                'class' => StatusAction::className(),
-                'modelClass' => User::className(),
-            ],
         ];
     }
 
@@ -57,7 +56,7 @@ class AdminUserController extends \yii\web\Controller
         $model = new User();
         $model->setScenario('create');
         if (yii::$app->getRequest()->getIsPost()) {
-            if ( $model->load(Yii::$app->getRequest()->post()) && $model->validate() && $model->save() ) {
+            if ( $model->load(Yii::$app->getRequest()->post()) && $model->validate() && $model->save() && $model->assignPermission() ) {
                 Yii::$app->getSession()->setFlash('success', yii::t('app', 'Success'));
                 return $this->redirect(['index']);
             } else {
@@ -85,10 +84,13 @@ class AdminUserController extends \yii\web\Controller
     {
         $model = User::findOne($id);
         $model->setScenario('update');
-        $model->roles = array_keys( yii::$app->getAuthManager()->getAssignments($id) );
-        $model->permissions = $model->roles;
+        $model->roles = $model->permissions = array_keys( yii::$app->getAuthManager()->getAssignments($id) );
+        if( in_array($id, yii::$app->getBehavior('access')->superAdminUserIds) ){
+            $model->permissions = array_keys( yii::$app->getAuthManager()->getPermissions() );
+            $model->roles = array_keys( yii::$app->getAuthManager()->getRoles() );
+        }
         if (Yii::$app->getRequest()->getIsPost()) {
-            if ($model->load(Yii::$app->request->post()) && $model->validate() && $model->save() ) {
+            if ($model->load(Yii::$app->request->post()) && $model->validate() && $model->save() && $model->assignPermission() ) {
                 Yii::$app->getSession()->setFlash('success', yii::t('app', 'Success'));
                 return $this->redirect(['update', 'id' => $model->getPrimaryKey()]);
             } else {
@@ -131,6 +133,58 @@ class AdminUserController extends \yii\web\Controller
         }
 
         return $this->render('update', [
+            'model' => $model,
+        ]);
+    }
+
+
+    /**
+     * 管理员输入邮箱重置密码
+     *
+     * @return string|\yii\web\Response
+     */
+    public function actionRequestPasswordReset()
+    {
+        $model = new PasswordResetRequestForm();
+        if ($model->load(Yii::$app->getRequest()->post()) && $model->validate()) {
+            if ($model->sendEmail()) {
+                Yii::$app->getSession()
+                    ->setFlash('success', yii::t('app', 'Check your email for further instructions.'));
+
+                return $this->goHome();
+            } else {
+                Yii::$app->getSession()
+                    ->setFlash('error', 'Sorry, we are unable to reset password for email provided.');
+            }
+        }
+
+        return $this->render('requestPasswordResetToken', [
+            'model' => $model,
+        ]);
+    }
+
+    /**
+     * 管理员重置密码
+     *
+     * @param $token
+     * @return string|\yii\web\Response
+     * @throws \yii\web\BadRequestHttpException
+     */
+    public function actionResetPassword($token)
+    {
+        try {
+            $model = new ResetPasswordForm($token);
+        } catch (InvalidParamException $e) {
+            throw new BadRequestHttpException($e->getMessage());
+        }
+
+        if ($model->load(Yii::$app->getRequest()->post()) && $model->validate() && $model->resetPassword()) {
+            Yii::$app->session->setFlash('success', yii::t('app', 'New password was saved.'));
+
+            return $this->goHome();
+        }
+
+        return $this->render('resetPassword', [
             'model' => $model,
         ]);
     }

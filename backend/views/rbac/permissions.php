@@ -9,10 +9,11 @@
 /**
  * @var $this yii\web\View
  * @var $dataProvider yii\data\ArrayDataProvider
- * @var $searchModel backend\form\RbacSearch
+ * @var $searchModel backend\models\search\RbacSearch
  */
 
 use backend\grid\GridView;
+use backend\grid\SortColumn;
 use backend\widgets\Bar;
 use yii\helpers\Html;
 use yii\helpers\Url;
@@ -41,6 +42,14 @@ $this->params['breadcrumbs'][] = yii::t('app', 'Permissions');
                                 'title' => yii::t('app', 'Sort'),
                                 'data-pjax' => '0',
                                 'class' => 'btn btn-white btn-sm sort',
+                            ]);
+                        },
+                        'delete' => function () {
+                            return Html::a('<i class="fa fa-trash-o"></i> ' . yii::t('app', 'Delete'), Url::to(['permission-delete']), [
+                                'title' => yii::t('app', 'Delete'),
+                                'data-pjax' => '0',
+                                'data-confirm' => yii::t('app', 'Realy to delete?'),
+                                'class' => 'btn btn-white btn-sm multi-operate',
                             ]);
                         }
                     ],
@@ -76,11 +85,8 @@ $this->params['breadcrumbs'][] = yii::t('app', 'Permissions');
                             'attribute' => 'description',
                         ],
                         [
-                            'attribute' => 'sort',
-                            'format' => 'raw',
-                            'value' => function ($model) {
-                                return Html::input('number', "sort[{$model['name']}]", $model['sort'], ['style' => 'width:50px']);
-                            }
+                            'class' => SortColumn::className(),
+                            'primaryKey' => 'name'
                         ],
                         [
                             'class' => ActionColumn::className(),
