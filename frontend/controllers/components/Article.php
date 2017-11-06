@@ -8,11 +8,10 @@
 
 namespace frontend\controllers\components;
 
-use yii\base\BaseObject;
 use yii\data\ActiveDataProvider;
 use frontend\models\Article as ArticleModel;
 
-class Article extends Object
+class Article extends \yii\base\BaseObject
 {
 
     /**
