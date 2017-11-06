@@ -8,8 +8,9 @@
 
 namespace backend\controllers;
 
-use yii\data\ActiveDataProvider;
-use backend\models\FriendLink;
+use Yii;
+use backend\models\search\FriendlyLinkSearch;
+use backend\models\FriendlyLink;
 use backend\actions\CreateAction;
 use backend\actions\UpdateAction;
 use backend\actions\IndexAction;
@@ -28,36 +29,29 @@ class FriendlyLinkController extends \yii\web\Controller
             'index' => [
                 'class' => IndexAction::className(),
                 'data' => function(){
-                    $query = FriendLink::find();
-                    $dataProvider = new ActiveDataProvider([
-                        'query' => $query,
-                        'sort' => [
-                            'defaultOrder' => [
-                                'sort' => SORT_ASC,
-                                'id' => SORT_ASC,
-                            ],
-                        ]
-                    ]);
+                    $searchModel = new FriendlyLinkSearch();
+                    $dataProvider = $searchModel->search(yii::$app->getRequest()->getQueryParams());
                     return [
                         'dataProvider' => $dataProvider,
+                        'searchModel' => $searchModel,
                     ];
                 }
             ],
             'create' => [
                 'class' => CreateAction::className(),
-                'modelClass' => FriendLink::className(),
+                'modelClass' => FriendlyLink::className(),
             ],
             'update' => [
                 'class' => UpdateAction::className(),
-                'modelClass' => FriendLink::className(),
+                'modelClass' => FriendlyLink::className(),
             ],
             'delete' => [
                 'class' => DeleteAction::className(),
-                'modelClass' => FriendLink::className(),
+                'modelClass' => FriendlyLink::className(),
             ],
             'sort' => [
                 'class' => SortAction::className(),
-                'modelClass' => FriendLink::className(),
+                'modelClass' => FriendlyLink::className(),
             ],
         ];
     }

@@ -22,6 +22,9 @@ return [
             'idParam' => '__backend__id',
             'returnUrlParam' => '_backend_returnUrl',
         ],
+        'session' => [
+            'timeout' => 1440,//session过期时间，单位为秒
+        ],
         'log' => [//此项具体详细配置，请访问http://wiki.feehi.com/index.php?title=Yii2_log
             'traceLevel' => YII_DEBUG ? 3 : 0,
             'targets' => [
@@ -92,6 +95,7 @@ return [
             'admin-user/reset-password',
             'admin-user/update-self',
             'debug/*',
+            'gii/*',
         ],
         'superAdminUserIds' => [1],//超级管理员用户id，拥有所有权限，不受权限管理的控制
     ],

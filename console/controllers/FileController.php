@@ -10,7 +10,7 @@ namespace console\controllers;
 
 use yii;
 use backend\models\ArticleContent;
-use common\models\FriendLink;
+use common\models\FriendlyLink;
 use common\models\Article;
 use yii\helpers\Console;
 use yii\helpers\FileHelper;
@@ -47,7 +47,7 @@ class FileController extends \yii\console\Controller
         }
 
         $friendlink = [];
-        foreach (FriendLink::find()->where(['<>', 'image', ''])->each(100) as $link) {
+        foreach (FriendlyLink::find()->where(['<>', 'image', ''])->each(100) as $link) {
             $friendlink[] = $rootPath . $link->image;
         }
 
@@ -144,6 +144,69 @@ class FileController extends \yii\console\Controller
             $str .= "  [";
             foreach ($val as $v){
                     $str .= "'{$v}',";
+            }
+            $str = rtrim($str, ',');
+            $str .= "],\n";
+        }
+        $str .= "]\n";
+        //var_dump($str);exit;
+        file_put_contents('db.txt', $str, FILE_APPEND);exit;
+        $str = '';
+        $authManager = yii::$app->getAuthManager();
+        $permissions = $authManager->getPermissions();
+        $columns = array_keys((array)$permissions['/setting/website:GET']);
+        $str = "[";
+        foreach ($columns as $column){
+            $str .= "'{$column}',";
+        }
+        $str .= "]\n";
+        foreach ($permissions as $permission){
+            $str .= "  [";
+            $i = 1;
+            foreach ($permission as $v){
+                if( $i == 5 ){
+                    $str .= "{$v},";
+                }else {
+                    $str .= "'{$v}',";
+                }
+                $i++;
+            }
+            $str = rtrim($str, ',');
+            $str .= "],\n";
+        }
+        file_put_contents('db.txt', $str);
+    }
+
+    public function actionTag()
+    {
+        $articles = \common\models\Article::find()->asArray()->all();
+        $columns = ['aid', 'key', 'value', 'created_at'];
+        $str = "[";
+        foreach ($columns as $column){
+            $str .= "'{$column}',";
+        }
+        $str = rtrim($str, ',');
+        $str .= "]";
+        file_put_contents('db.txt', $str);
+
+        $str = "\n\n[\n";
+        $aaa = [];
+        foreach ($articles as $article){
+            $tags = explode(',', $article['tag']);
+            foreach ($tags as $tag){
+                if( $tag == '' ) continue;
+                $aaa[] = [
+                    "aid" => $article['id'],
+                    "key" => "tag",
+                    "value" => $tag,
+                    "created_at" => time(),
+                ];
+            }
+        }
+        foreach ($aaa as $val){
+            $str .= "  [";
+            foreach ($val as $v){
+                $str .= "'{$v}',";
             }
             $str = rtrim($str, ',');
             $str .= "],\n";

@@ -8,6 +8,7 @@
 
 namespace frontend\controllers\components;
 
+use common\models\meta\ArticleMetaTag;
 use yii\data\ActiveDataProvider;
 use frontend\models\Article as ArticleModel;
 
@@ -87,21 +88,15 @@ class Article extends \yii\base\BaseObject
     }
 
     /**
-     * 获取随机标签
+     * 获取最热标签
      *
      * @param int $limit
      * @return array|\yii\db\ActiveRecord[]
      */
-    public static function getTags($limit = 14)
+    public static function getHotestTags($limit)
     {
-        $data = ArticleModel::find()->select('tag')->where(['<>', 'tag', ''])->asArray()->all();
-        $tags = [];
-        foreach ($data as $val) {
-            $tags = array_merge($tags, explode(',', $val['tag']));
-        }
-        shuffle($tags);
-        $data = array_slice(array_count_values($tags), 0, $limit);
-        return $data;
+        $metaTagModel = new ArticleMetaTag();
+        return $metaTagModel->getHotestTags($limit);
     }
 
     /**
@@ -112,7 +107,7 @@ class Article extends \yii\base\BaseObject
      */
     public static function getArticleList($where = [])
     {
-        $where = array_merge($where, ['type' => ArticleModel::ARTICLE]);
+        $where = array_merge($where, ['type' => ArticleModel::ARTICLE, 'status'=>ArticleModel::ARTICLE_PUBLISHED]);
         $query = ArticleModel::find()->select([])->where($where);
         $dataProvider = new ActiveDataProvider([
             'query' => $query,

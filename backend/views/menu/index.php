@@ -9,7 +9,7 @@
 /**
  * @var $this yii\web\View
  * @var $dataProvider yii\data\ArrayDataProvider
- * @var $searchModel backend\models\MenuSearch
+ * @var $searchModel backend\models\search\MenuSearch
  */
 
 use backend\grid\DateColumn;
@@ -61,7 +61,9 @@ $this->params['breadcrumbs'][] = yii::t('app', 'Backend Menus');
                             'label' => yii::t('app', 'Url'),
                         ],
                         [
-                            'class' => SortColumn::className()
+                            'class' => SortColumn::className(),
+                            'primaryKey' => 'id',
+                            'label' => yii::t('app', 'Sort')
                         ],
                         [
                             'class' => StatusColumn::className(),

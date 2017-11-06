@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Author: lf
  * Blog: https://blog.feehi.com
@@ -31,7 +30,7 @@ class CreateAction extends \yii\base\Action
         $model = new $this->modelClass;
         $model->setScenario( $this->scenario );
         if (yii::$app->getRequest()->getIsPost()) {
-            if ($model->load(yii::$app->getRequest()->post()) && $model->validate() && $model->save()) {
+            if ($model->load(yii::$app->getRequest()->post()) && $model->save()) {
                 yii::$app->getSession()->setFlash('success', yii::t('app', 'Success'));
                 return $this->controller->redirect(['index']);
             } else {
