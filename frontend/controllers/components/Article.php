@@ -8,7 +8,7 @@
 
 namespace frontend\controllers\components;
 
-use yii\base\Object;
+use yii\base\BaseObject;
 use yii\data\ActiveDataProvider;
 use frontend\models\Article as ArticleModel;
 
