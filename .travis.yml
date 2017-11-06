@@ -20,6 +20,8 @@ sudo: false
 install:
   - travis_retry composer self-update && composer --version
   - travis_retry composer update --prefer-dist --no-interaction
+  - cat vendor/yiisoft/yii2/BaseObject.php
+  - ls vendor/yiisoft/yii2
 # setup application:
   - |
     ./init --env=Development
