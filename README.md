@@ -167,7 +167,7 @@ QQ群 258780872
     2. ```bash
          cd /path/to/webApp
          vendor/bin/codecept run
-    ```
+        ```
 
 
 项目展示
