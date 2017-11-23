@@ -2,7 +2,8 @@ FeehiCMS __[(English)](docs/README_EN.md)__
 ===============================
 
 基于yii2的CMS系统，运行环境与yii2(php>=5.4)一致。FeehiCMS旨在为yii2爱好者提供一个基础功能稳定完善的系统，使开发者更专注于业务功能开发。
-FeehiCMS没有对yii2做任何的修改、封装，但是把yii2的一些优秀特性几乎都用在了FeehiCMS上，对于学习yii2框架提供了良好的实例。
+FeehiCMS没有对yii2做任何的修改、封装，但是把yii2的一些优秀特性几乎都用在了FeehiCMS上，虽提供文档，
+但FeehiCMS提倡简洁、快速上手，基于FeehiCMS开发可以无需文档，反倒FeehiCMS为yii2文档提供了最好的实例
 
 [![Latest Stable Version](https://poser.pugx.org/feehi/cms/v/stable)](https://packagist.org/packages/feehi/cms)
 [![License](https://poser.pugx.org/feehi/cms/license)](https://packagist.org/packages/feehi/cms)
@@ -30,7 +31,7 @@ FeehiCMS没有对yii2做任何的修改、封装，但是把yii2的一些优秀�
 
 帮助
 ---------------
-1. 开发文档[http://doc.feehi.com](http://doc.feehi.com) `Tips:虽然提供文档，但FeehiCMS提倡简洁，快速上手，基于FeehiCMS开发可以无需本文档，反倒FeehiCMS为yii2文档提供了最好的实例`
+1. 开发文档[http://doc.feehi.com](http://doc.feehi.com)
 
 2. QQ群 258780872
 
