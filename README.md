@@ -39,7 +39,7 @@ FeehiCMS没有对yii2做任何的修改、封装，但是把yii2的一些优秀�
 
 4. Email job@feehi.com
 
-[bug反馈](http://www.github.com/liufee/cms/issues)
+5. [bug反馈](http://www.github.com/liufee/cms/issues)
 
 
 功能
