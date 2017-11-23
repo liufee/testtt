@@ -1,9 +1,6 @@
 FeehiCMS __[(English)](docs/README_EN.md)__
 ===============================
 
-
-首款编写单元测试、功能测试、验收测试的yii2开源系统
-------------------------------------------------------------
 基于yii2的CMS系统，运行环境与yii2(php>=5.4)一致。FeehiCMS旨在为yii2爱好者提供一个基础功能稳定完善的系统，使开发者更专注于业务功能开发。
 FeehiCMS没有对yii2做任何的修改、封装，但是把yii2的一些优秀特性几乎都用在了FeehiCMS上，虽提供文档，
 但FeehiCMS提倡简洁、快速上手，基于FeehiCMS开发可以无需文档，反倒FeehiCMS为yii2文档提供了最好的实例
@@ -13,8 +10,8 @@ FeehiCMS没有对yii2做任何的修改、封装，但是把yii2的一些优秀�
 [![Build Status](https://www.travis-ci.org/liufee/cms.svg?branch=master)](https://www.travis-ci.org/liufee/cms)
 
 
-更新记录
----------------
+更新记录 - 首款编写单元测试、功能测试、验收测试的yii2开源系统
+-------
 1.0.0rc1 优化使用
 
 1.0.0beta 3 修复bug
