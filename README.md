@@ -30,14 +30,14 @@ FeehiCMS没有对yii2做任何的修改、封装，但是把yii2的一些优秀�
 
 帮助
 ---------------
-开发文档[http://doc.feehi.com](http://doc.feehi.com)
+1. 开发文档[http://doc.feehi.com](http://doc.feehi.com)
   >Tips:虽然提供文档，但FeehiCMS提倡简洁，快速上手，基于FeehiCMS开发可以无需本文档，反倒FeehiCMS为yii2文档提供了最好的实例。
 
-QQ群 258780872
+2. QQ群 258780872
 
-微信 
+3. 微信 \<br /\> ![微信](http://img-1251086492.cosgz.myqcloud.com/github/wechat.png)
 
-![微信](http://img-1251086492.cosgz.myqcloud.com/github/wechat.png)
+4. Email job@feehi.com
 
 [bug反馈](http://www.github.com/liufee/cms/issues)
 
