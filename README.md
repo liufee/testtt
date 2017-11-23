@@ -35,7 +35,8 @@ FeehiCMS没有对yii2做任何的修改、封装，但是把yii2的一些优秀�
 
 QQ群 258780872
 
-微信 ![微信](http://img-1251086492.cosgz.myqcloud.com/github/wechat.png)
+微信 
+![微信](http://img-1251086492.cosgz.myqcloud.com/github/wechat.png)
 
 [bug反馈](http://www.github.com/liufee/cms/issues)
 
