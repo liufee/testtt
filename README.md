@@ -30,8 +30,7 @@ FeehiCMS没有对yii2做任何的修改、封装，但是把yii2的一些优秀�
 
 帮助
 ---------------
-1. 开发文档[http://doc.feehi.com](http://doc.feehi.com)
-  >Tips:虽然提供文档，但FeehiCMS提倡简洁，快速上手，基于FeehiCMS开发可以无需本文档，反倒FeehiCMS为yii2文档提供了最好的实例。
+1. 开发文档[http://doc.feehi.com](http://doc.feehi.com) `Tips:虽然提供文档，但FeehiCMS提倡简洁，快速上手，基于FeehiCMS开发可以无需本文档，反倒FeehiCMS为yii2文档提供了最好的实例`
 
 2. QQ群 258780872
 
