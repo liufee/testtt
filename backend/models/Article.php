@@ -16,6 +16,15 @@ use yii\helpers\FileHelper;
 
 class Article extends \common\models\Article
 {
+    /**
+     * @var string
+     */
+    public $tag = '';
+
+    /**
+     * @var null|string
+     */
+    public $content = null;
 
     /**
      * @inheritdoc
@@ -40,7 +49,13 @@ class Article extends \common\models\Article
                 if( file_exists($file) && is_file($file) ) unlink($file);
             }
         } else {
-            $this->thumb = $this->getOldAttribute('thumb');
+            if( $this->thumb !== '' ){//删除
+                $file = yii::getAlias('@frontend/web') . $this->getOldAttribute('thumb');
+                if( file_exists($file) && is_file($file) ) unlink($file);
+                $this->thumb = '';
+            }else {
+                $this->thumb = $this->getOldAttribute('thumb');
+            }
         }
         if ($this->flag_headline == null) {
             $this->flag_headline = 0;
@@ -123,8 +138,13 @@ class Article extends \common\models\Article
     public function afterFind()
     {
         parent::afterFind();
-        $metaModel = new ArticleMetaTag();
-        $this->tag = $metaModel->getTagsByArticle($this->id, true);
+        $this->tag = call_user_func(function(){
+            $tags = '';
+            foreach ($this->articleTags as $tag) {
+                $tags .= $tag->value . ',';
+            }
+            return rtrim($tags, ',');
+        });
         $this->content = ArticleContent::findOne(['aid' => $this->id])['content'];
     }
 
