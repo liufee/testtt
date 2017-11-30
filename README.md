@@ -96,8 +96,11 @@ FeehiCMS没有对yii2做任何的修改、封装，但是把yii2的一些优秀�
     
 2. 使用composer (`推荐使用此方式安装`)
     >使用此方式安装，默认的后台超级管理员用户名admin密码123456
-     composer的安装以及国内镜像设置请点击 [此处](http://www.phpcomposer.com/)
-     以下命令默认您已全局安装composer，如果您是局部安装的composer:请使用php /path/to/composer.phar来替换以下命令中的composer
+    
+     >composer的安装以及国内镜像设置请点击 [此处](http://www.phpcomposer.com/)
+     
+     >以下命令默认您已全局安装composer，如果您是局部安装的composer:请使用php /path/to/composer.phar来替换以下命令中的composer
+     
      1. 使用composer下载创建FeehiCMS项目
         **以下两个命令任选其一。如果喜欢简单且日后不需要升级FeehiCMS请选择命令一,如果日后需要平滑升级FeehiCMS请选择命令二**
         
