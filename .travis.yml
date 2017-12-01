@@ -36,3 +36,5 @@ before_script:
 
 script:
   - vendor/bin/codecept run --debug --steps
+after_success:
+  - curl http://hook.feehi.com/github/cms/auto-update
