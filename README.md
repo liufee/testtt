@@ -1,210 +1,187 @@
-FeehiCMS  __[(English)](docs/README_EN.md)__  首款编写单元测试、功能测试、验收测试的yii2开源系统
+yii2 swoole
 ===============================
 
-基于yii2的CMS系统，运行环境与yii2(php>=5.4)一致。FeehiCMS旨在为yii2爱好者提供一个基础功能稳定完善的系统，使开发者更专注于业务功能开发。
-FeehiCMS没有对yii2做任何的修改、封装，但是把yii2的一些优秀特性几乎都用在了FeehiCMS上，虽提供文档，
-但FeehiCMS提倡简洁、快速上手，基于FeehiCMS开发可以无需文档，反倒FeehiCMS为yii2文档提供了最好的实例
-
-[![Latest Stable Version](https://poser.pugx.org/feehi/cms/v/stable)](https://packagist.org/packages/feehi/cms)
-[![License](https://poser.pugx.org/feehi/cms/license)](https://packagist.org/packages/feehi/cms)
-[![Build Status](https://www.travis-ci.org/liufee/cms.svg?branch=master)](https://www.travis-ci.org/liufee/cms)
+让yii2运行在swoole上。如果您在使用中遇到问题或者想学习yii2结合swoole可以加qq群258780872一起讨论
 
 
-更新记录
--------
-1.0.0rc1 优化使用
-
-1.0.0beta 3 修复bug
-
-1.0.0beta2 增加自定义图片类型设置,优化管理员角色创建和修改
-
-1.0.0beta1 修复bug
-
-1.0.0alpha3 重写文章tag,修复两次model validate
-
-1.0.0alpha2 修复bug 
-
-1.0.0alpha1 增加restful api,单元测试,行为测试,验收测试,替换为yii2最新模板,优化composer安装依赖替换fxp/composer-asset-plugin为Asset Packagist,重写rbac权限管理替换为yii2内置实现
-
-0.1.3 版本已经集成swoole作为FeehiCMS应用服务器，详细配置及使用参见[yii2-swoole](https://www.github.com/liufee/yii2-swoole)
-
-
-帮助
----------------
-1. 开发文档[http://doc.feehi.com](http://doc.feehi.com)
-
-2. QQ群 258780872
-
-3. 微信 <br> ![微信](http://img-1251086492.cosgz.myqcloud.com/github/wechat.png)
-
-4. Email job@feehi.com
-
-5. [bug反馈](http://www.github.com/liufee/cms/issues)
-
-
-功能
----------------
- * 多语言
- * 单元测试
- * 功能测试
- * 验收测试
- * RBAC权限管理
- * restful api
- * 文章管理 
- * 操作日志
- 
- FeehiCMS提供完备的web系统基础通用功能，包括前后台菜单管理,文章标签,缓存,网站设置,seo设置,邮件设置,分类管理,单页...
- 
- 
-快速体验
+性能
 ----------------
-1. 使用演示站点
-演示站点后台   **用户名:feehicms 密码123456**
-      * php7.0.0
-        * 后台 [http://demo.cms.feehi.com/admin](http://demo.cms.feehi.com/admin)
-        * 前台 [http://demo.cms.feehi.com](http://demo.cms.feehi.com/)
-        * api [http://demo.cms.feehi.com/api/articles](http://demo.cms.feehi.com/api/articles)
-      * swoole (docker)
-        * swoole演示前台 [http://swoole.demo.cms.qq.feehi.com](http://swoole.demo.cms.qq.feehi.com)
-        * swoole演示后台 [http://swoole-admin.demo.cms.qq.feehi.com](http://swoole-admin.demo.cms.qq.feehi.com)
-      * php7.1.8 (docker)
-        * 备用演示前台1 [http://demo.cms.qq.feehi.com](http://demo.cms.qq.feehi.com)
-        * 备用演示api1 [http://demo.cms.qq.feehi.com/admin](http://demo.cms.qq.feehi.com/admin)
-        * 备用演示后台1 [http://demo.cms.qq.feehi.com/api](http://demo.cms.qq.feehi.com/api/articles)
-      * php5.4 (docker)
-        * 备用演示前台2 [http://php54.demo.cms.qq.feehi.com](http://php54.demo.cms.qq.feehi.com/)
-        * 备用演示后台2 [http://php54.demo.cms.qq.feehi.com/admin](http://php54.demo.cms.qq.feehi.com/admin)
-        * 备用演示api2 [http://php54.demo.cms.qq.feehi.com/api](http://php54.demo.cms.qq.feehi.com/api/articles)
-      
-2. 使用Docker容器
-    ```bash
-    $ docker pull registry.cn-hangzhou.aliyuncs.com/liufee/cms
-    $ docker run --name feehicms -h feehicms -itd -p 80:80 -p 22:22 liufee/cms
-    ```
+运行在swoole上的yii2是运行在php-fpm上yii2的5倍以上，而且一句代码也不用修改。
  
+ 
+在线demo性能体验
+----------------
+各个演示站点后台   **用户名:feehicms 密码123456**
+  * php7.1.8 (php-fpm+nginx+yii2)
+    * 前台[http://demo.cms.qq.feehi.com/](http://demo.cms.qq.feehi.com)
+    * 后台1[http://demo.cms.qq.feehi.com/admin](http://demo.cms.qq.feehi.com/admin)
+  * php7.1.8 (swoole+nginx+yii2)
+    * 前台[http:/swoole.demo.cms.qq.feehi.com/](http://swoole.demo.cms.qq.feehi.com)
+    * 后台[http://swoole-admin.demo.cms.qq.feehi.com/](http://swoole-admin.demo.cms.qq.feehi.com)
+
+以上demo均采取同一[docker镜像](https://www.github.com/liufee/docker)部署，docker容器运行在同一服务器上，分配相同的资源。
+
+这里用作比较的demo是采用yii2框架开发的一款cms系统[FeehiCMS](http://www.github.com/liufee/cms)，因为FeehiCMS只开发基础cms功能，未对yii框架做任何封装、改造，故选择此作为体验demo。
  
 安装
 ---------------
-前置条件: 如未特别说明，本文档已默认您把php命令加入了环境变量，如果您未把php加入环境变量，请把以下命令中的php替换成/path/to/php
-1. 使用归档文件(简单，适合没有yii2经验者)
-    >使用此方式安装，后台超管用户名和密码会在安装过程中让您填入
-    1. 下载FeehiCMS源码 [点击此处下载最新版](http://resource-1251086492.file.myqcloud.com/Feehi_CMS.zip)
-    2. 解压到目录 
-    3. 配置web服务器(参见下面)
-    4. 浏览器打开 http://localhost/install.php 按照提示完成安装(若使用php内置web服务a器则地址为 http://localhost:8080/install.php )
-    5. 完成
-    
-2. 使用composer (`推荐使用此方式安装`)
-    >使用此方式安装，默认的后台超级管理员用户名admin密码123456
-    
-     >composer的安装以及国内镜像设置请点击 [此处](http://www.phpcomposer.com/)
+1. 使用composer
+     composer的安装以及国内镜像设置请点击[此处](http://www.phpcomposer.com/)
      
-     >以下命令默认您已全局安装composer，如果您是局部安装的composer:请使用php /path/to/composer.phar来替换以下命令中的composer
-     
-     1. 使用composer下载创建FeehiCMS项目
-        **以下两个命令任选其一。如果喜欢简单且日后不需要升级FeehiCMS请选择命令一,如果日后需要平滑升级FeehiCMS请选择命令二**
+     ```bash
+     $ cd /path/to/yii2-app
+     $ composer require "feehi/yii2-swoole"
+     $ composer install -vvv
+     ```
+ 
+
+配置yii2
+-------------
+打开console/config/main.php，在顶层配置中加入如下配置。（注意：并不是配置在components里面，而应该在最外层，即与components同级）。[完整示例](https://github.com/liufee/cms/blob/master/console/config/main.php)
+
+```bash
+ 'id' => 'app-console',
+ ...//其他配置
+'controllerMap'=>[
+     ...//其他配置项
+     'swoole' => [
+            'class' => feehi\console\SwooleController::className(),
+            'rootDir' => str_replace('console/config', '', __DIR__ ),//yii2项目根路径
+            'app' => 'frontend',//app目录地址
+            'host' => '127.0.0.1',//监听地址
+            'port' => 9999,//监听端口
+            'swooleConfig' => [//标准的swoole配置项都可以再此加入
+                'reactor_num' => 2,
+                'worker_num' => 4,
+                'daemonize' => false,
+                'log_file' => __DIR__ . '/../../frontend/runtime/logs/swoole.log',
+                'log_level' => 0,
+                'pid_file' => __DIR__ . '/../../frontend/runtime/server.pid',
+            ],
+    ],
+    'swoole-backend' => [
+            'class' => feehi\console\SwooleController::className(),
+            'rootDir' => str_replace('console/config', '', __DIR__ ),//yii2项目根路径
+            'app' => 'backend',
+            'host' => '127.0.0.1',
+            'port' => 9998,
+            'swooleConfig' => [
+            'reactor_num' => 2,
+            'worker_num' => 4,
+            'daemonize' => false,
+            'log_file' => __DIR__ . '/../../backend/runtime/logs/swoole.log',
+            'log_level' => 0,
+            'pid_file' => __DIR__ . '/../../backend/runtime/server.pid',
+        ],
+    ]
+    ...//其他配置
+ ]
+ ...//其他配置
+```
+
+
+启动命令
+-------------
+前台
+
+    * 启动 /path/to/php /path/to/yii swoole/start
+    * 关闭 /path/to/php /path/to/yii swoole/stop
+    * 重启 /path/to/php /path/to/yii swoole/restart
+
+后台
+
+    * 启动 /path/to/php /path/to/yii swoole-backend/start
+    * 关闭 /path/to/php /path/to/yii swoole-backend/stop
+    * 重启 /path/to/php /path/to/yii swoole-backend/restart
+    
+使用systemd启动和开机自动启动
+---------------------------
+  使用systemd来管理服务
+  
+    1. 复制feehi.service和feehi-backend.service到/etc/systemd/system目录
+    2. 分别修改feehi.service和feehi-backend.service中[Service]部分的 /path/to/yii2app为你的目录，/path/to/php为你的php命令绝对路径
+    3. 运行systemctl daemon-reload
+  
+  现在可以像管理apache一样使用service httpd start和service httpd stop以及service httpd restart来启动、关闭、重启yii2 swoole服务了
+  
+  serice feehi start和service feehi stop以及service feehi restart启动、关闭、重启前台
+  
+  serice feehi-backend start和service feehi-backend stop以及service feehi-backend restart启动、关闭、重启后台
+    
+    
+  加入开机自动启动
+  
+   方法一 
+   
+        1. 使用systemd管理服务
+        2. 运行systemctl enable feehi以及systemctl enable feehi-backend设置开机自动启动
         
-        ```bash
-            $ composer create-project feehi/cms webApp //此命令创建的FeehiCMS项目不能平滑升级新版本(目录结构简单,目前主力维护版本)
-        ```
-        ```bash
-            $ composer create-project feehi/feehicms webApp //此命令创建的FeehiCMS项目能够通过运行composer update平滑升级到FeehiCMS新版本(FeehiCMS以composer包提供,未来可能主力维护此版本)
-        ```
-     2. 依次执行以下命令初始化yii2框架以及导入数据库
-         ```bash
-         $ cd webApp
-         $ php ./init --env=Production #初始化yii2框架
-         $ php ./yii migrate/up --interactive=0 #导入FeehiCMS sql数据库，执行此步骤之前请先到common/config/main-local.php修改成正确的数据库配置
-         ```
-     3. 配置web服务器(参加下面)
-     4. 完成
- 
-附:web服务器配置(注意是设置"path/to/frontend/web为根目录)
- 
- * php内置web服务器(仅可用于开发环境,当您的环境中没有web服务器时)
- ```bash
-  cd /path/to/cms
-  php ./yii serve  
+   方法二
+   
+        在/etc/rc.local中加入/path/to/php /path/to/yii2app/yii swoole/start和/path/to/php /path/to/yii2app/yii swoole-backend/start两行
   
-  #至此启动成功，可以通过localhost:8080/和localhost:8080/admin来访问了，在线安装即访问localhost:8080/install.php
- ```
- 
- * Apache
- ```bash
-  DocumentRoot "path/to/frontend/web"
-  <Directory "path/to/frontend/web">
-      # 开启 mod_rewrite 用于美化 URL 功能的支持（译注：对应 pretty URL 选项）
-      RewriteEngine on
-      # 如果请求的是真实存在的文件或目录，直接访问
-      RewriteCond %{REQUEST_FILENAME} !-f
-      RewriteCond %{REQUEST_FILENAME} !-d
-      # 如果请求的不是真实文件或目录，分发请求至 index.php
-      RewriteRule . index.php
-  
-      # ...其它设置...
-  </Directory>
-  ```
-  
- * Nginx
- ```bash
+
+Nginx配置
+-------------
+虽然swoole从1.9.17版本以后底层支持作为静态资源web服务器，但毕竟没有完全实现http协议，强烈推荐配合nginx使用，把swoole仅作为应用服务器。
+
+```bash
+ *
+ * 前台
+ *
  server {
-     server_name  localhost;
-     root   /path/to/frontend/web;
-     index  index.php index.html index.htm;
-     try_files $uri $uri/ /index.php?$args;
-     
-     location ~ /api/(?!index.php).*$ {
-        rewrite /api/(.*) /api/index.php?r=$1 last;
-     }
- 
-     location ~ \.php$ {
-         fastcgi_pass   127.0.0.1:9000;
-         fastcgi_index  index.php;
-         fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name;
-         include        fastcgi_params;
-         try_files $uri=404;
-     }
+    set $web /www/cms-swoole/frontend/web;
+    root $web;
+    server_name swoole.cms.test.docker;
+
+    location ~* .(ico|gif|bmp|jpg|jpeg|png|swf|js|css|mp3) {
+    root  $web;
+    }
+
+    location ~ timthumb\.php$ {//若部分功能仍需要使用php-fpm则做类似配置，否则删除此段
+        fastcgi_pass   127.0.0.1:9000;
+        fastcgi_index  index.php;
+        fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name;
+        include        fastcgi_params;
+    }
+
+    location / {
+        proxy_http_version 1.1;
+        proxy_set_header Connection "keep-alive";
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header Host http://swoole.cms.test.docker;
+        proxy_pass http://127.0.0.1:9999;
+    }
  }
- ```
  
- 
-运行测试
--------
-1. 仅运行单元测试,功能测试(不需要配置web服务器)
- ```bash
-    cd /path/to/webApp
-    vendor/bin/codecept run
- ```
-2. 运行单元测试,功能测试,验收测试(需要配置完web服务器)
-    1. 分别拷贝backend,frontend,api三个目录下的tests/acceptance.suite.yml.example到各自目录，并均重名为acceptance.suite.yml,且均修改里面的url为各自的访问url地址
-    2. 与上(仅运行单元测试,功能测试)命令一致
+ *
+ * 后台
+ *
+ server {
+    set $web /www/cms-swoole/backend/web;
+    root $web;
+    server_name swoole-admin.cms.test.docker;
+
+    location ~* .(ico|gif|bmp|jpg|jpeg|png|swf|js|css|mp3) {
+        root  $web;
+    }
+
+    location / {
+        proxy_http_version 1.1;
+        proxy_set_header Connection "keep-alive";
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header Host http://swoole-admin.cms.test.docker;
+        proxy_pass http://127.0.0.1:9998;
+    }
+ }
+```
 
 
-项目展示
-------------
-* [lcs消费金融](http://118.89.241.65/)   
-* [吉安市食品药品监督管理局](http://jamsda.jsz2.com:8011/)  
-* [微信公众号益乐游戏](http://www.ylegame.com/)  
-* [Usens Dev博客](http://dev.usenslnc.com/)  
-* [最美容颜](http://www.zmface.com/)  
-* [有温度](http://youwendu.cn/)  
-* [云上旅游集团](http://www.ys517.cn/)  
-* [微信公众号蚂蚁鲜生](http://www.chijidun.com/) 
-*  ......
+调试
+-------------
+var_dump、echo都是输出到控制台，不方便调试。可以使用\feehi\swoole\Util::dump()，输出数组、对象、字符串、布尔值到浏览器
 
-运行效果
----------
 
-![后台](docs/backend.png)
-
-![前台](docs/frontend.png)
-
-![后台文章编辑](docs/backend_article.png)
-
-![后台角色编辑](docs/backend_role.png)
-
-![后台自定义参数](docs/backend_custom_create.png)
-
-![后台文章编辑](docs/backend_custom_setting.png)
-
-![后台文章编辑](docs/backend_log.png)
+其他
+-------------
+以上是把swoole启动/关闭/重启命令集成到了yii2 console里面，如果你并不想使用集成到yii2 console的swoole，可以复制vendor/feehi/yii2-swoole下的backend.php和frontend.php，修改$rootDir = "/path/to/project"为真正的yii2项目根目录,然后执行php backend.php以及php frontend.php启动swoole
