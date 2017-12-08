@@ -33,7 +33,6 @@ class Bar extends Widget
         $buttons .= $this->renderDataCellContent();
         if( strpos($this->template, '{sort}' ) ){
             ActiveForm::begin([
-                'action' => Url::to('sort'),
                 'method' => 'post',
                 'options' => ['class' => 'form-horizontal', 'name' => 'sort']
             ]);
@@ -100,7 +99,7 @@ class Bar extends Widget
                 return Html::a('<i class="fa fa-trash-o"></i> ' . yii::t('app', 'Delete'), Url::to(['delete']), [
                     'title' => yii::t('app', 'Delete'),
                     'data-pjax' => '0',
-                    'data-confirm' => yii::t('app', 'Realy to delete?'),
+                    'data-confirm' => yii::t('app', 'Really to delete?'),
                     'class' => 'btn btn-white btn-sm multi-operate',
                 ]);
             };

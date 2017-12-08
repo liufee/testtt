@@ -44,7 +44,7 @@ return [
     'Hot Recommends' => '热门推荐',
     'Clound Tags' => '云标签',
     'Email Suscribe' => '邮件订阅',
-    'Frinendly Links' => '友情链接',
+    'Friendly Links' => '友情链接',
     'Latest Comments' => '最新评论',
     'Subscribe to the wonderful content' => '订阅精彩内容',
     ' Topics' => '个话题',
@@ -81,6 +81,7 @@ return [
     'New generation CMS FeehiCMS' => 'Feehi cms 新一代内容管理系统',
     'Highly recommend' => '吐血推荐',
     'FeehiCMS based on yii2, support php7, makes website more excellent...' => 'Feehi cms是一款基于优秀php框架yii2开发的新一代cms系统，使用了php最新版本(php7)带来的新特性，会让网站显得内涵而出色...',
+    'Send email at someone replied' => '有人回复时邮件通知我',
     /*article*/
 
     /*comment*/
