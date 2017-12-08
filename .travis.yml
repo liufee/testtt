@@ -6,21 +6,20 @@ php:
   - 5.6
   - 7.0
   - 7.1
+#  - 7.2
 #  - hhvm
 
 # faster builds on new travis setup not using sudo
 sudo: false
 
 # cache vendor dirs
-#cache:
-  #directories:
-    #- $HOME/.composer/cache
+cache:
+  directories:
+    - $HOME/.composer/cache
 
 install:
   - travis_retry composer self-update && composer --version
   - travis_retry composer update --prefer-dist --no-interaction
-  #- cat vendor/yiisoft/yii2/BaseObject.php
-  - ls vendor/yiisoft/yii2/base
 # setup application:
   - |
     ./init --env=Development
@@ -34,6 +33,4 @@ before_script:
   - php yii_test migrate --interactive=0
 
 script:
-  - vendor/bin/codecept run --debug --steps
-after_success:
-  - curl http://hook.feehi.com/github/cms/auto-update
+  - vendor/bin/codecept run
