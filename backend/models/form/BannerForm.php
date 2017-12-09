@@ -177,7 +177,8 @@ class BannerForm extends \Common\models\Options
 
         if( !$insert ){//修改
             $ifChangeStatus = false;
-            count( yii::$app->getRequest()->post()[$formName] ) == 1 && isset( yii::$app->getRequest()->post()[$formName]['status'] ) && $ifChangeStatus = true;
+            $post = yii::$app->getRequest()->post()[$formName];
+            count( yii::$app->getRequest()->post()[$formName] ) == 1 && isset( $post['status'] ) && $ifChangeStatus = true;
             foreach ($banners as &$banner){
                 if( $banner['sign'] == $sign ){
                     if( $ifChangeStatus ){//首页仅修改状态
