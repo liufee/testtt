@@ -94,11 +94,11 @@ class AdForm extends \Common\models\Options
                 if (file_exists($file) && is_file($file)) unlink($file);
             }
             if ($upload === null) {
-                if ($this->ad !== '' && $this->input_type == Constants::AD_IMG) {//删除
+                if ($this->ad === '0' && $this->input_type == Constants::AD_IMG) {//删除
                     $file = yii::getAlias('@frontend/web') . $this->getOldAttribute('ad');
                     if (file_exists($file) && is_file($file)) unlink($file);
                     $this->ad = '';
-                } else if( $this->input_type != Constants::AD_TEXT ){
+                }else if($this->input_type != Constants::AD_TEXT){
                     $this->ad = $this->getOldAttribute('ad');
                 }
             }
@@ -126,7 +126,6 @@ class AdForm extends \Common\models\Options
         $this->created_at = $value->created_at;
         $this->setOldAttributes([
             'id' => $this->id,
-            'type' => $this->type,
             'name' => $this->name,
             'value' => $this->value,
             'input_type' => $this->input_type,
