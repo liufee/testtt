@@ -27,7 +27,14 @@ LNMP Dockerfile
 - [x] xhprof
 
 
->docker build的时候加入--build-arg PHP_VER=php版本号,NGINX_VER=nginx版本号,REDIS_VER=reids版本号,PHPMYADMIN_VER=phpmyadmin版本号,REDIS_VER=redis密码(phpredisadmin同此),ROOT_PASSWORD=ssh的root密码 可以指定php，nginx，redis，phpmyadmin的安装版本,redis(phpredisadmin)和ssh的密码
+>docker build的时候加入
+    --build-arg PHP_VER=php版本号 
+    --build-arg NGINX_VER=nginx版本号 
+    --build-arg REDIS_VER=reids版本号
+    --build-arg PHPMYADMIN_VER=phpmyadmin版本号
+    --build-arg REDIS_VER=redis密码(phpredisadmin同此)
+    --build-arg ROOT_PASSWORD=ssh的root密码
+可以指定php，nginx，redis，phpmyadmin的安装版本,redis(phpredisadmin)和ssh的密码
 
 
 获取镜像
