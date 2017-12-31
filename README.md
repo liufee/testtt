@@ -27,9 +27,7 @@ LNMP Dockerfile
 - [x] xhprof
 
 
->docker build的时候加入--build-arg PHP_VER=php版本号 --build-arg NGINX_VER=nginx版本号 --build-arg REDIS_VER=reids版本号 --build-arg PHPMYADMIN_VER=phpmyadmin版本号 指定php，nginx，redis，phpmyadmin的安装版本。*
-
->docker build的时候加入--build-arg REDIS_VER=REDIS_PASS指定redis密码(phpredisadmin的admin用户的密码也是此密码)，--build-arg ROOT_PASSWORD=ssh的root密码*
+>docker build的时候加入--build-arg PHP_VER=php版本号,NGINX_VER=nginx版本号,REDIS_VER=reids版本号,PHPMYADMIN_VER=phpmyadmin版本号,REDIS_VER=redis密码(phpredisadmin同此),ROOT_PASSWORD=ssh的root密码 可以指定php，nginx，redis，phpmyadmin的安装版本,redis(phpredisadmin)和ssh的密码
 
 
 获取镜像
@@ -56,7 +54,7 @@ P.S 自行构建，如果某一步骤失败, 再来一次。(因为你懂的原�
 ```
  P.S 
  
- 默认web目录为/usr/local/nginx/html,若需要配置vhost可以映射其他web目录进去.如: -v /path/to/sites:/www,然后在/etc/nginx/site.d中增加vhost配置
+ 默认web目录为/usr/local/nginx/html,若需要配置多个vhost可以映射其他web目录进去.如: -v /path/to/sites:/www,然后在/etc/nginx/site.d中增加vhost配置
 
 
 xhprof使用方法
