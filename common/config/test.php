@@ -7,8 +7,5 @@ return [
             'class' => yii\web\User::className(),
             'identityClass' => backend\models\User::className(),
         ],
-        'request' => [
-            'cookieValidationKey' => 'test',
-        ],
     ],
 ];
