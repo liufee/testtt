@@ -27,7 +27,7 @@ class ArticleController extends \yii\web\Controller
             'index' => [
                 'class' => IndexAction::className(),
                 'data' => function(){
-                    $searchModel = new ArticleSearch(['scenario' => 'article']);
+                    $searchModel = new ArticleSearch();
                     $dataProvider = $searchModel->search(yii::$app->getRequest()->getQueryParams());
                     return [
                         'dataProvider' => $dataProvider,
@@ -56,6 +56,7 @@ class ArticleController extends \yii\web\Controller
             'sort' => [
                 'class' => SortAction::className(),
                 'modelClass' => Article::className(),
+                'scenario' => 'article',
             ],
         ];
     }

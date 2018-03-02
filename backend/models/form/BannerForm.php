@@ -8,13 +8,11 @@
 
 namespace backend\models\form;
 
-use common\models\Options;
+use common\helpers\Util;
 use yii;
 use common\libs\Constants;
 use yii\helpers\ArrayHelper;
-use yii\helpers\FileHelper;
 use yii\web\NotFoundHttpException;
-use yii\web\UploadedFile;
 
 class BannerForm extends \Common\models\Options
 {
@@ -55,14 +53,6 @@ class BannerForm extends \Common\models\Options
     public function rules()
     {
         return [
-            [['name'], 'unique'],
-            [
-                ['name'],
-                'match',
-                'pattern' => '/^[a-zA-Z][0-9_]*/',
-                'message' => yii::t('app', 'Must begin with alphabet and can only includes alphabet,_,and number')
-            ],
-            [['name', 'tips'], 'required'],
             [['sort', 'status'], 'integer'],
             [['sign', 'target', 'link', 'desc'], 'string'],
             [['img'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg, jpeg, gif, webp'],
@@ -71,168 +61,122 @@ class BannerForm extends \Common\models\Options
 
     public function scenarios()
     {
-        return [
-            'type' => ['name', 'group', 'tips'],
-            'banner' => ['sign', 'img', 'target', 'link', 'sort', 'desc', 'status'],
-        ];
+        return ['default'=>['sort', 'status', 'integer', 'sign', 'target', 'link', 'desc', 'img'], 'delete'=>['id', 'sign']];
     }
 
-    public function beforeSave($insert)
+    public static function findOne($id)
     {
-        $this->type = self::TYPE_BANNER;
-        return parent::beforeSave($insert);
+        if( in_array(yii::$app->controller->action->id, ['banner-sort', 'banner-delete']) ){//删除,排序
+            $model = parent::findOne(yii::$app->getRequest()->get('id'));
+            $model->sign = $id;
+            return $model;
+        }else{
+            return parent::findOne($id);
+        }
     }
 
-    public function beforeDelete()
+    public function delete()
     {
-        if($this->getScenario() == 'type'){
-            if( $this->value != '[]' && $this->value != '' ){
-                $this->addError('id', yii::t('app', 'This type exits banner'));
-                return false;
+        return $this->save();
+    }
+
+    public function afterFind()
+    {
+        if(empty($this->value)) {
+            $this->value = [];
+        }else {
+            $temp = json_decode($this->value, true);
+            ArrayHelper::multisort($temp, 'sort');
+            $this->value = $temp;
+            $sign = yii::$app->getRequest()->get('sign', null);
+            if($sign !== null) {
+                foreach ($this->value as $value) {
+                    if( $sign === $value['sign'] ){
+                        $this->sign = $value['sign'];
+                        $this->img = $value['img'];
+                        $this->target = $value['target'];
+                        $this->desc = $value['desc'];
+                        $this->link = $value['link'];
+                        $this->sort = $value['sort'];
+                        $this->status = $value['status'];
+                        break;
+                    }
+                }
             }
         }
-        return true;
     }
 
-    public function getBannersById($id)
+   public static function getBanners($id, $asArray=false)
     {
-        $model = self::findOne(['id'=>$id, 'type'=>self::TYPE_BANNER]);
+        $model = parent::findOne(['id'=>$id, 'type'=>self::TYPE_BANNER]);
         if( $model == '' ) throw new NotFoundHttpException("Cannot find id $id");
-        $banners = json_decode($model->value);
-        if($banners == null) $banners = [];
-        ArrayHelper::multisort($banners, 'sort');
         $models = [];
-        foreach ($banners as $banner){
-            $models[] = new self([
-                'id' => $model->id,
-                'sign' => $banner->sign,
-                'img' => $banner->img,
-                'target' => $banner->target,
-                'desc' => $banner->desc,
-                'link' => $banner->link,
-                'sort' => $banner->sort,
-                'status' => $banner->status,
-            ]);
+        foreach ($model->value as $banner){
+            $temp = [
+                'id' => $id,
+                'sign' => $banner['sign'],
+                'img' => $banner['img'],
+                'target' => $banner['target'],
+                'desc' => $banner['desc'],
+                'link' => $banner['link'],
+                'sort' => $banner['sort'],
+                'status' => $banner['status'],
+            ];
+            $models[$banner['sign']] = $asArray ? $temp : new self($temp);
         }
         return $models;
     }
 
-    public function getBannerBySign($id, $sign)
+    public function beforeSave($insert)
     {
-        $models = $this->getBannersById($id);
-        foreach ($models as $model){
-            if( $model->sign == $sign ) {
-                return $model;
+        $sign = yii::$app->getRequest()->get('sign', null);
+        if( $sign === null && $this->sign ) $sign = $this->sign;//删除
+        $options = [];
+        $oldFullName = "";
+        if( $sign !== null ){//修改
+            foreach ($this->value as $key => $value){
+                if( $value['sign'] === $sign ){
+                    $oldFullName = $value['img'];
+                }
             }
+            if( $this->getScenario() === 'delete' ) $options['deleteOldFile'] = true;
         }
-        throw new NotFoundHttpException("Cannot find id $id img $sign");
-    }
-
-    public function saveBanner($id, $sign='')
-    {
-        $model = self::findOne($id);
-        $banners = json_decode($model->value, true);
-        if( $banners == null ) $banners = [];
-        $insert = $sign == '' ? true : false;
-
-        $temp = explode('\\', __CLASS__);
-        $formName = end($temp);
-
-        $upload = UploadedFile::getInstance($this, 'img');
-        if ($upload !== null) {
-            $uploadPath = yii::getAlias('@uploads/setting/banner/');
-            if (! FileHelper::createDirectory($uploadPath)) {
-                $this->addError('img', "Create directory failed " . $uploadPath);
-                return false;
-            }
-            $fullName = $uploadPath . uniqid() . '_' . $upload->baseName . '.' . $upload->extension;
-            if (! $upload->saveAs($fullName)) {
-                $this->addError('img', yii::t('app', 'Upload {attribute} error: ' . $upload->error, ['attribute' => yii::t('app', 'Thumb')]) . ': ' . $fullName);
-                return false;
-            }
-            $this->img = str_replace(yii::getAlias('@frontend/web'), '', $fullName);
-            if( !$insert ){
-                foreach ($banners as $banner){
-                    if( $banner['sign'] == $sign ){
-                        $file = yii::getAlias('@frontend/web') . $banner['img'];
-                        if( file_exists($file) && is_file($file) ) unlink($file);
+        Util::handleModelSingleFileUploadAbnormal($this, 'img', '@uploads/setting/banner/', $oldFullName, $options);
+        $data = [
+            'img' => $this->img,
+            'target' => $this->target,
+            'desc' => $this->desc,
+            'link' => $this->link,
+            'sort' => $this->sort,
+            'status' => $this->status,
+        ];
+        if( $sign === null ){//新增
+            $data['sign'] = uniqid();
+            $temp = $this->value;
+            $temp[] = $data;
+            $this->value = $temp;
+        }else{
+            $temp = $this->value;
+            foreach ($this->value as $key => $value){
+                if( $value['sign'] === $sign ){
+                    if( $this->getScenario() === 'delete'){
+                        unset($temp[$key]);
+                    }else {
+                        $data['sign'] = $sign;
+                        $temp[$key] = $data;
                     }
                     break;
                 }
+                if( count($this->value) - 1 === $key ) throw new NotFoundHttpException("Id $this->id does not exists sign $sign");
             }
-        } else {
-            foreach ($banners as $banner){
-                if( $banner['sign'] == $sign ){
-                    if( $this->img !== '' && count( yii::$app->getRequest()->post()[$formName] ) != 1 ){//删除
-                        $file = yii::getAlias('@frontend/web') . $banner['img'];
-                        if( file_exists($file) && is_file($file) ) unlink($file);
-                        $this->img = '';
-                    }else {
-                        $this->img = $banner['img'];
-                    }
-                    break;
-                }
-            }
+            $this->value = $temp;
         }
-
-        if( !$insert ){//修改
-            $ifChangeStatus = false;
-            $post = yii::$app->getRequest()->post()[$formName];
-            count( yii::$app->getRequest()->post()[$formName] ) == 1 && isset( $post['status'] ) && $ifChangeStatus = true;
-            foreach ($banners as &$banner){
-                if( $banner['sign'] == $sign ){
-                    if( $ifChangeStatus ){//首页仅修改状态
-                        $banner['status'] = $this->status;
-                    }else {
-                        $banner = [
-                            'sign' => $sign,
-                            'img' => $this->img,
-                            'target' => $this->target,
-                            'desc' => $this->desc,
-                            'link' => $this->link,
-                            'sort' => $this->sort,
-                            'status' => $this->status,
-                        ];
-                    }
-                }
-            }
-        }else {//新增
-            $banners[] = [
-                'sign' => uniqid(),
-                'img' => $this->img,
-                'target' => $this->target,
-                'desc' => $this->desc,
-                'link' => $this->link,
-                'sort' => $this->sort,
-                'status' => $this->status,
-            ];
-        }
-        $model->value = json_encode($banners);
-        return $model->save(false);
+        $this->value = json_encode($this->value);
+        return parent::beforeSave(false);
     }
 
-    public function deleteBanner($id, $sign)
+    public function getBannerType()
     {
-        $banners = $this->getBannersById($id);
-        $temp = [];
-        foreach ($banners as $banner){
-            if($banner['sign'] == $sign){
-                $file = yii::getAlias('@frontend/web') . $banner['img'];
-                if( file_exists($file) && is_file($file) ) unlink($file);
-                continue;
-            }
-            $temp[] = json_decode( json_encode($banner), true);
-        }
-        $model = self::findOne($id);
-        $model->value = json_encode($temp);
-        return $model->save(false);
+        return $this->hasOne(self::className(), ['id' => 'id']);
     }
-
-    public function getBannerTypeById($id)
-    {
-        $model = Options::findOne(['id'=>$id, 'type'=>self::TYPE_BANNER]);
-        if( $model == null ) throw new NotFoundHttpException("None banner type id $id");
-        return $model;
-    }
-
 }

@@ -10,7 +10,7 @@
  * @var $dataProvider yii\data\ArrayDataProvider
  * @var $searchModel backend\models\search\MenuSearch
  * @var $model backend\models\form\BannerForm
- * @var $banner common\models\Options
+ * @var $bannerType common\models\Options
  */
 
 use backend\grid\GridView;
@@ -24,7 +24,7 @@ use backend\grid\ActionColumn;
 
 $this->title = "Banners";
 $this->params['breadcrumbs'][] = ['label' => yii::t('app', 'Banner Types'), 'url' => Url::to(['index'])];
-$this->params['breadcrumbs'][] =  yii::t('app', 'Banner') . ' (' . $banner->tips . "-{$banner->name})";
+$this->params['breadcrumbs'][] =  yii::t('app', 'Banner') . ' (' . $bannerType->tips . "-{$bannerType->name})";
 ?>
 <div class="row">
     <div class="col-sm-12">
@@ -45,13 +45,6 @@ $this->params['breadcrumbs'][] =  yii::t('app', 'Banner') . ' (' . $banner->tips
                                 'title' => yii::t('app', 'Sort'),
                                 'data-pjax' => '0',
                                 'param-sign'=>'sign',
-                                'class' => 'btn btn-white btn-sm sort',
-                            ]);
-                        },
-                        'sort' => function () {
-                            return Html::a('<i class="fa  fa-sort-numeric-desc"></i> ' . yii::t('app', 'Sort'), Url::to(['banner-sort', 'id' => yii::$app->getRequest()->get('id')]), [
-                                'title' => yii::t('app', 'Sort'),
-                                'data-pjax' => '0',
                                 'class' => 'btn btn-white btn-sm sort',
                             ]);
                         },
@@ -81,8 +74,7 @@ $this->params['breadcrumbs'][] =  yii::t('app', 'Banner') . ' (' . $banner->tips
                             'label' => yii::t('app', 'Image'),
                             'format' => 'raw',
                             'value' => function($model){
-                                $img = yii::$app->params['site']['url'] . $model->img;
-                                return "<img style='max-width: 200px;max-height: 100px' src='{$img}'>";
+                                return "<img style='max-width: 200px;max-height: 100px' src='{$model->img}'>";
                             }
                         ],
                         [
@@ -98,7 +90,8 @@ $this->params['breadcrumbs'][] =  yii::t('app', 'Banner') . ' (' . $banner->tips
                             'label' => yii::t('app', 'Sort'),
                             'primaryKey' => function($model){
                                 return $model->sign;
-                            }
+                            },
+                            'action' => Url::to(['banner-sort', 'id'=>yii::$app->getRequest()->get('id')]),
                         ],
                         [
                             'class' => StatusColumn::className(),
@@ -111,6 +104,14 @@ $this->params['breadcrumbs'][] =  yii::t('app', 'Banner') . ' (' . $banner->tips
                             'class' => ActionColumn::className(),
                             'width' => '190px',
                             'buttons' => [
+                                'view-layer' => function ($url, $model, $key, $index, $gridView) {
+                                    return Html::a('<i class="fa fa-folder"></i> ' . Yii::t('yii', 'View'), 'javascript:void(0)', [
+                                        'title' => Yii::t('yii', 'View'),
+                                        'onclick' => "viewLayer('" . Url::toRoute(['banner-view-layer', 'id'=>$model->id, 'sign'=>$model->sign]) . "',$(this))",
+                                        'data-pjax' => '0',
+                                        'class' => 'btn btn-white btn-sm',
+                                    ]);
+                                },
                                 'update' => function ($url, $model, $key, $index, $gridView) {
                                     return Html::a('<i class="fa fa-pencil"></i> ' . Yii::t('app', 'Update'), Url::toRoute(['banner-update', 'id'=>$model->id, 'sign'=>$model->sign]), [
                                         'title' => Yii::t('app', 'Update'),

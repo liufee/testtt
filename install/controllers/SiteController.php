@@ -25,6 +25,7 @@ class SiteController extends \yii\web\Controller
 {
 
     public $enableCsrfValidation = false;
+
     public static $installLockFile = '@common/config/conf/install.lock';
 
     public function init()
@@ -274,9 +275,9 @@ EOF;
                 $_SESSION["_install_setinfo"] = 1;
                 sleep(1);
                 echo "<script>location.href='" . Url::to(['success']) . "';</script>";
+                exit;
             });
             $html = $this->render('installing');
-            header('Content-type: text/html');
             echo $html;
             flush();
             ob_flush();
@@ -287,6 +288,7 @@ EOF;
 
     public function actionCreateDatabase()
     {
+        set_time_limit(0);
         $request = yii::$app->getRequest();
         Yii::$app->response->format = Response::FORMAT_JSON;
         $dbtype = $request->post('dbtype', 'mysql');
@@ -348,7 +350,7 @@ EOF;
 
     public function actionLanguage()
     {
-        $language = \Yii::$app->request->get('lang');//echo $language;die;
+        $language = Yii::$app->request->get('lang');//echo $language;die;
         if (isset($language)) {
             Yii::$app->session['language'] = $language;
         }

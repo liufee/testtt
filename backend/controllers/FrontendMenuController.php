@@ -7,6 +7,7 @@
  */
 namespace backend\controllers;
 
+use backend\actions\ViewAction;
 use yii\data\ArrayDataProvider;
 use frontend\models\Menu;
 use backend\actions\CreateAction;
@@ -39,6 +40,11 @@ class FrontendMenuController extends \yii\web\Controller
                     ];
                 }
             ],
+            'view-layer' => [
+                'class' => ViewAction::className(),
+                'modelClass' => Menu::className(),
+                'scenario' => 'frontend',
+            ],
             'create' => [
                 'class' => CreateAction::className(),
                 'modelClass' => Menu::className(),
@@ -56,6 +62,7 @@ class FrontendMenuController extends \yii\web\Controller
             'sort' => [
                 'class' => SortAction::className(),
                 'modelClass' => Menu::className(),
+                'scenario' => 'frontend',
             ],
         ];
     }

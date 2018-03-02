@@ -84,23 +84,34 @@ $this->params['breadcrumbs'][] = yii::t('app', 'Custom Setting');
                 content: $("#addForm").html(),
             });
             $("form#w1").bind('submit', function () {
-                /*
-                 var index = parent.layer.load(1, {
-                 shade: [0.1,'red'] //0.1透明度的白色背景
-                 });*/
                 var $form = $(this);
                 $.ajax({
                     url: $form.attr('action'),
                     type: "post",
+                    beforeSend: function () {
+                        layer.load(2,{
+                            shade: [0.1,'#fff'] //0.1透明度的白色背景
+                        });
+                    },
                     data: $form.serialize(),
                     success: function (data) {
-                        layer.msg(data.err_msg);
+                        location.reload();
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        layer.alert(jqXHR.responseJSON.message, {
+                            title:tips.error,
+                            btn: [tips.ok],
+                            icon: 2,
+                            skin: 'layer-ext-moon'
+                        })
+                    },
+                    complete: function () {
+                        layer.closeAll("loading");
                     }
-                }).always(function () {
-                    //clearTimeout(index);
                 });
                 return false;
             });
+            $("select#options-input_type").bind('change', onCheckCanTypeInValue);
         });
         $("a.btn_edit").click(function () {
             var name = $(this).parents("div.form-group").children("label").html();
@@ -116,23 +127,34 @@ $this->params['breadcrumbs'][] = yii::t('app', 'Custom Setting');
                         content: data,
                     });
                     $("form[name=edit]").bind('submit', function () {
-                        /*
-                         var index = parent.layer.load(1, {
-                         shade: [0.1,'red'] //0.1透明度的白色背景
-                         });*/
                         var $form = $(this);
                         $.ajax({
                             url: $form.attr('action'),
                             type: "post",
                             data: $form.serialize(),
+                            beforeSend: function () {
+                                layer.load(2,{
+                                    shade: [0.1,'#fff'] //0.1透明度的白色背景
+                                });
+                            },
                             success: function (data) {
-                                layer.msg(data.err_msg);
+                                location.reload();
+                            },
+                            error: function (jqXHR, textStatus, errorThrown) {
+                                layer.alert(jqXHR.responseJSON.message, {
+                                    title:tips.error,
+                                    btn: [tips.ok],
+                                    icon: 2,
+                                    skin: 'layer-ext-moon'
+                                })
+                            },
+                            complete: function () {
+                                layer.closeAll("loading");
                             }
-                        }).always(function () {
-                            //clearTimeout(index);
                         });
                         return false;
                     });
+                    $("select#options-input_type").bind('change', onCheckCanTypeInValue).trigger('change');
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
                     alert("ajax错误," + textStatus + ' : ' + errorThrown);
@@ -143,6 +165,27 @@ $this->params['breadcrumbs'][] = yii::t('app', 'Custom Setting');
             return false;
         })
     });
+
+    function onCheckCanTypeInValue() {
+        var type = $(this).val();
+        var restrictTypeTips = '<?=yii::t('app', 'Type restrict, please type in after create')?>';
+        var input = $(this).parents('form').attr('name') == 'edit' ? $("#editForm input#options-value") : $("#w1 input#options-value");
+        if(type != <?=Constants::INPUT_INPUT?> && type != <?=Constants::INPUT_TEXTAREA?>){
+            if( input.val() == restrictTypeTips ){
+                input.val(input.attr('oldValue'));
+            }else{
+                input.attr('oldValue', input.val());
+            }
+            input.val(restrictTypeTips).attr('disabled', true);
+        }else{
+            if( input.val() == '<?=yii::t('app', 'Type restrict, please type in after create')?>' ){
+                input.val(input.attr('oldValue'));
+            }else{
+                input.attr('oldValue', input.val());
+            }
+            input.attr('disabled', false);
+        }
+    }
 </script>
 <?php JsBlock::end() ?>
 <div class="hide" id="addForm">
@@ -154,6 +197,7 @@ $this->params['breadcrumbs'][] = yii::t('app', 'Custom Setting');
         echo $form->field($model, 'tips')->textInput();
         echo $form->field($model, 'autoload')->dropDownList(Constants::getYesNoItems());
         echo $form->field($model, 'sort')->textInput();
+        echo $form->field($model, 'value')->textInput();
         echo $form->defaultButtons();
         ActiveForm::end();
         ?>

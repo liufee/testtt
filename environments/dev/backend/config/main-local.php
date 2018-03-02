@@ -13,12 +13,23 @@ if (!YII_ENV_TEST) {
     // configuration adjustments for 'dev' environment
     $config['bootstrap'][] = 'debug';
     $config['modules']['debug'] = [
-        'class' => 'yii\debug\Module',
+        'class' => yii\debug\Module::className(),
+        //'allowedIPs' => ['127.0.0.1'],
     ];
 
     $config['bootstrap'][] = 'gii';
     $config['modules']['gii'] = [
-        'class' => 'yii\gii\Module',
+        'class' => yii\gii\Module::className(),
+        //'allowedIPs' => ['127.0.0.1'],
+        'generators' => [
+            'crud' => [
+                'class' => yii\gii\generators\crud\Generator::className(),
+                'templates' => [
+                    'default' => '@backend/components/gii/crud/default',
+                    'yii' => '@vendor/yiisoft/yii2-gii/generators/crud/default',
+                ]
+            ]
+        ],
     ];
 }
 

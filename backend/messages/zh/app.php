@@ -79,15 +79,22 @@ return [
     'Permission denied' => "无权限",
     'Cannot be themselves descendants sub' => '不能是他自己子类的子类',
     'Delete must be POST http method' => '只允许使用POST删除',
+    'Value' => '值',
+    'Admin User Id' => '管理员用户Id',
+    'IP Address' => 'IP地址',
+    'User Id' => '用户Id',
+    /*Public*/
+
     /*Login*/
     'Welcome to' => '欢迎使用',
     'Forgot password' => '忘记密码',
     'Please contact admin for reset password' => '请联系管理员重置密码',
     'Captcha' => '验证码',
     'Verification code error.' => '验证码错误。',
-    /*Login*/
     'Login' => '登陆',
-    /*public*/
+    'Verification Code' => '验证码',
+    /*Login*/
+
     /*Article*/
     'Category Id' => '分类ID',
     'Category' => '分类',
@@ -101,6 +108,8 @@ return [
     'Seo Description' => 'seo描述',
     'Can Comment' => '评论',
     'Visibility' => '可见',
+    'Scan Count' => '浏览次数',
+    'Comment Count' => '评论次数',
     'Tag' => '标签',
     'Author Id' => '作者ID',
     'Author' => '作者',
@@ -120,17 +129,21 @@ return [
     'Please select' => '请选择',
     'Allowed not to be deleted, some article belongs to this category.' => '不允许被删除，还有文章属于此分类',
     'Secret article must set a password' => '加密文章必须设置密码',
+    'Article Id' => '文章Id',
     /*Article*/
 
     /*Comment*/
     'Alias' => '别名',
-    /*Comment*/
-
-    /*Comment*/
     'Comments' => '评论',
     'Article Title' => '文章标题',
     'Website' => '网址',
+    'Replay User Id' => '原评论用户Id',
     /*Comment*/
+
+    /*Category*/
+    'Parent Category Id' => '父分类Id',
+    'Parent Category Name' => '父分类名称',
+    /*Category*/
 
     /*friend link*/
     'Target' => '新窗口打开',
@@ -143,6 +156,7 @@ return [
     'Input new' => '输入',
     'Sub Menu exists, cannot be deleted' => '该菜单还有子菜单，不能被删除',
     'Select from article category' => '从文章分类选择',
+    'Parent Menu Name' => '父分类菜单名称',
     /*menu*/
 
     /*setting*/
@@ -175,6 +189,7 @@ return [
     'Encryption' => '连接类型',
     'SMTP Setting' => 'SMTP设置',
     'Test' => '测试',
+    'Type restrict, please type in after create' => '类型受限，请创建完成后再录入值',
     /*setting*/
 
     /*Log*/
@@ -263,15 +278,10 @@ return [
     /*rbac*/
 
     /*js*/
-    'Realy to do it?' => '确定要执行此操作？',
+    'Confirm' => '确认',
     'ok' => '确定',
     'cancel' => '取消',
     'None item selected!' => '啊哦,神马都都没有选中!',
-    'Please at least select one item.' => '请至少选中一项',
-    'Waiting and no refresh window' => '执行中,请勿刷新页面',
-    'Operating' => '执行中',
-    'Done, operating success' => '执行成功',
-    'Sorry, operating failed' => '啊哦,执行失败啦~',
     'Only picture file be permitted.' => '只能选择图片类型',
     'Choose File' => '选择文件',
     /*js*/

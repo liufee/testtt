@@ -8,6 +8,7 @@
 
 namespace backend\widgets;
 
+use feehi\cdn\DummyTarget;
 use yii;
 use yii\helpers\Html;
 
@@ -87,6 +88,7 @@ class ActiveField extends \yii\widgets\ActiveField
         static $i = 1;
         $unique = uniqid() . $i;
         $i++;
+        if($i >= 10000) $i = 1;
         $for = 'inlineCheckbox' . $unique;
         $options['id'] = $for;
         $options['tag'] = 'a';
@@ -175,6 +177,7 @@ class ActiveField extends \yii\widgets\ActiveField
             static $i = 1;
             $unique .= rand(1, 99999) . $i;
             $i++;
+            if($i >= 10000) $i = 1;
             $checkbox = Html::checkbox($name, $checked, array_merge($itemOptions, [
                 'value' => $value,
                 'id' => 'inlineCheckbox' . $unique,
@@ -213,7 +216,7 @@ class ActiveField extends \yii\widgets\ActiveField
         $nonePicUrl = isset($options['default']) ? $options['default'] : yii::$app->params['site']['url'] . '/static/images/none.jpg';
         if ($src != '') {
             $temp = parse_url($src);
-            $src = isset($temp['host']) ? $src : yii::$app->params['site']['url'] . $src;
+            $src = !isset($temp['host']) ? ( yii::$app->cdn instanceof DummyTarget ?  yii::$app->params['site']['url'] . $src : yii::$app->cdn->getCdnUrl($src) ) : $src;
             $delete = yii::t('app', 'Delete');
             $this->parts['{actions}'] = "<div onclick=\"$(this).parents('.image').find('input[type=hidden]').val(0);$(this).prev().attr('src', '$nonePicUrl');$(this).remove()\" style='position: absolute;width: 50px;padding: 5px 3px 3px 5px;top:5px;left:6px;background: black;opacity: 0.6;color: white;cursor: pointer'><i class='fa fa-trash' aria-hidden='true'> {$delete}</i></div>";
         }else{

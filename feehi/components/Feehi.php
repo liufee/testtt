@@ -9,6 +9,7 @@
 namespace feehi\components;
 
 use common\models\Category;
+use feehi\cdn\DummyTarget;
 use yii;
 use common\helpers\FileDependencyHelper;
 use backend\components\CustomLog;
@@ -69,8 +70,8 @@ class Feehi extends Component
         if (substr(yii::$app->params['site']['url'], -1, 1) != '/') {
             yii::$app->params['site']['url'] .= '/';
         }
-        if (stripos(yii::$app->params['site']['url'], 'http://') !== 0 && stripos(yii::$app->params['site']['url'], 'https://') !== 0) {
-            yii::$app->params['site']['url'] = "http://" . yii::$app->params['site']['url'];
+        if (stripos(yii::$app->params['site']['url'], 'http://') !== 0 && stripos(yii::$app->params['site']['url'], 'https://') !== 0 && stripos(yii::$app->params['site']['url'], '//')) {
+            yii::$app->params['site']['url'] = ( yii::$app->getRequest()->getIsSecureConnection() ? "https://" : "http://" ) . yii::$app->params['site']['url'];
         }
 
         if (isset(yii::$app->session['language'])) {
@@ -98,6 +99,13 @@ class Feehi extends Component
                     'charset' => 'UTF-8',
                     'from' => [yii::$app->feehi->smtp_username => yii::$app->feehi->smtp_nickname]
                 ],
+            ]);
+        }
+
+        $cdn = yii::$app->get('cdn');
+        if( $cdn instanceof DummyTarget){
+            Yii::configure(yii::$app->cdn, [
+                'host' => yii::$app->params['site']['url']
             ]);
         }
     }

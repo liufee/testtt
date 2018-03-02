@@ -78,9 +78,10 @@ $this->params['breadcrumbs'][] = yii::t('app', 'Articles');
                                 } else {
                                     $num = Constants::YesNo_Yes;
                                 }
-                                return Html::a(Constants::getYesNoItems($num), 'javascript:void(0)', [
-                                    'img' => yii::$app->params['site']['url'] . $model->thumb,
-                                    'class' => 'thumbImg'
+                                return Html::a(Constants::getYesNoItems($num), $model->thumb ? yii::$app->params['site']['url'] . $model->thumb : 'javascript:void(0)', [
+                                    'img' => $model->thumb ? yii::$app->params['site']['url'] . $model->thumb : '',
+                                    'class' => 'thumbImg',
+                                    'target' => '_blank',
                                 ]);
                            },
                             'filter' => Constants::getYesNoItems(),
@@ -140,28 +141,10 @@ $this->params['breadcrumbs'][] = yii::t('app', 'Articles');
                         [
                             'class' => DateColumn::className(),
                             'attribute' => 'created_at',
-                            'filter' => Html::activeInput('text', $searchModel, 'create_start_at', [
-                                    'class' => 'form-control layer-date',
-                                    'placeholder' => '',
-                                    'onclick' => "laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'});"
-                                ]) . Html::activeInput('text', $searchModel, 'create_end_at', [
-                                    'class' => 'form-control layer-date',
-                                    'placeholder' => '',
-                                    'onclick' => "laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})"
-                                ]),
                         ],
                         [
                             'class' => DateColumn::className(),
                             'attribute' => 'updated_at',
-                            'filter' => Html::activeInput('text', $searchModel, 'update_start_at', [
-                                    'class' => 'form-control layer-date',
-                                    'placeholder' => '',
-                                    'onclick' => "laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})"
-                                ]) . Html::activeInput('text', $searchModel, 'update_end_at', [
-                                    'class' => 'form-control layer-date',
-                                    'placeholder' => '',
-                                    'onclick' => "laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})"
-                                ]),
                         ],
                         [
                             'class' => ActionColumn::className(),
@@ -177,7 +160,7 @@ $this->params['breadcrumbs'][] = yii::t('app', 'Articles');
                                     ]);
                                 }
                             ],
-                            'template' => '{view-layer} {update} {delete}{comment}',
+                            'template' => '{view-layer} {update} {delete} {comment}',
                         ],
                     ]
                 ]); ?>
@@ -195,7 +178,7 @@ $this->params['breadcrumbs'][] = yii::t('app', 'Articles');
         if (url.length == 0) {
             layer.tips('<?=yii::t('app', 'No picture')?>', $(this));
         } else {
-            layer.tips('<img src=' + url + '>', $(this));
+            layer.tips('<img style="max-width: 100px;max-height: 60px" src=' + url + '>', $(this));
         }
     }
     $(document).ready(function(){
@@ -211,6 +194,7 @@ $this->params['breadcrumbs'][] = yii::t('app', 'Articles');
     container.on('pjax:complete',function(args){
         layer.closeAll('loading');
         $('table tr td a.thumbImg').bind('mouseover mouseout', showImg);
+        $("input.sort").bind('blur', indexSort);
     });
 </script>
 <?php JsBlock::end()?>

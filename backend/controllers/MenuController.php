@@ -8,6 +8,7 @@
 
 namespace backend\controllers;
 
+use backend\actions\ViewAction;
 use yii;
 use backend\models\Menu;
 use backend\models\search\MenuSearch;
@@ -38,6 +39,11 @@ class MenuController extends \yii\web\Controller
                     return $data;
                 }
             ],
+            'view-layer' => [
+                'class' => ViewAction::className(),
+                'modelClass' => Menu::className(),
+                'scenario' => 'backend',
+            ],
             'create' => [
                 'class' => CreateAction::className(),
                 'modelClass' => Menu::className(),
@@ -55,6 +61,7 @@ class MenuController extends \yii\web\Controller
             'sort' => [
                 'class' => SortAction::className(),
                 'modelClass' => Menu::className(),
+                'scenario' => 'backend',
             ],
         ];
     }

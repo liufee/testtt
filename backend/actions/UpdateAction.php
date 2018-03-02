@@ -19,18 +19,29 @@ class UpdateAction extends \yii\base\Action
 
     public $scenario = 'default';
 
+    public $paramSign = "id";
+
+    /** @var string 模板路径，默认为action id  */
+    public $viewFile = null;
+
+    /** @var array|\Closure 分配到模板中去的变量 */
+    public $data;
+
+    /** @var  string|array 编辑成功后跳转地址,此参数直接传给yii::$app->controller->redirect() */
+    public $successRedirect;
+
 
     /**
      * update修改
      *
-     * @param $id
      * @return array|string|\yii\web\Response
      * @throws \yii\web\BadRequestHttpException
      * @throws \yii\web\UnprocessableEntityHttpException
      */
-    public function run($id)
+    public function run()
     {
-        if (! $id) throw new BadRequestHttpException(yii::t('app', "Id doesn't exit"));
+        $id = yii::$app->getRequest()->get($this->paramSign, null);
+        if (! $id) throw new BadRequestHttpException(yii::t('app', "{$this->paramSign} doesn't exit"));
         /* @var $model yii\db\ActiveRecord */
         $model = call_user_func([$this->modelClass, 'findOne'], $id);
         if (! $model) throw new BadRequestHttpException(yii::t('app', "Cannot find model by $id"));
@@ -42,7 +53,8 @@ class UpdateAction extends \yii\base\Action
                     return [];
                 }else {
                     yii::$app->getSession()->setFlash('success', yii::t('app', 'Success'));
-                    return $this->controller->redirect(['update', 'id' => $model->getPrimaryKey()]);
+                    if( $this->successRedirect ) return $this->controller->redirect($this->successRedirect);
+                    return $this->controller->refresh();
                 }
             } else {
                 $errors = $model->getErrors();
@@ -55,13 +67,20 @@ class UpdateAction extends \yii\base\Action
                 }else {
                     yii::$app->getSession()->setFlash('error', $err);
                 }
-
+                $model = call_user_func([$this->modelClass, 'findOne'], $id);
             }
         }
 
-        return $this->controller->render('update', [
+        $this->viewFile === null && $this->viewFile = $this->id;
+        $data = [
             'model' => $model,
-        ]);
+        ];
+        if( is_array($this->data) ){
+            $data = array_merge($data, $this->data);
+        }elseif ($this->data instanceof \Closure){
+            $data = call_user_func_array($this->data, [$model, $this]);
+        }
+        return $this->controller->render($this->viewFile, $data);
     }
 
 }

@@ -37,13 +37,6 @@ $this->params['breadcrumbs'][] = yii::t('app', 'Roles');
                                 'class' => 'btn btn-white btn-sm',
                             ]);
                         },
-                        'sort' => function () {
-                            return Html::a('<i class="fa fa-sort-numeric-desc"></i> ' . yii::t('app', 'Sort'), Url::to(['role-sort']), [
-                                'title' => yii::t('app', 'Sort'),
-                                'data-pjax' => '0',
-                                'class' => 'btn btn-white btn-sm sort',
-                            ]);
-                        },
                         'delete' => function () {
                             return Html::a('<i class="fa fa-trash-o"></i> ' . yii::t('app', 'Delete'), Url::to(['role-delete']), [
                                 'title' => yii::t('app', 'Delete'),
@@ -53,7 +46,7 @@ $this->params['breadcrumbs'][] = yii::t('app', 'Roles');
                             ]);
                         }
                     ],
-                    'template' => '{refresh} {create} {sort} {delete}'
+                    'template' => '{refresh} {create} {delete}'
                 ]) ?>
                 <?= GridView::widget([
                     'dataProvider' => $dataProvider,
@@ -75,12 +68,21 @@ $this->params['breadcrumbs'][] = yii::t('app', 'Roles');
                             'class' => SortColumn::className(),
                             'primaryKey' => function($model){
                                 return $model['name'];
-                            }
+                            },
+                            'action' => Url::to(['roles-sort']),
                         ],
                         [
                             'class' => ActionColumn::className(),
                             'width' => '190px',
                             'buttons' => [
+                                'view-layer' => function($url, $model, $key){
+                                    return Html::a('<i class="fa fa-folder"></i> ' . Yii::t('yii', 'View'), 'javascript:void(0)', [
+                                        'title' => Yii::t('yii', 'View'),
+                                        'onclick' => "viewLayer('" . Url::to(['role-view-layer', 'name' => $model->name]) . "',$(this))",
+                                        'data-pjax' => '0',
+                                        'class' => 'btn btn-white btn-sm',
+                                    ]);
+                                },
                                 'update' => function ($url, $model, $key) {
                                     return Html::a('<i class="fa  fa-edit" aria-hidden="true"></i> ' . Yii::t('app', 'Update'), Url::to([
                                         'role-update',
@@ -100,7 +102,7 @@ $this->params['breadcrumbs'][] = yii::t('app', 'Roles');
                                     ]);
                                 },
                             ],
-                            'template' => '{update} {delete}',
+                            'template' => '{view-layer} {update} {delete}',
                         ]
                     ]
                 ]) ?>

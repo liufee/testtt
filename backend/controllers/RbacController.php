@@ -42,7 +42,7 @@ class RbacController extends \yii\web\Controller
                 }
             }
         }
-        $this->redirect(['permissions']);
+        return [];
     }
 
     public function actionPermissionCreate()
@@ -84,6 +84,15 @@ class RbacController extends \yii\web\Controller
             }
         }
         return $this->render('permission-update', [
+            'model' => $model,
+        ]);
+    }
+
+    public function actionPermissionViewLayer($name)
+    {
+        $model = new Rbac(['scenario'=>'permission']);
+        $model->fillModel($name);
+        return $this->render('permission-view-layer', [
             'model' => $model,
         ]);
     }
@@ -149,7 +158,7 @@ class RbacController extends \yii\web\Controller
     public function actionRoleUpdate($name)
     {
         $model = new Rbac(['scenario'=>'role']);
-        $model->fillModel($name);//var_dump($model->roles);exit;
+        $model->fillModel($name);
         if( yii::$app->getRequest()->getIsPost() ) {
             if ($model->load(yii::$app->getRequest()->post()) && $model->validate() && $model->updateRole($name)) {
                 yii::$app->getSession()->setFlash('success', yii::t('app', 'Success'));
@@ -168,7 +177,16 @@ class RbacController extends \yii\web\Controller
         ]);
     }
 
-    public function actionRoleSort()
+    public function actionRoleViewLayer($name)
+    {
+        $model = new Rbac(['scenario'=>'role']);
+        $model->fillModel($name);
+        return $this->render('role-view-layer', [
+            'model' => $model,
+        ]);
+    }
+
+    public function actionRolesSort()
     {
         if (yii::$app->getRequest()->getIsPost()) {
             $data = yii::$app->getRequest()->post();
@@ -183,7 +201,7 @@ class RbacController extends \yii\web\Controller
                 }
             }
         }
-        $this->redirect(['roles']);
+        return [];
     }
 
     public function actionRoleDelete($name='', $id=null)

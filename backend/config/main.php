@@ -33,7 +33,7 @@ return [
                     'levels' => ['error', 'warning'],
                 ],
                 [
-                    'class' => yii\log\EmailTarget::className(),//当触发levels配置的错误级别时，发送到此些邮箱（请改成自己的邮箱）
+                    'class' => yii\log\EmailTarget::className(),//当触发levels配置的错误级别时，发送到message to配置的邮箱中（请改成自己的邮箱）
                     'levels' => ['error', 'warning'],
                     /*'categories' => [//默认匹配所有分类。启用此项后，仅匹配数组中的分类信息会触发邮件提醒（白名单）
                         'yii\db\*',
@@ -45,7 +45,7 @@ return [
                         'yii\debug\Module::checkAccess',
                     ],
                     'message' => [
-                        'to' => ['admin@feehi.com', 'liufee@126.com'],
+                        'to' => ['admin@feehi.com', 'liufee@126.com'],//此处修改成自己接收错误的邮箱
                         'subject' => '来自 Feehi CMS 后台的新日志消息',
                     ],
                 ],
@@ -80,6 +80,7 @@ return [
             ],
         ],
         'assetManager' => [
+            'linkAssets' => false,//若为unix like系统这里可以修改成true则创建css js文件软链接到assets而不是拷贝css js到assets目录
             'bundles' => [
                 backend\assets\AppAsset::className() => [
                     'css' => [
@@ -87,15 +88,13 @@ return [
                         'b' => 'static/css/font-awesome.min93e3.css?v=4.4.0',
                         'c' => 'static/css/animate.min.css',
                         'd' => 'static/css/style.min862f.css?v=4.1.0',
-                        'e' => 'static/css/plugins/sweetalert/sweetalert.css',
-                        'f' => 'static/js/plugins/layer/laydate/need/laydate.css',
+                        'f' => 'static/js/plugins/layer/laydate/theme/default/laydate.css',
                         'g' => 'static/css/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css',
                         'h' => 'static/css/plugins/toastr/toastr.min.css',
 
                     ],
                     'js' => [
                         'a' => 'static/js/feehi.js',
-                        'b' => 'static/js/plugins/sweetalert/sweetalert.min.js',
                         'c' => 'static/js/plugins/layer/laydate/laydate.js',
                         'd' => 'static/js/plugins/layer/layer.min.js',
                         'e' => 'static/js/plugins/prettyfile/bootstrap-prettyfile.js',
@@ -141,6 +140,7 @@ return [
             'admin-user/request-password-reset',
             'admin-user/reset-password',
             'admin-user/update-self',
+            'assets/*',
             'debug/*',
             'gii/*',
         ],
