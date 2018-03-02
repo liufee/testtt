@@ -9,13 +9,15 @@ class m130524_201442_init extends Migration
         $params = $this->getParams();
         $frontendUri = "";
         isset($params['frontendUri']) && $frontendUri = $params['frontendUri'];
-        while( strpos($frontendUri, 'http://') !== 0 && strpos($frontendUri, 'https://') !== 0 && strpos($frontendUri, '//') !== 0 ){
-            if( $frontendUri == "" ){
-                yii::$app->controller->stdout("Input your frontend web url(like http://www.xxx.com) :");
-            }else {
-                yii::$app->controller->stdout("Must begin with 'http', 'https' or '//' :");
+        if( $frontendUri == '' ) {
+            while (strpos($frontendUri, 'http://') !== 0 && strpos($frontendUri, 'https://') !== 0 && strpos($frontendUri, '//') !== 0) {
+                if ($frontendUri == "") {
+                    yii::$app->controller->stdout("Input your frontend web url(like http://www.xxx.com) :");
+                } else {
+                    yii::$app->controller->stdout("Must begin with 'http', 'https' or '//' :");
+                }
+                $frontendUri = trim(fgets(STDIN));
             }
-            $frontendUri = trim(fgets(STDIN));
         }
 
         $tableOptions = null;
