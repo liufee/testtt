@@ -23,6 +23,8 @@ AppAsset::register($this);
 <head>
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
+    <?php !isset($this->metaTags['keywords']) && $this->registerMetaTag(['name' => 'keywords', 'content' => yii::$app->feehi->seo_keywords], 'keywords');?>
+    <?php !isset($this->metaTags['description']) && $this->registerMetaTag(['name' => 'description', 'content' => yii::$app->feehi->seo_description], 'description');?>
     <meta charset="<?= yii::$app->charset ?>">
     <?= Html::csrfMetaTags() ?>
     <meta http-equiv="X-UA-Compatible" content="IE=10,IE=9,IE=8">
@@ -75,7 +77,7 @@ AppAsset::register($this);
                 <span class="nav-search_1"><i class="fa fa-navicon"></i></span>
                 <hgroup class="logo-site" style="margin-top: 10px;">
                     <h1 class="site-title">
-                        <a href="<?= yii::$app->getHomeUrl() ?>"><img src="/static/images/logo.png" alt="<?= yii::$app->feehi->website_title ?>"></a>
+                        <a href="<?= yii::$app->getHomeUrl() ?>"><img src="<?=yii::$app->getRequest()->getBaseUrl()?>/static/images/logo.png" alt="<?= yii::$app->feehi->website_title ?>"></a>
                     </h1>
                 </hgroup>
                 <div id="site-nav-wrap">

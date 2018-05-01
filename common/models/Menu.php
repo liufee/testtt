@@ -86,6 +86,8 @@ class Menu extends \yii\db\ActiveRecord
                 'target',
                 'sort',
                 'is_display',
+                'created_at',
+                'updated_at',
             ],
             'frontend' => [
                 'parent_id',
@@ -96,7 +98,9 @@ class Menu extends \yii\db\ActiveRecord
                 'is_absolute_url',
                 'target',
                 'sort',
-                'is_display'
+                'is_display',
+                'created_at',
+                'updated_at',
             ],
         ];
     }
@@ -144,6 +148,7 @@ class Menu extends \yii\db\ActiveRecord
     {
         $menus = self::_getMenus($type);
         $familyTree = new FamilyTree($menus);
+        $a = $familyTree->getParents(24);
         $array = $familyTree->getDescendants(0);
         foreach ($array as $k => &$menu){
             if( isset($menus[$k+1]['level']) && $menus[$k+1]['level'] == $menu['level'] ){
@@ -185,7 +190,7 @@ class Menu extends \yii\db\ActiveRecord
             }
             $familyTree = new FamilyTree(Menu::_getMenus($this->type));
             $descendants = $familyTree->getDescendants($this->id);
-            $descendants = array_column($descendants, 'id');
+            $descendants = ArrayHelper::getColumn($descendants, 'id');
             if( in_array($this->parent_id, $descendants) ){
                 $this->addError('parent_id', yii::t('app', 'Cannot be themselves descendants sub'));
                 return false;

@@ -12,11 +12,13 @@ FeehiCMS没有对yii2做任何的修改、封装，但是把yii2的一些优秀�
 
 更新记录
 -------
-2.0.2 增加cdn,使用layer弹窗替换swal,修复时间范围搜索需要按回车的bug
+2.0.3 增加后台详情页;增加x.com/cms/frontend/web访问;修复批量删除不显示原因bug
 
-2.0.1 增加gii自动生成后台crud,优化后台排序,优化其他功能
+2.0.2 增加cdn;使用layer弹窗替换swal;修复时间范围搜索需要按回车的bug
 
-2.0.0 修复bug,增加1.0.0系列alpha、beta、rc版所有的功能
+2.0.1 增加gii自动生成后台crud;优化后台排序;优化其他功能
+
+2.0.0 修复bug;增加1.0.0系列alpha、beta、rc版所有的功能
 
 1.0.0rc2 修复bug
 
@@ -24,15 +26,15 @@ FeehiCMS没有对yii2做任何的修改、封装，但是把yii2的一些优秀�
 
 1.0.0beta 3 修复bug
 
-1.0.0beta2 增加自定义图片类型设置,优化管理员角色创建和修改
+1.0.0beta2 增加自定义图片类型设置;优化管理员角色创建和修改
 
 1.0.0beta1 修复bug
 
-1.0.0alpha3 重写文章tag,修复两次model validate
+1.0.0alpha3 重写文章tag;修复两次model validate
 
 1.0.0alpha2 修复bug 
 
-1.0.0alpha1 增加restful api,单元测试,行为测试,验收测试,替换为yii2最新模板,优化composer安装依赖替换fxp/composer-asset-plugin为Asset Packagist,重写rbac权限管理替换为yii2内置实现
+1.0.0alpha1 增加restful api,单元测试,行为测试,验收测试;替换为yii2最新模板;优化composer安装依赖替换fxp/composer-asset-plugin为Asset Packagist;重写rbac权限管理替换为yii2内置实现
 
 0.1.3 版本已经集成swoole作为FeehiCMS应用服务器，详细配置及使用参见[yii2-swoole](https://www.github.com/liufee/yii2-swoole)
 
@@ -105,15 +107,10 @@ FeehiCMS没有对yii2做任何的修改、封装，但是把yii2的一些优秀�
      
      >以下命令默认您已全局安装composer，如果您是局部安装的composer:请使用php /path/to/composer.phar来替换以下命令中的composer
      
-     1. 使用composer下载创建FeehiCMS项目
-        **以下两个命令任选其一。如果喜欢简单且日后不需要升级FeehiCMS请选择命令一,如果日后需要平滑升级FeehiCMS请选择命令二**
-        **2018.01.25备注:当前推荐使用命令一，命令二还有一些bug，遇到情况请反馈给我**
+     1. 使用composer下创建FeehiCMS项目
         
         ```bash
             $ composer create-project feehi/cms webApp //此命令创建的FeehiCMS项目不能平滑升级新版本(目录结构简单,目前主力维护版本)
-        ```
-        ```bash
-            $ composer create-project feehi/feehicms webApp //此命令创建的FeehiCMS项目能够通过运行composer update平滑升级到FeehiCMS新版本(FeehiCMS以composer包提供,未来可能主力维护此版本)
         ```
      2. 依次执行以下命令初始化yii2框架以及导入数据库
          ```bash
@@ -186,12 +183,13 @@ FeehiCMS没有对yii2做任何的修改、封装，但是把yii2的一些优秀�
 
 项目展示
 ------------
-* [选校通](https://www.xuanxt.com/)   
-* [微信公众号益乐游戏](http://www.ylegame.com/)  
+* [山东城市服务技师学院](http://www.sdcc.edu.cn/)   
+* [优悦娱乐网](http://www.qqyouyue.com/)  
 * [Usens Dev博客](http://dev.usensinc.com/)  
-* [最美容颜](http://www.zmface.com/)  
-* [云上旅游集团](http://www.ys517.cn/)  
+* [完美娱乐](http://www.qqwanmei.com/)  
+* [北京大学附属中学](http://group-ht.pkuschool.edu.cn/)  
 * [微信公众号蚂蚁鲜生](http://www.chijidun.com/) 
+* [用友财务软件](http://www.myyonyou.cn/) 
 *  ......
 
 
