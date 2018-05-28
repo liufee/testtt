@@ -1,7 +1,7 @@
 <?php
 $config = [
     'name' => 'Feehi CMS',
-    'version' => '2.0.3',
+    'version' => '2.0.4.1',
     'vendorPath' => dirname(dirname(__DIR__)) . '/vendor',
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
@@ -97,7 +97,7 @@ $config = [
         ],
     ],
 ];
-$install = yii::getAlias('@common/config/conf/db.php');
+$install = Yii::getAlias('@common/config/conf/db.php');
 if( file_exists($install) ){
     return yii\helpers\ArrayHelper::merge($config, (require $install));
 }

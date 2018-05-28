@@ -38,4 +38,16 @@ class ActiveForm extends \yii\widgets\ActiveForm
                 </div>';
     }
 
+    /**
+     * Generates a form field.
+     * @return ActiveField the created ActiveField object.
+     * @see fieldConfig
+     */
+    public function field($model, $attribute, $options = [])
+    {
+        $activeField = parent::field($model, $attribute, $options);
+        /** @var $activeField ActiveField */
+        return $activeField;
+    }
+
 }

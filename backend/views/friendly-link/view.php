@@ -5,11 +5,12 @@
  * Email: job@feehi.com
  * Created at: 2018-02-24 14:36
  */
+
 use common\libs\Constants;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
-/* @var $model common\models\FriendlyLink */
+/* @var $model backend\models\FriendlyLink */
 ?>
 <?= DetailView::widget([
     'model' => $model,

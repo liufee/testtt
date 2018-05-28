@@ -8,7 +8,7 @@
 
 namespace backend\controllers;
 
-use yii;
+use Yii;
 use backend\actions\ViewAction;
 use backend\actions\UpdateAction;
 use backend\models\Comment;
@@ -25,8 +25,9 @@ class CommentController extends \yii\web\Controller
             'index' => [
                 'class' => IndexAction::className(),
                 'data' => function(){
-                    $searchModel = new CommentSearch();
-                    $dataProvider = $searchModel->search(yii::$app->getRequest()->getQueryParams());
+                    /** @var CommentSearch $searchModel */
+                    $searchModel = Yii::createObject( CommentSearch::className() );
+                    $dataProvider = $searchModel->search( Yii::$app->getRequest()->getQueryParams() );
                     return [
                         'dataProvider' => $dataProvider,
                         'searchModel' => $searchModel,

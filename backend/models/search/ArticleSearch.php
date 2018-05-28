@@ -10,9 +10,9 @@ namespace backend\models\search;
 
 use backend\behaviors\TimeSearchBehavior;
 use backend\components\search\SearchEvent;
-use common\models\Article as CommonArticle;
 use backend\models\Article;
 use common\models\Category;
+use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use yii\helpers\ArrayHelper;
@@ -61,12 +61,15 @@ class ArticleSearch extends Article
     /**
      * @param $params
      * @param int $type
-     * @return \yii\data\ActiveDataProvider
+     * @return ActiveDataProvider
+     * @throws \yii\base\InvalidConfigException
      */
     public function search($params, $type = self::ARTICLE)
     {
-        $query = CommonArticle::find()->select([])->where(['type' => $type])->with('category');
-        $dataProvider = new ActiveDataProvider([
+        $query = Article::find()->select([])->where(['type' => $type])->with('category');
+        /** @var $dataProvider ActiveDataProvider */
+        $dataProvider = Yii::createObject([
+            'class' => ActiveDataProvider::className(),
             'query' => $query,
             'sort' => [
                 'defaultOrder' => [
@@ -110,7 +113,7 @@ class ArticleSearch extends Article
                 }
             }
         }
-        $this->trigger(SearchEvent::BEFORE_SEARCH, new SearchEvent(['query'=>$query]));
+        $this->trigger(SearchEvent::BEFORE_SEARCH, Yii::createObject(['class' => SearchEvent::className(), 'query'=>$query]));
         return $dataProvider;
     }
 

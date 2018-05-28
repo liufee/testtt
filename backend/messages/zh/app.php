@@ -52,7 +52,7 @@ return [
     '{attribute} cannot be blank.' => '{attribute}不能为空.',
     'Allowed not to be deleted, sub level exsited.' => '还有子项存在,不允许被删除',
     'Failed' => '失败',
-    'Cannot be themself sub.' => '不能是它自己的子类',
+    'Cannot be themselves sub' => '不能是它自己的子类',
     'Send' => '发送',
     'Upload {attribute} error' => '上传{attribute}出错',
     'Filename' => '文件名',
@@ -339,7 +339,7 @@ return [
     'Banner Types' => 'Banner类型',
     'Jump Link' => '跳转链接',
     'Entry' => '进入',
-    'This type exits banner' => '该类下还有banner',
+    'Delete failed, banner existed' => '删除失败，先删除banner',
     /*banner*/
 
     /*ad*/
