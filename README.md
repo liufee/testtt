@@ -16,13 +16,13 @@ LNMP Dockerfile
 
 - [x] mysql (默认5.7.23)
 
-- [x] redis4.0.11（默认密码123456）
+- [x] redis（默认4.0.11版本,默认密码123456）
 
 - [x] openssh server(默认root密码123456)
 
 - [x] crond
 
-- [x] phpmyadmin(管理地址:http://nginx默认站点或域名/phpmyadmin)
+- [x] phpmyadmin(默认版本4.7.6, 管理地址:http://nginx默认站点或域名/phpmyadmin)
 
 - [x] phpredisadmin(管理地址::http://nginx默认站点域名或ip/phpredisadmin。管理用户名为admin，密码同redis密码)
 
@@ -67,7 +67,8 @@ LNMP Dockerfile
 P.S 
 
 自行构建，如果某一步骤失败, 再来一次。(因为你懂的原因，pecl.php.net,phpmyadmin.net,repo.mysql.com不稳定，造成下载某些扩展的时候失败退出。windows下使用ss代理切记勾选全局使用代理并重启cmd)
-强烈建议在执行cd /path/to/docker命令前，执行export http_proxy=http://ip:1087;export https_proxy=http://ip:1087;//伟大的GFW，最好带个梯子。ip通常为127.0.0.1
+
+强烈建议在执行cd /path/to/docker命令前，执行export http_proxy=http://ip:1087;export https_proxy=http://ip:1087;伟大的GFW，最好带个梯子。ip通常为127.0.0.1
 
 
 运行容器
