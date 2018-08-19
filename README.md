@@ -3,18 +3,20 @@ LNMP Dockerfile
 
 基于最新版CentOS官方镜像
 
-包含php, nginx, reids, openssh server, go, crond, swoole, mongodb, node.js, phpmyadmin, phpredisadmin, xhprof等服务。
+包含php, nginx, mysql, reids, openssh server, go, crond, swoole, mongodb, node.js, phpmyadmin, phpredisadmin, xhprof等服务。
 
 
 简介
 ------------------------
 默认包含的版本
 
-- [x] php7.1.2
+- [x] php (默认7.2.8)
 
-- [x] nginx1.12.2 (默认web根目录在/usr/local/nginx/html)
+- [x] nginx (默认1.15.2版本,默认web根目录在/usr/local/nginx/html)
 
-- [x] redis3.2.9（默认密码123456）
+- [x] mysql (默认5.7.23)
+
+- [x] redis4.0.11（默认密码123456）
 
 - [x] openssh server(默认root密码123456)
 
@@ -36,6 +38,7 @@ LNMP Dockerfile
 >docker build的时候加入
     --build-arg PHP_VER=php版本号 
     --build-arg NGINX_VER=nginx版本号 
+    --build-arg MYSQL_VER=mysql版本号 
     --build-arg REDIS_VER=reids版本号
     --build-arg PHPMYADMIN_VER=phpmyadmin版本号
     --build-arg REDIS_VER=redis密码(phpredisadmin同此)
@@ -61,8 +64,10 @@ LNMP Dockerfile
     $ cd /path/to/docker
     $ docker build -t liufee/feehi ./
     ```
-P.S 自行构建，如果某一步骤失败, 再来一次。(因为你懂的原因，pecl.php.net,phpmyadmin.net,repo.mysql.com不稳定，造成下载某些扩展的时候失败退出。windows下使用ss代理切记勾选全局使用代理并重启cmd)
-    强烈建议在执行cd /path/to/docker命令前，执行export http_proxy=http://ip:1087;export https_proxy=http://ip:1087;//伟大的GFW，最好带个梯子。ip通常为127.0.0.1
+P.S 
+
+自行构建，如果某一步骤失败, 再来一次。(因为你懂的原因，pecl.php.net,phpmyadmin.net,repo.mysql.com不稳定，造成下载某些扩展的时候失败退出。windows下使用ss代理切记勾选全局使用代理并重启cmd)
+强烈建议在执行cd /path/to/docker命令前，执行export http_proxy=http://ip:1087;export https_proxy=http://ip:1087;//伟大的GFW，最好带个梯子。ip通常为127.0.0.1
 
 
 运行容器
