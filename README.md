@@ -64,11 +64,11 @@ LNMP Dockerfile
     $ cd /path/to/docker
     $ docker build -t liufee/feehi ./
     ```
-P.S 
-
-自行构建，如果某一步骤失败, 再来一次。(因为你懂的原因，pecl.php.net,phpmyadmin.net,repo.mysql.com不稳定，造成下载某些扩展的时候失败退出。windows下使用ss代理切记勾选全局使用代理并重启cmd)
-
-强烈建议在执行cd /path/to/docker命令前，执行export http_proxy=http://ip:1087;export https_proxy=http://ip:1087;伟大的GFW，最好带个梯子。ip通常为127.0.0.1
+    P.S 
+    
+    自行构建，如果某一步骤失败, 再来一次。(因为你懂的原因，pecl.php.net,phpmyadmin.net,repo.mysql.com不稳定，造成下载某些扩展的时候失败退出。windows下使用ss代理切记勾选全局使用代理并重启cmd)
+    
+    强烈建议在执行cd /path/to/docker命令前，执行export http_proxy=http://ip:1087;export https_proxy=http://ip:1087;伟大的GFW，最好带个梯子。ip通常为127.0.0.1
 
 
 运行容器
