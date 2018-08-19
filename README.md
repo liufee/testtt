@@ -1,217 +1,103 @@
-FeehiCMS  __[(English)](docs/README_EN.md)__  首款编写单元测试、功能测试、验收测试的yii2开源系统
-===============================
+LNMP Dockerfile
+=================
 
-基于yii2的CMS系统，运行环境与yii2(php>=5.4)一致。FeehiCMS旨在为yii2爱好者提供一个基础功能稳定完善的系统，使开发者更专注于业务功能开发。
-FeehiCMS没有对yii2做任何的修改、封装，但是把yii2的一些优秀特性几乎都用在了FeehiCMS上，虽提供文档，
-但FeehiCMS提倡简洁、快速上手，基于FeehiCMS开发可以无需文档，反倒FeehiCMS为yii2文档提供了最好的实例
+基于最新版CentOS官方镜像
 
-[![Latest Stable Version](https://poser.pugx.org/feehi/cms/v/stable)](https://packagist.org/packages/feehi/cms)
-[![License](https://poser.pugx.org/feehi/cms/license)](https://packagist.org/packages/feehi/cms)
-[![Build Status](https://www.travis-ci.org/liufee/cms.svg?branch=master)](https://www.travis-ci.org/liufee/cms)
+包含php, nginx, reids, openssh server, go, crond, swoole, mongodb, node.js, phpmyadmin, phpredisadmin, xhprof等服务。
 
 
-更新记录
--------
-2.0.4 修复bug;增强seo
+简介
+------------------------
+默认包含的版本
 
-2.0.3 增加后台详情页;增加x.com/cms/frontend/web访问;修复批量删除不显示原因bug
+- [x] php7.1.2
 
-2.0.2 增加cdn;使用layer弹窗替换swal;修复时间范围搜索需要按回车的bug
+- [x] nginx1.12.2 (默认web根目录在/usr/local/nginx/html)
 
-2.0.1 增加gii自动生成后台crud;优化后台排序;优化其他功能
+- [x] redis3.2.9（默认密码123456）
 
-2.0.0 修复bug;增加1.0.0系列alpha、beta、rc版所有的功能
+- [x] openssh server(默认root密码123456)
 
-1.0.0rc2 修复bug
+- [x] crond
 
-1.0.0rc1 优化使用
+- [x] phpmyadmin(管理地址:http://nginx默认站点或域名/phpmyadmin)
 
-1.0.0beta 3 修复bug
+- [x] phpredisadmin(管理地址::http://nginx默认站点域名或ip/phpredisadmin。管理用户名为admin，密码同redis密码)
 
-1.0.0beta2 增加自定义图片类型设置;优化管理员角色创建和修改
+- [x] xhprof
 
-1.0.0beta1 修复bug
+- [x] go语言 (默认1.10.3 GOPATH环境变量已设置为$HOME/go，映射到此文件夹即可)
 
-1.0.0alpha3 重写文章tag;修复两次model validate
+- [x] node.js (默认8.11.4)
 
-1.0.0alpha2 修复bug 
-
-1.0.0alpha1 增加restful api,单元测试,行为测试,验收测试;替换为yii2最新模板;优化composer安装依赖替换fxp/composer-asset-plugin为Asset Packagist;重写rbac权限管理替换为yii2内置实现
-
-0.1.3 版本已经集成swoole作为FeehiCMS应用服务器，详细配置及使用参见[yii2-swoole](https://www.github.com/liufee/yii2-swoole)
+- [x] mongodb (默认4.0.1)
 
 
-帮助
----------------
-1. 开发文档[http://doc.feehi.com](http://doc.feehi.com)
+>docker build的时候加入
+    --build-arg PHP_VER=php版本号 
+    --build-arg NGINX_VER=nginx版本号 
+    --build-arg REDIS_VER=reids版本号
+    --build-arg PHPMYADMIN_VER=phpmyadmin版本号
+    --build-arg REDIS_VER=redis密码(phpredisadmin同此)
+    --build-arg ROOT_PASSWORD=ssh的root密码
+    --build-arg GO_VER=go语言版本
+    --build-arg NODE_VER=node.js语言版本
+    --build-arg MONGODB_VER=mongodb版本
+可以指定php，nginx，redis，phpmyadmin的安装版本,redis(phpredisadmin)和ssh的密码
 
-2. QQ群 258780872
 
-3. 微信 <br> ![微信](http://img-1251086492.cosgz.myqcloud.com/github/wechat.png)
-
-4. Email job@feehi.com
-
-5. [bug反馈](http://www.github.com/liufee/cms/issues)
-
-
-功能
----------------
- * 多语言
- * 单元测试
- * 功能测试
- * 验收测试
- * RBAC权限管理
- * restful api
- * 文章管理 
- * 操作日志
- 
- FeehiCMS提供完备的web系统基础通用功能，包括前后台菜单管理,文章标签,广告,banner,缓存,网站设置,seo设置,邮件设置,分类管理,单页...
- 
- 
-快速体验
-----------------
-1. 使用演示站点
-演示站点后台   **用户名:feehicms 密码123456**
-      * php7.0.0
-        * 后台 [http://demo.cms.feehi.com/admin](http://demo.cms.feehi.com/admin)
-        * 前台 [http://demo.cms.feehi.com](http://demo.cms.feehi.com/)
-        * api [http://demo.cms.feehi.com/api/articles](http://demo.cms.feehi.com/api/articles)
-      * swoole (docker)
-        * swoole演示前台 [http://swoole.demo.cms.qq.feehi.com](http://swoole.demo.cms.qq.feehi.com)
-        * swoole演示后台 [http://swoole-admin.demo.cms.qq.feehi.com](http://swoole-admin.demo.cms.qq.feehi.com)
-      * php7.1.8 (docker)
-        * 备用演示前台1 [http://demo.cms.qq.feehi.com](http://demo.cms.qq.feehi.com)
-        * 备用演示后台1 [http://demo.cms.qq.feehi.com/admin](http://demo.cms.qq.feehi.com/admin)
-        * 备用演示api1 [http://demo.cms.qq.feehi.com/api](http://demo.cms.qq.feehi.com/api/articles)
-
-2. 使用Docker容器
-    ```bash
-    $ docker pull registry.cn-hangzhou.aliyuncs.com/liufee/cms
-    $ docker run --name feehicms -h feehicms -itd -p 80:80 liufee/cms
+获取镜像
+------------------------
+1. 远程获取镜像(推荐)
+    ```bash 
+    $ docker pull registry.cn-hangzhou.aliyuncs.com/liufee/feehi 
+    $ git clone https://github.com/liufee/docker.git
+    $ cd /path/to/docker
     ```
- 
- 
-安装
----------------
-前置条件: 如未特别说明，本文档已默认您把php命令加入了环境变量，如果您未把php加入环境变量，请把以下命令中的php替换成/path/to/php
-1. 使用归档文件(简单，适合没有yii2经验者)
-    >使用此方式安装，后台超管用户名和密码会在安装过程中让您填入
-    1. 下载FeehiCMS源码 [点击此处下载最新版](http://resource-1251086492.cossh.myqcloud.com/Feehi_CMS.zip)
-    2. 解压到目录 
-    3. 配置web服务器(参见下面)
-    4. 浏览器打开 http://localhost/install.php 按照提示完成安装(若使用php内置web服务a器则地址为 http://localhost:8080/install.php )
-    5. 完成
     
-2. 使用composer (`推荐使用此方式安装`)
-    >使用此方式安装，默认的后台超级管理员用户名admin密码123456
+2. 自行构建
+    ```bash
+    $ git clone https://github.com/liufee/docker.git
+    $ cd /path/to/docker
+    $ docker build -t liufee/feehi ./
+    ```
+P.S 自行构建，如果某一步骤失败, 再来一次。(因为你懂的原因，pecl.php.net,phpmyadmin.net,repo.mysql.com不稳定，造成下载某些扩展的时候失败退出。windows下使用ss代理切记勾选全局使用代理并重启cmd)
+    强烈建议在执行cd /path/to/docker命令前，执行export http_proxy=http://ip:1087;export https_proxy=http://ip:1087;//伟大的GFW，最好带个梯子。ip通常为127.0.0.1
+
+
+运行容器
+-------------------
+
+```bash
+  $ docker run -h feehi -p 80:80 -p 23:22 -p 3306:3306 -p 6379:6379 --name feehi -itd -v /path/to/docker/etc/nginx:/etc/nginx -v /path/to/docker/data/mysql:/data/mysql -v /path/to/docker/data/log:/var/log -v /path/to/www:/usr/local/nginx/html liufee/feehi
+```
+ P.S 
+ 
+ 若使用远程获取镜像请将liufee/feehi修改成registry.cn-hangzhou.aliyuncs.com/liufee/feehi
+ 默认web目录为/usr/local/nginx/html,若需要配置多个vhost可以映射其他web目录进去.如: -v /path/to/sites:/www,然后在/etc/nginx/site.d中增加vhost配置
+
+
+xhprof使用方法
+-------------------
+```php
+    xhprof_enable();
+
+    //你需要分析的代码
     
-     >composer的安装以及国内镜像设置请点击 [此处](http://www.phpcomposer.com/)
-     
-     >以下命令默认您已全局安装composer，如果您是局部安装的composer:请使用php /path/to/composer.phar来替换以下命令中的composer
-     
-     1. 使用composer下创建FeehiCMS项目
-        
-        ```bash
-            $ composer create-project feehi/cms webApp //此命令创建的FeehiCMS项目不能平滑升级新版本(目录结构简单,目前主力维护版本)
-        ```
-     2. 依次执行以下命令初始化yii2框架以及导入数据库
-         ```bash
-         $ cd webApp
-         $ php ./init --env=Development #初始化yii2框架，线上环境请使用--env=Production
-         $ php ./yii migrate/up --interactive=0 #导入FeehiCMS sql数据库，执行此步骤之前请先到common/config/main-local.php修改成正确的数据库配置
-         ```
-     3. 配置web服务器(参加下面)
-     4. 完成
- 
-附:web服务器配置(注意是设置"path/to/frontend/web为根目录)
- 
- * php内置web服务器(仅可用于开发环境,当您的环境中没有web服务器时)
- ```bash
-  cd /path/to/cms
-  php ./yii serve  
-  
-  #至此启动成功，可以通过localhost:8080/和localhost:8080/admin来访问了，在线安装即访问localhost:8080/install.php
- ```
- 
- * Apache
- ```bash
-  DocumentRoot "path/to/frontend/web"
-  <Directory "path/to/frontend/web">
-      # 开启 mod_rewrite 用于美化 URL 功能的支持（译注：对应 pretty URL 选项）
-      RewriteEngine on
-      # 如果请求的是真实存在的文件或目录，直接访问
-      RewriteCond %{REQUEST_FILENAME} !-f
-      RewriteCond %{REQUEST_FILENAME} !-d
-      # 如果请求的不是真实文件或目录，分发请求至 index.php
-      RewriteRule . index.php
-  
-      # ...其它设置...
-  </Directory>
-  ```
-  
- * Nginx
- ```bash
- server {
-     server_name  localhost;
-     root   /path/to/frontend/web;
-     index  index.php index.html index.htm;
-     try_files $uri $uri/ /index.php?$args;
-     
-     location ~ /api/(?!index.php).*$ {
-        rewrite /api/(.*) /api/index.php?r=$1 last;
-     }
- 
-     location ~ \.php$ {
-         fastcgi_pass   127.0.0.1:9000;
-         fastcgi_index  index.php;
-         fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name;
-         include        fastcgi_params;
-     }
- }
- ```
- 
- 
-运行测试
--------
-1. 仅运行单元测试,功能测试(不需要配置web服务器)
- ```bash
-    cd /path/to/webApp
-    vendor/bin/codecept run
- ```
-2. 运行单元测试,功能测试,验收测试(需要配置完web服务器)
-    1. 分别拷贝backend,frontend,api三个目录下的tests/acceptance.suite.yml.example到各自目录，并均重名为acceptance.suite.yml,且均修改里面的url为各自的访问url地址
-    2. 与上(仅运行单元测试,功能测试)命令一致
+    $xhprof_data = xhprof_disable();
+    include_once 'xhprof_lib/utils/xhprof_lib.php';//注xhprof_lib已经在/usr/local/php/lib/php中了
+    include_once 'xhprof_lib/utils/xhprof_runs.php';
+    
+    $xhprof_runs = new XHProfRuns_Default();
+    $run_id = $xhprof_runs->save_run($xhprof_data, "xhprof_test");
+    //将run_id保存起来或者随代码一起输出
+```
+然后访问:http://nginx默认站点或域名/xhpfrof_html/index.php?run=run_id&source=xhprof_test查看结果
 
 
-项目展示
-------------
-* [山东城市服务技师学院](http://www.sdcc.edu.cn/)   
-* [优悦娱乐网](http://www.qqyouyue.com/)  
-* [吉安市食品药品监督管理局](http://www.jamsda.gov.cn/)  
-* [完美娱乐](http://www.qqwanmei.com/)  
-* [北京大学附属中学](http://group-ht.pkuschool.edu.cn/)  
-* [微信公众号蚂蚁鲜生](http://www.chijidun.com/) 
-* [用友财务软件](http://www.myyonyou.cn/) 
-*  ......
+注意
+-------------------
+* 为了持久化保存数据，最好把宿主机某一目录挂载到容器内的/mysql。
+* 每次启动容器的时候，都会判断/mysql目录是否为空，为空则初始化mysql服务并修改root密码为docker run -e MYSQL_PASSWORD=xxx的值，若没有指定默认修改为123456, host='%'，需要重置mysql直接清空/mysql目录重新启动容器即可。
 
-
-运行效果
----------
-![后台](docs/backend.png)
-
-![前台](docs/frontend.png)
-
-![后台文章编辑](docs/backend_article.png)
-
-![后台角色编辑](docs/backend_role.png)
-
-![后台自定义参数](docs/backend_custom_create.png)
-
-![后台文章编辑](docs/backend_custom_setting.png)
-
-![后台文章编辑](docs/backend_log.png)
-
-
-特别鸣谢
----------
-[twitf](https://github.com/twitf) 在后台时间搜索范围提供的建议和代码片段
+   
