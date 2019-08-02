@@ -11,7 +11,6 @@ namespace frontend\controllers;
 use Yii;
 use common\libs\Constants;
 use frontend\models\form\ArticlePasswordForm;
-use yii\base\Event;
 use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use frontend\models\Article;
@@ -51,7 +50,8 @@ class ArticleController extends Controller
      *
      * @param string $cat 分类名称
      * @return string
-     * @throws \yii\web\NotFoundHttpException
+     * @throws NotFoundHttpException
+     * @throws \yii\base\InvalidConfigException
      */
     public function actionIndex($cat = '')
     {
@@ -87,9 +87,12 @@ class ArticleController extends Controller
                 ]
             ]
         ]);
-        return $this->render('index', [
+        $template = "index";
+        isset($category) && $category->template != "" && $template = $category->template;
+        return $this->render($template, [
             'dataProvider' => $dataProvider,
             'type' => ( !empty($cat) ? Yii::t('frontend', 'Category {cat} articles', ['cat'=>$cat]) : Yii::t('frontend', 'Latest Articles') ),
+            'category' => isset($category) ? $category->name : "",
         ]);
     }
 
@@ -102,6 +105,7 @@ class ArticleController extends Controller
      */
     public function actionView($id)
     {
+        /** @var Article $model */
         $model = Article::findOne(['id' => $id, 'type' => Article::ARTICLE, 'status' => Article::ARTICLE_PUBLISHED]);
         if( $model === null ) throw new NotFoundHttpException(Yii::t("frontend", "Article id {id} is not exists", ['id' => $id]));
         $prev = Article::find()
@@ -140,13 +144,16 @@ class ArticleController extends Controller
                 $authorized = Yii::$app->getSession()->get("article_password_" . $model->id, null);
                 if( $authorized === null ) $this->redirect(Url::toRoute(['password', 'id'=>$id]));
                 break;
-            case Constants::ARTICLE_VISIBILITY_LOGIN://登陆可见
+            case Constants::ARTICLE_VISIBILITY_LOGIN://登录可见
                 if( Yii::$app->getUser()->getIsGuest() ) {
                     $model->articleContent->content = "<p style='color: red'>" . Yii::t('frontend', "Only login user can visit this article") . "</p>";
                 }
                 break;
         }
-        return $this->render('view', [
+        $template = "view";
+        isset($model->category) && $model->category->article_template != "" && $template = $model->category->article_template;
+        $model->template != "" && $template = $model->template;
+        return $this->render($template, [
             'model' => $model,
             'prev' => $prev,
             'next' => $next,
@@ -247,6 +254,7 @@ class ArticleController extends Controller
      * rss订阅
      *
      * @return mixed
+     * @throws \yii\base\InvalidConfigException
      */
     public function actionRss()
     {

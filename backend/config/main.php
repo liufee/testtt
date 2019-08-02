@@ -32,8 +32,15 @@ return [
                 [
                     'class' => yii\log\FileTarget::className(),//当触发levels配置的错误级别时，保存到日志文件
                     'levels' => ['error', 'warning'],
+                    'logFile' => '@runtime/logs/'.date('Y/m/d') . '.log',
                 ],
                 [
+                    /**
+                    注：此配置可能造成：
+                        1.当打开的页面包含错误时，响应缓慢。若您配置的发件箱不存在或连不上一直等待超时。
+                        2.如果common/config/main.php mail useFileTransport为true时，并不会真发邮件，只把邮件写到runtime目录，很容易造成几十个G吃硬盘。
+                        如您不需要发送邮件提醒建议删除此配置
+                     */
                     'class' => yii\log\EmailTarget::className(),//当触发levels配置的错误级别时，发送到message to配置的邮箱中（请改成自己的邮箱）
                     'levels' => ['error', 'warning'],
                     /*'categories' => [//默认匹配所有分类。启用此项后，仅匹配数组中的分类信息会触发邮件提醒（白名单）
@@ -57,6 +64,11 @@ return [
         ],
         'request' => [
             'csrfParam' =>'_csrf_backend',
+        ],
+        'urlManager' => [
+            'enablePrettyUrl' => false,//true 美化路由(注:需要配合web服务器配置伪静态，详见http://doc.feehi.com/install.html), false 不美化路由
+            'showScriptName' => true,//隐藏index.php
+            'enableStrictParsing' => false,
         ],
         'i18n' => [
             'translations' => [//多语言包设置
@@ -93,14 +105,17 @@ return [
                         'f' => 'js/plugins/layer/laydate/theme/default/laydate.css',
                         'g' => 'css/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css',
                         'h' => 'css/plugins/toastr/toastr.min.css',
+                        'i' => 'css/plugins/chosen/chosen.css',
+                        'j' => 'css/feehi.css',
 
                     ],
                     'js' => [
                         'a' => 'js/feehi.js',
-                        'c' => 'js/plugins/layer/laydate/laydate.js',
-                        'd' => 'js/plugins/layer/layer.min.js',
-                        'e' => 'js/plugins/prettyfile/bootstrap-prettyfile.js',
-                        'f' => 'js/plugins/toastr/toastr.min.js',
+                        'b' => 'js/plugins/layer/laydate/laydate.js',
+                        'c' => 'js/plugins/layer/layer.min.js',
+                        'd' => 'js/plugins/prettyfile/bootstrap-prettyfile.js',
+                        'e' => 'js/plugins/toastr/toastr.min.js',
+                        'f' => 'js/plugins/chosen/chosen.jquery.js',
                     ],
                 ],
                 backend\assets\IndexAsset::className() => [

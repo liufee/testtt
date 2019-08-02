@@ -13,8 +13,6 @@ use yii\helpers\Url;
 
 class MenuCest
 {
-    public $cookies = [];
-
     public function _fixtures()
     {
         return [
@@ -27,30 +25,11 @@ class MenuCest
 
     public function _before(AcceptanceTester $I)
     {
-        $I->amOnPage(Url::toRoute('/site/login'));
-        $I->see('登陆');
-        $I->submitForm("button[name=login-button]", [
-            'LoginForm[username]' => "admin",
-            'LoginForm[password]' => 'password_0',
-            'LoginForm[captcha]' => 'testme',
-        ]);
-        $I->seeCookie('_csrf_backend');
-        $this->cookies = [
-            '_' => $I->grabCookie("_csrf_backend"),
-            'PHPSESSID' => $I->grabCookie("PHPSESSID")
-        ];
-    }
-
-    private function setCookie(AcceptanceTester $I)
-    {
-        foreach ($this->cookies as $k => $v){
-            $I->setHeader($k, $v);
-        }
+        login($I);
     }
 
     public function checkIndex(AcceptanceTester $I)
     {
-        $this->setCookie($I);
         $I->amOnPage(Url::toRoute('/menu/index'));
         $I->see('后台菜单');
         $I->see("操作");
@@ -58,6 +37,7 @@ class MenuCest
         $I->see("编辑后台菜单");
         $I->fillField("Menu[name]", '测试123');
         $I->submitForm("button[type=submit]", []);
+        $I->click("a[title=编辑]");
         $I->seeInField("Menu[name]", "测试123");
     }
 

@@ -16,6 +16,8 @@ use common\models\Category;
 use common\libs\Constants;
 use common\widgets\JsBlock;
 use backend\widgets\Ueditor;
+use backend\widgets\webuploader\Webuploader;
+use common\helpers\Util;
 
 $this->title = "Articles";
 ?>
@@ -40,6 +42,7 @@ $this->title = "Articles";
                         <?= $form->field($model, 'sub_title')->textInput(); ?>
                         <?= $form->field($model, 'summary')->textArea(); ?>
                         <?= $form->field($model, 'thumb')->imgInput(['style' => 'max-width:200px;max-height:200px']); ?>
+                        <?= $form->field($model, 'images')->widget(Webuploader::className()); ?>
                         <?= $form->field($model, 'content')->widget(Ueditor::className()) ?>
                     </div>
                     <!--left stop -->
@@ -52,12 +55,7 @@ $this->title = "Articles";
                             <div class="row">
                                 <div class="form-group">
                                     <div class="col-sm-12 col-sm-offset-1">
-                                        <div class="form-group col-sm-12 field-article-parent_id">
-                                            <div class="col-sm-12 m-l-n">
-                                                <?= $form->field($model, 'cid')->label('')->dropDownList(Category::getCategoriesName(), ['multiple'=>''])?>
-                                            </div>
-                                            <div class="help-block m-b-none"></div>
-                                        </div>
+                                        <?= $form->field($model, 'cid', ['size'=>10])->label(false)->chosenSelect(Category::getCategoriesName())?>
                                     </div>
                                 </div>
                             </div>
@@ -153,6 +151,7 @@ $this->title = "Articles";
                             <?= $form->field($model, 'password', ['options'=>['class'=>"form-group $hide"]])->textInput(); ?>
                             <?= $form->field($model, 'tag')->textInput(); ?>
                             <?= $form->field($model, 'sort')->textInput(); ?>
+                            <?= $form->field($model, 'template')->chosenSelect(Util::getViewTemplate()); ?>
 
                             <?= $form->defaultButtons(['size' => 12]) ?>
                         </div>

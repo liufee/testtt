@@ -44,13 +44,13 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Banner Types');
                             'width' => '190px',
                             'buttons' => [
                                 'entry' => function ($url, $model, $key) {
-                                    return Html::a('<i class="fa fa-bars" aria-hidden="true"></i> ' . Yii::t('app', 'Entry'), Url::to([
+                                    return Html::a('<i class="fa fa-bars" aria-hidden="true"></i> ', Url::to([
                                         'banners',
                                         'id' => $model['id']
                                     ]), [
                                         'title' => Yii::t('app', 'Entry'),
                                         'data-pjax' => '0',
-                                        'class' => 'btn btn-white btn-sm J_menuItem',
+                                        'class' => 'btn-sm J_menuItem',
                                     ]);
                                 }
                             ],

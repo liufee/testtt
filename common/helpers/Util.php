@@ -8,6 +8,7 @@
 
 namespace common\helpers;
 
+use yii\base\Exception;
 use yii\imagine\Image;
 use Yii;
 use yii\db\ActiveRecord;
@@ -135,6 +136,7 @@ class Util
      *
      * @param $fullName string 原图路径
      * @param array $thumbSizes 二维数组 如 [["w"=>110,"height"=>"20"],["w"=>200,"h"=>"30"]]则生成两张缩量图，分别为宽110高20和宽200高30
+     * @throws \yii\base\InvalidConfigException
      */
     public static function thumbnails($fullName, array $thumbSizes)
     {
@@ -153,6 +155,7 @@ class Util
      * @param $fullName string 原图图片路径
      * @param $thumbSizes array 二维数组 如 [["w"=>110,"height"=>"20"],["w"=>200,"h"=>"30"]]则生成两张缩量图，分别为宽110高20和宽200高30
      * @param $deleteOrigin bool 是否删除原图
+     * @throws \yii\base\InvalidConfigException
      */
     public static function deleteThumbnails($fullName, array $thumbSizes, $deleteOrigin=false)
     {
@@ -172,18 +175,40 @@ class Util
      *
      * @param $fullName string 原图路径
      * @param $width int 长
-     * @param $heith int 宽
+     * @param $height int 宽
      * @return string 如/path/to/uploads/article/xx@100x20.png
      */
-    public static function getThumbName($fullName, $width, $heith)
+    public static function getThumbName($fullName, $width, $height)
     {
-        $dotPosition = strrpos($fullName, '.');
-        $thumbExt = "@" . $width . 'x' . $heith;
+        $dotPosition = strrpos($fullName, '.', mb_strlen(Yii::getAlias('@frontend')));
+        $thumbExt = "@" . $width . 'x' . $height;
         if( $dotPosition === false ){
             $thumbFullName = $fullName . $thumbExt;
         }else{
             $thumbFullName = substr_replace($fullName,$thumbExt, $dotPosition, 0);
         }
         return $thumbFullName;
+    }
+
+    public static function getViewTemplate($type="article")
+    {
+        if( $type == "article" ){
+            $files = Yii::$app->params['article.template.directory'];
+        }else if ($type == "page"){
+            $files = Yii::$app->params['page.template.directory'];
+        }else if($type == "category"){
+            $files = Yii::$app->params['category.template.directory'];
+        }else{
+            throw new Exception("Unknown " . $type);
+        }
+        $templates = [];
+        foreach ($files as $key => $file){
+            if( !is_int($key) ) {
+                $templates[str_replace(Yii::getAlias("@frontend/views"), "", $key)] = $file;
+            }else{
+                $templates[str_replace(Yii::getAlias("@frontend/views"), "", $file)] = $file;
+            }
+        }
+        return $templates;
     }
 }

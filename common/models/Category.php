@@ -23,6 +23,8 @@ use yii\helpers\FileHelper;
  * @property string $name
  * @property string $alias
  * @property integer $sort
+ * @property string $template
+ * @property string $article_template
  * @property string $remark
  * @property string $created_at
  * @property string $updated_at
@@ -54,7 +56,7 @@ class Category extends \yii\db\ActiveRecord
             [['sort', 'parent_id', 'created_at', 'updated_at'], 'integer'],
             [['sort'], 'compare', 'compareValue' => 0, 'operator' => '>='],
             [['parent_id'], 'default', 'value' => 0],
-            [['name', 'alias', 'remark'], 'string', 'max' => 255],
+            [['name', 'alias', 'remark', 'template', 'article_template'], 'string', 'max' => 255],
             [['alias'],  'match', 'pattern' => '/^[a-zA-Z0-9_]+$/', 'message' => Yii::t('app', 'Only includes alphabet,_,and number')],
             [['name', 'alias'], 'required'],
         ];
@@ -71,9 +73,11 @@ class Category extends \yii\db\ActiveRecord
             'name' => Yii::t('app', 'Name'),
             'alias' => Yii::t('app', 'Alias'),
             'sort' => Yii::t('app', 'Sort'),
+            'template' => Yii::t('app', 'Category Template'),
+            'article_template' => Yii::t('app', 'Article Template'),
+            'remark' => Yii::t('app', 'Remark'),
             'created_at' => Yii::t('app', 'Created At'),
             'updated_at' => Yii::t('app', 'Updated At'),
-            'remark' => Yii::t('app', 'Remark'),
         ];
     }
 
@@ -122,13 +126,13 @@ class Category extends \yii\db\ActiveRecord
     /**
      * @return array
      */
-    public static function getMenuCategories()
+    public static function getMenuCategories($menuCategoryChosen=false)
     {
         $categories = self::getCategories();
         $familyTree = new FamilyTree($categories);
         $data = [];
-        foreach ($categories as $k => $v){
-            $parents = $familyTree->getAncectors($v['id']);
+        foreach ($categories as $k => $category){
+            $parents = $familyTree->getAncectors($category['id']);
             $url = '';
             if(!empty($parents)){
                 $parents = array_reverse($parents);
@@ -136,18 +140,22 @@ class Category extends \yii\db\ActiveRecord
                     $url .= '/' . $parent['alias'];
                 }
             }
-            $url .= '/'.$v['alias'];
-            if( isset($categories[$k+1]['level']) && $categories[$k+1]['level'] == $v['level'] ){
-                $name = ' ├' . $v['name'];
+            if( isset($categories[$k+1]['level']) && $categories[$k+1]['level'] == $category['level'] ){
+                $name = ' ├' . $category['name'];
             }else{
-                $name = ' └' . $v['name'];
+                $name = ' └' . $category['name'];
             }
-            if( end($categories) == $v ){
+            if( end($categories) == $category ){
                 $sign = ' └';
             }else{
                 $sign = ' │';
             }
-            $data[$url] = str_repeat($sign, $v['level']-1) . $name;
+            if( $menuCategoryChosen ){
+                $url = '{"0":"article/index","cat":"' . $category['alias'] . '"}';
+            }else{
+                $url = '/'.$category['alias'];
+            }
+            $data[$url] = str_repeat($sign, $category['level']-1) . $name;
         }
         return $data;
     }
@@ -226,9 +234,9 @@ class Category extends \yii\db\ActiveRecord
             $data[$url] = 'article/index';
         }
         $json = json_encode($data);
-        $path = Yii::getAlias('@frontend/runtime/cache');
+        $path = Yii::getAlias('@frontend/runtime/cache/');
         if( !file_exists($path) ) FileHelper::createDirectory($path);
-        file_put_contents($path . '/category.txt', $json);
+        file_put_contents($path . 'category.txt', $json);
     }
 
     public static function getUrlRules()

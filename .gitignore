@@ -1,6 +1,7 @@
 # yii console command
 /yii
 /yii_test
+/yii_test.bat
 
 # phpstorm project files
 .idea
@@ -34,3 +35,4 @@ backend/tests/acceptance.suite.yml
 frontend/tests/acceptance.suite.yml
 api/tests/acceptance.suite.yml
 apps/*
+install/install.lock

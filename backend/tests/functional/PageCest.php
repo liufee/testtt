@@ -37,13 +37,14 @@ class PageCest
         $I->see("编辑单页");
         $I->fillField("Article[summary]", '123');
         $I->submitForm("button[type=submit]", []);
+        $I->click("a[title=编辑]");
         $I->seeInField("Article[summary]", "123");
     }
 
     public function checkView(FunctionalTester $I)
     {
-        $I->amOnPage(Url::toRoute(['/page/index', 'id'=>24]));
-        $I->see('查看');
-        $I->see("关于我们");
+        $I->amOnPage(Url::toRoute(['/page/view-layer', 'id'=>24]));
+        $I->see('标题');
+        $I->see("副标题");
     }
 }

@@ -7,13 +7,13 @@
  */
 namespace backend\models\form;
 
+use Yii;
 use backend\components\CustomLog;
 use yii\base\Event;
-use Yii;
 use yii\helpers\ArrayHelper;
 use yii\web\NotFoundHttpException;
 
-class Rbac extends \yii\base\Model
+class RbacForm extends \yii\base\Model
 {
     public $name;
 
@@ -176,6 +176,15 @@ class Rbac extends \yii\base\Model
                 $authManager->addChild($role, $permission);
             }
 
+            if( $this->roles === null ) $this->roles = [];
+            $this->roles = array_flip($this->roles);
+            if (isset($this->roles[0])) unset($this->roles[0]);
+            $this->roles = array_flip($this->roles);
+            foreach ($this->roles as $needAdd){
+                $needAdd = $authManager->getRole($needAdd);
+                $authManager->addChild($role, $needAdd);
+            }
+
             Event::trigger(CustomLog::className(), CustomLog::EVENT_AFTER_CREATE, new CustomLog([
                 'sender' => $this,
             ]));
@@ -204,6 +213,7 @@ class Rbac extends \yii\base\Model
         ]);
 
         $oldPermissions = array_keys( $authManager->getPermissionsByRole($name) );
+        $oldRoles = array_keys($authManager->getChildRoles($name));
 
         if( $authManager->update($name, $role) ){
             if( $this->permissions === null ) $this->permissions = [];
@@ -221,6 +231,23 @@ class Rbac extends \yii\base\Model
             foreach ($needRemoves as $permission){
                 $permission = $authManager->getPermission($permission);
                 $authManager->removeChild($role, $permission);
+            }
+
+            if( $this->roles === null ) $this->roles = [];
+            $this->roles = array_flip($this->roles);
+            if (isset($this->roles[0])) unset($this->roles[0]);
+            $this->roles = array_flip($this->roles);
+            $needAdds = array_diff($this->roles, $oldRoles);
+            foreach ($needAdds as $needAdd){
+                $needAdd = $authManager->getRole($needAdd);
+                $authManager->addChild($role, $needAdd);
+            }
+
+            $needRemoves = array_diff($oldRoles, $this->roles);
+            foreach ($needRemoves as $needRemove){
+                $needRemove = $authManager->getRole($needRemove);
+                if( !$needRemove ) continue;
+                $authManager->removeChild($role, $needRemove);
             }
 
             Event::trigger(CustomLog::className(), CustomLog::EVENT_CUSTOM, new CustomLog([
@@ -327,7 +354,7 @@ class Rbac extends \yii\base\Model
             $this->category = isset( $data['category'] ) ? $data['category'] : '';
             $this->sort = $data['sort'];
         }else{
-            $role = $authManager->getRole($name);
+            $role = $authManager->getRole($name);//var_dump($name, $role);exit;
             $data = json_decode($role->data, true);
             $temp = $authManager->getPermissionsByRole($role->name);
             $permissions = [];

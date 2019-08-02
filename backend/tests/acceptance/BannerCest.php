@@ -13,8 +13,6 @@ use yii\helpers\Url;
 
 class BannerCest
 {
-    public $cookies = [];
-
     public function _fixtures()
     {
         return [
@@ -27,30 +25,11 @@ class BannerCest
 
     public function _before(AcceptanceTester $I)
     {
-        $I->amOnPage(Url::toRoute('/site/login'));
-        $I->see('登陆');
-        $I->submitForm("button[name=login-button]", [
-            'LoginForm[username]' => "admin",
-            'LoginForm[password]' => 'password_0',
-            'LoginForm[captcha]' => 'testme',
-        ]);
-        $I->seeCookie('_csrf_backend');
-        $this->cookies = [
-            '_' => $I->grabCookie("_csrf_backend"),
-            'PHPSESSID' => $I->grabCookie("PHPSESSID")
-        ];
-    }
-
-    private function setCookie(AcceptanceTester $I)
-    {
-        foreach ($this->cookies as $k => $v){
-            $I->setHeader($k, $v);
-        }
+        login($I);
     }
 
     public function checkIndex(AcceptanceTester $I)
     {
-        $this->setCookie($I);
         $I->amOnPage(Url::toRoute('/banner/index'));
         $I->see('Banner类型');
         $I->see("描述");
@@ -58,6 +37,7 @@ class BannerCest
         $I->see("编辑Banner类型");
         $I->fillField("BannerTypeForm[tips]", 'banner类型描述');
         $I->submitForm("button[type=submit]", []);
+        $I->click("a[title=编辑]");
         $I->seeInField("BannerTypeForm[tips]", "banner类型描述");
     }
 
@@ -68,7 +48,7 @@ class BannerCest
         $I->click("a[title=编辑]");
         $I->fillField("BannerForm[desc]", 'banner图片描述222');
         $I->submitForm("button[type=submit]", []);
-        //$I->click("a[title=编辑]");
+        $I->click("a[title=编辑]");
         $I->seeInField("BannerForm[desc]", "banner图片描述222");
     }
 

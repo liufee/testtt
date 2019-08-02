@@ -11,7 +11,7 @@
  * @var $model backend\models\User
  */
 
-use backend\models\form\Rbac;
+use backend\models\form\RbacForm;
 use backend\widgets\ActiveForm;
 use backend\models\User;
 use common\widgets\JsBlock;
@@ -32,10 +32,7 @@ $this->title = "Admin";
                 ]); ?>
                 <?= $form->field($model, 'username')->textInput(['maxlength' => 64]) ?>
                 <div class="hr-line-dashed"></div>
-                <?= $form->field($model, 'avatar')->imgInput([
-                    'width' => '200px',
-                    'baseUrl' => Yii::$app->params['admin']['url']
-                ]) ?>
+                <?= $form->field($model, 'avatar')->imgInput() ?>
                 <div class="hr-line-dashed"></div>
                 <?= $form->field($model, 'email')->textInput(['maxlength' => 64]) ?>
                 <div class="hr-line-dashed"></div>
@@ -66,7 +63,7 @@ $this->title = "Admin";
                     <span class="col-sm-2 control-label checkbox checkbox-success"><?= Html::checkbox("", false, ['id'=>'permission-all','class'=>'chooseAll'])?><label for='permission-all'><h4><?=Yii::t('app', 'Permissions')?></h4></label></span>
                     <div class="col-sm-10">
                         <?php
-                        $rbac = new Rbac();
+                        $rbac = new RbacForm();
                         foreach ($rbac->getPermissionsByGroup('form') as $key => $value){
                             echo "<div class='col-sm-1 text-left'><span class='checkbox checkbox-success checkbox-inline'>" . Html::checkbox("", false, ['id'=>"permission-all-{$key}", 'class'=>'chooseAll']) . "<label for='permission-all-{$key}'><h4>{$key}</h4></label></span></div>";
                             echo "<div class='col-sm-11'>";

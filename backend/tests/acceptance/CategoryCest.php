@@ -13,8 +13,6 @@ use yii\helpers\Url;
 
 class CategoryCest
 {
-    public $cookies = [];
-
     public function _fixtures()
     {
         return [
@@ -27,30 +25,11 @@ class CategoryCest
 
     public function _before(AcceptanceTester $I)
     {
-        $I->amOnPage(Url::toRoute('/site/login'));
-        $I->see('登陆');
-        $I->submitForm("button[name=login-button]", [
-            'LoginForm[username]' => "admin",
-            'LoginForm[password]' => 'password_0',
-            'LoginForm[captcha]' => 'testme',
-        ]);
-        $I->seeCookie('_csrf_backend');
-        $this->cookies = [
-            '_' => $I->grabCookie("_csrf_backend"),
-            'PHPSESSID' => $I->grabCookie("PHPSESSID")
-        ];
-    }
-
-    private function setCookie(AcceptanceTester $I)
-    {
-        foreach ($this->cookies as $k => $v){
-            $I->setHeader($k, $v);
-        }
+        login($I);
     }
 
     public function checkIndex(AcceptanceTester $I)
     {
-        $this->setCookie($I);
         $I->amOnPage(Url::toRoute('/category/index'));
         $I->see('分类');
         $I->see("别名");
@@ -58,6 +37,7 @@ class CategoryCest
         $I->see("编辑分类");
         $I->fillField("Category[name]", '123');
         $I->submitForm("button[type=submit]", []);
+        $I->click("a[title=编辑]");
         $I->seeInField("Category[name]", "123");
     }
 

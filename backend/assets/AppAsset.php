@@ -8,8 +8,15 @@
 
 namespace backend\assets;
 
-use yii;
 
+/**
+ * 重要提示：启用配置后，修改此处的js/css将不会生效
+ * 需要在backend/config/main.php中assetManager.bundles处修改配置
+ * 主要用于测试环境走本地文件,正式环境配置成cdn
+ *
+ * Class AppAsset
+ * @package backend\assets
+ */
 class AppAsset extends \yii\web\AssetBundle
 {
 
@@ -23,6 +30,8 @@ class AppAsset extends \yii\web\AssetBundle
         //'js/plugins/layer/laydate/skins/default/laydate.css'
         'static/css/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css',
         'static/css/plugins/toastr/toastr.min.css',
+        'static/css/plugins/chosen/chosen.css',
+        'static/css/feehi.css',
 
     ];
 
@@ -32,6 +41,7 @@ class AppAsset extends \yii\web\AssetBundle
         'static/js/plugins/layer/layer.min.js',
         'static/js/plugins/prettyfile/bootstrap-prettyfile.js',
         'static/js/plugins/toastr/toastr.min.js',
+        'static/js/plugins/chosen/chosen.jquery.js',
     ];
 
     public $depends = [

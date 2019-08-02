@@ -9,7 +9,7 @@
 /**
  * @var $this yii\web\View
  * @var $dataProvider yii\data\ArrayDataProvider
- * @var $searchModel backend\models\search\RbacSearch
+ * @var $searchModel backend\models\search\RbacFormSearch
  */
 
 use backend\grid\GridView;
@@ -41,6 +41,7 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Permissions');
                             return Html::a('<i class="fa fa-trash-o"></i> ' . Yii::t('app', 'Delete'), Url::to(['permission-delete']), [
                                 'title' => Yii::t('app', 'Delete'),
                                 'data-pjax' => '0',
+                                'param-sign' => 'name',//批量操作时，设置post数据的key名，默认为id
                                 'data-confirm' => Yii::t('app', 'Really to delete?'),
                                 'class' => 'btn btn-white btn-sm multi-operate',
                             ]);
@@ -56,7 +57,7 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Permissions');
                             'class' => CheckboxColumn::className(),
                             'checkboxOptions' => function ($model, $key, $index, $column) {
                                 return ['value' => $model->name];
-                            }
+                            },
                         ],
                         [
                             'attribute' => 'group',
@@ -80,38 +81,38 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Permissions');
                         [
                             'class' => SortColumn::className(),
                             'primaryKey' => function($model){
-                                return $model['name'];
+                                return ["name" => $model['name']];
                             },
-                            'action' => Url::to(['permissions-sort'])
+                            'action' => Url::to(['permission-sort'])
                         ],
                         [
                             'class' => ActionColumn::className(),
                             'width' => '190px',
                             'buttons' => [
                                 'view-layer' => function($url, $model, $key){
-                                    return Html::a('<i class="fa fa-folder"></i> ' . Yii::t('yii', 'View'), 'javascript:void(0)', [
+                                    return Html::a('<i class="fa fa-folder"></i> ', 'javascript:void(0)', [
                                         'title' => Yii::t('yii', 'View'),
                                         'onclick' => "viewLayer('" . Url::to(['permission-view-layer', 'name' => $model->name]) . "',$(this))",
                                         'data-pjax' => '0',
-                                        'class' => 'btn btn-white btn-sm',
+                                        'class' => 'btn',
                                     ]);
                                 },
                                 'update' => function ($url, $model, $key) {
-                                    return Html::a('<i class="fa  fa-edit" aria-hidden="true"></i> ' . Yii::t('app', 'Update'), Url::to([
+                                    return Html::a('<i class="fa fa-edit" aria-hidden="true"></i> ', Url::to([
                                         'permission-update',
                                         'name' => $model->name
                                     ]), [
                                         'title' => Yii::t('app', 'Update'),
                                         'data-pjax' => '0',
-                                        'class' => 'btn btn-white btn-sm J_menuItem',
+                                        'class' => 'btn J_menuItem',
                                     ]);
                                 },
                                 'delete' => function ($url, $model) {
-                                    return Html::a('<i class="fa fa-trash-o"></i> ' . Yii::t('app', 'Delete'), Url::to(['permission-delete', 'name'=>$model->name]), [
+                                    return Html::a('<i class="fa fa-trash-o"></i> ', Url::to(['permission-delete', 'name'=>$model->name]), [
                                         'title' => Yii::t('app', 'Delete'),
                                         'data-pjax' => '0',
                                         'data-confirm' => Yii::t('app', 'Are you sure you want to delete this item?'),
-                                        'class' => 'btn btn-white btn-sm',
+                                        'class' => 'btn',
                                     ]);
                                 },
                             ],

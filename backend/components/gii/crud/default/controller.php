@@ -4,6 +4,7 @@
  */
 
 use yii\db\ActiveRecordInterface;
+use yii\helpers\Inflector;
 use yii\helpers\StringHelper;
 
 
@@ -39,14 +40,27 @@ use backend\actions\UpdateAction;
 use backend\actions\IndexAction;
 use backend\actions\DeleteAction;
 use backend\actions\SortAction;
+use backend\actions\ViewAction;
 <?php if (empty($generator->searchModelClass)){ ?>
 use yii\data\ActiveDataProvider;
 <?php } ?>
+<?php $category = Yii::t("app", Inflector::pluralize(Inflector::camel2words(StringHelper::basename($generator->modelClass)))); ?>
+
 /**
  * <?= $controllerClass ?> implements the CRUD actions for <?= $modelClass ?> model.
  */
 class <?= $controllerClass ?> extends \yii\web\<?= StringHelper::basename($generator->baseControllerClass) . "\n" ?>
 {
+    /**
+    * @auth
+    * - item group=未分类 category=<?= $category?> description-get=列表 sort=000 method=get
+    * - item group=未分类 category=<?= $category?> description=创建 sort-get=001 sort-post=002 method=get,post  
+    * - item group=未分类 category=<?= $category?> description=修改 sort=003 sort-post=004 method=get,post  
+    * - item group=未分类 category=<?= $category?> description-post=删除 sort=005 method=post  
+    * - item group=未分类 category=<?= $category?> description-post=排序 sort=006 method=post  
+    * - item group=未分类 category=<?= $category?> description-get=查看 sort=007 method=get  
+    * @return array
+    */
     public function actions()
     {
         return [
@@ -88,6 +102,10 @@ class <?= $controllerClass ?> extends \yii\web\<?= StringHelper::basename($gener
             ],
             'sort' => [
                 'class' => SortAction::className(),
+                'modelClass' => <?= $modelClass ?>::className(),
+            ],
+            'view-layer' => [
+                'class' => ViewAction::className(),
                 'modelClass' => <?= $modelClass ?>::className(),
             ],
         ];

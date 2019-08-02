@@ -27,7 +27,7 @@ class GridView extends \yii\grid\GridView
 
     public $tableOptions = ['class' => 'table table-hover'];
 
-    public $layout = "{items}\n<div class='row'><div class='col-sm-2' style='line-height: 567%'>{summary}</div><div class='col-sm-10'><div class='dataTables_paginate paging_simple_numbers'>{pager}</div></div></div>";
+    public $layout = "{items}\n<div class='row'><div class='col-sm-3' style='line-height: 567%'>{summary}</div><div class='col-sm-9'><div class='dataTables_paginate paging_simple_numbers'>{pager}</div></div></div>";
 
     public $pagerOptions = [
         'firstPageLabel' => '首页',
@@ -48,22 +48,26 @@ class GridView extends \yii\grid\GridView
     {
         parent::init();
 
-        $this->rowOptions = function ($model, $key, $index, $grid) {
-            if ($index % 2 === 0) {
-                return ['class' => 'odd'];
-            } else {
-                return ['class' => 'even'];
-            }
-        };
-        $this->pagerOptions = [
-            'firstPageLabel' => Yii::t('app', 'first'),
-            'lastPageLabel' => Yii::t('app', 'last'),
-            'prevPageLabel' => Yii::t('app', 'previous'),
-            'nextPageLabel' => Yii::t('app', 'next'),
-            'options' => [
-                'class' => 'pagination',
-            ]
-        ];
+        if( !$this->rowOptions && $this->rowOptions !== false ) {
+            $this->rowOptions = function ($model, $key, $index, $grid) {
+                if ($index % 2 === 0) {
+                    return ['class' => 'odd'];
+                } else {
+                    return ['class' => 'even'];
+                }
+            };
+        }
+        if( !$this->pagerOptions && $this->pagerOptions !== false ) {
+            $this->pagerOptions = [
+                'firstPageLabel' => Yii::t('app', 'first'),
+                'lastPageLabel' => Yii::t('app', 'last'),
+                'prevPageLabel' => Yii::t('app', 'previous'),
+                'nextPageLabel' => Yii::t('app', 'next'),
+                'options' => [
+                    'class' => 'pagination',
+                ]
+            ];
+        }
     }
 
     /**

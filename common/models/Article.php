@@ -8,6 +8,7 @@
 
 namespace common\models;
 
+use common\models\meta\ArticleMetaImages;
 use common\models\meta\ArticleMetaLike;
 use common\models\meta\ArticleMetaTag;
 use feehi\cdn\TargetAbstract;
@@ -44,10 +45,12 @@ use yii\behaviors\TimestampBehavior;
  * @property integer $flag_roll
  * @property integer $flag_bold
  * @property integer $flag_picture
+ * @property string  $template
  * @property integer $created_at
  * @property integer $updated_at
  *
- * @property ArticleContent[] $articleContents
+ * @property ArticleContent $articleContent
+ * @property Category $category
  */
 class Article extends \yii\db\ActiveRecord
 {
@@ -66,6 +69,11 @@ class Article extends \yii\db\ActiveRecord
         ["w"=>185, "h"=>110],//文章详情下边图片推荐
         ["w"=>125, "h"=>86],//热门推荐
     ];
+
+    /**
+     * @var array
+     */
+    public $images;
 
     public function behaviors()
     {
@@ -94,6 +102,7 @@ class Article extends \yii\db\ActiveRecord
             [['can_comment', 'visibility'], 'default', 'value' => Constants::YesNo_Yes],
             [['thumb'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg, jpeg, gif, webp'],
             [['content'], 'string'],
+            [['images'], 'safe'],
             [['created_at', 'updated_at'], 'safe'],
             [
                 [
@@ -105,7 +114,8 @@ class Article extends \yii\db\ActiveRecord
                     'seo_keywords',
                     'seo_description',
                     'author_name',
-                    'tag'
+                    'tag',
+                    'template'
                 ],
                 'string',
                 'max' => 255
@@ -129,6 +139,7 @@ class Article extends \yii\db\ActiveRecord
             [['type'], 'default', 'value'=>self::ARTICLE, 'on'=>'article'],
             [['type'], 'default', 'value'=>self::SINGLE_PAGE, 'on'=>'page'],
             [['password'], 'string', 'max'=>20],
+            ['cid', 'default', 'value'=>0]
         ];
     }
 
@@ -167,7 +178,9 @@ class Article extends \yii\db\ActiveRecord
                 'flag_roll',
                 'flag_bold',
                 'flag_picture',
-                'password'
+                'password',
+                'images',
+                'template'
             ],
             'page' => [
                 'type',
@@ -182,7 +195,9 @@ class Article extends \yii\db\ActiveRecord
                 'can_comment',
                 'visibility',
                 'tag',
-                'sort'
+                'sort',
+                'images',
+                'template'
             ],
         ];
     }
@@ -220,10 +235,12 @@ class Article extends \yii\db\ActiveRecord
             'flag_roll' => Yii::t('app', 'Is Roll'),
             'flag_bold' => Yii::t('app', 'Is Bold'),
             'flag_picture' => Yii::t('app', 'Is Picture'),
+            'template' => Yii::t('app', 'Article Template'),
             'password' => Yii::t('app', 'Password'),
             'scan_count' => Yii::t('app', 'Scan Count'),
             'comment_count' => Yii::t('app', 'Comment Count'),
             'category' => Yii::t('app', 'Category'),
+            'images' => Yii::t('app', 'Article Images'),
         ];
     }
 
@@ -273,6 +290,8 @@ class Article extends \yii\db\ActiveRecord
             $cdn = Yii::$app->get('cdn');
             $this->thumb = $cdn->getCdnUrl($this->thumb);
         }
+        $articleMetaImagesModel = new ArticleMetaImages();
+        $this->images = $articleMetaImagesModel->getImagesByArticle($this->id);
         parent::afterFind();
     }
 

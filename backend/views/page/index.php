@@ -24,6 +24,18 @@ use backend\grid\ActionColumn;
 
 $this->title = 'Pages';
 $this->params['breadcrumbs'][] = Yii::t('app', 'Pages');
+$config = yii\helpers\ArrayHelper::merge(
+    require Yii::getAlias("@frontend/config/main.php"),
+    require Yii::getAlias("@frontend/config/main-local.php")
+);
+$prettyUrl = false;
+if( isset( $config['components']['urlManager']['enablePrettyUrl'] ) ){
+    $prettyUrl = $config['components']['urlManager']['enablePrettyUrl'];
+}
+$suffix = "";
+if( isset( $config['components']['urlManager']['suffix'] ) ){
+    $suffix = $config['components']['urlManager']['suffix'];
+}
 ?>
 <div class="row">
     <div class="col-sm-12">
@@ -34,7 +46,6 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Pages');
                 <?= GridView::widget([
                     'dataProvider' => $dataProvider,
                     'filterModel' => $searchModel,
-                    'layout' => "{items}\n{pager}",
                     'columns' => [
                         [
                             'class' => CheckboxColumn::className(),
@@ -47,24 +58,19 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Pages');
                         ],
                         [
                             'attribute' => 'title',
-                            'format' => 'html',
-                            'width' => '170',
-                            'value' => function ($model, $key, $index, $column) {
-                                return Html::a($model->title, 'javascript:void(0)', [
-                                    'title' => $model->thumb,
-                                    'class' => 'title'
-                                ]);
-                            }
+                        ],
+                        [
+                            'attribute' => 'sub_title',
+                            'label' => Yii::t("app", "Page Sign"),
+                            'format' => 'raw',
+                            'value' => function($model)use($prettyUrl, $suffix){
+                                /** @var \common\models\Article $model */
+                                $url = $prettyUrl ? Yii::$app->params['site']['url'] . 'page/' . $model->sub_title . $suffix : Yii::$app->params['site']['url'] . 'index.php?r=page/' . $model->sub_title . $suffix;
+                                return Html::a($model->sub_title, $url, ["target" => "_blank"]);
+                            },
                         ],
                         [
                             'attribute' => 'author_name',
-                        ],
-                        [
-                            'label' => Yii::t('app', 'Url'),
-                            'format' => 'raw',
-                            'value' => function($model){
-                                return "<a target='_blank' href='" . Yii::$app->params['site']['url'] . 'page/' . $model->sub_title . "'>" . Yii::$app->params['site']['url'] . 'page/' . $model->sub_title . '</a>';
-                            },
                         ],
                         [
                             'attribute' => 'status',
@@ -95,13 +101,13 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Pages');
                             'class' => ActionColumn::className(),
                             'buttons' => [
                                 'comment' => function ($url, $model, $key) {
-                                    return Html::a('<i class="fa  fa-commenting-o" aria-hidden="true"></i> ' . Yii::t('app', 'Comments'), Url::to([
+                                    return Html::a('<i class="fa  fa-commenting-o" aria-hidden="true"></i> ', Url::to([
                                         'comment/index',
                                         'CommentSearch[aid]' => $model->id
                                     ]), [
                                         'title' => Yii::t('app', 'Comments'),
                                         'data-pjax' => '0',
-                                        'class' => 'btn btn-white btn-sm openContab',
+                                        'class' => 'btn-sm openContab',
                                     ]);
                                 }
                             ],

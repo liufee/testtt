@@ -83,6 +83,7 @@ return [
     'Admin User Id' => '管理员用户Id',
     'IP Address' => 'IP地址',
     'User Id' => '用户Id',
+    'None' => '无',
     /*Public*/
 
     /*Login*/
@@ -91,7 +92,7 @@ return [
     'Please contact admin for reset password' => '请联系管理员重置密码',
     'Captcha' => '验证码',
     'Verification code error.' => '验证码错误。',
-    'Login' => '登陆',
+    'Login' => '登录',
     'Verification Code' => '验证码',
     /*Login*/
 
@@ -127,9 +128,13 @@ return [
     'Are you sure you want to cancel release?' => '您确定要取消发布此文章吗?',
     'uncategoried' => '未分类',
     'Please select' => '请选择',
+    'Please select some' => '请选择一个或多个',
     'Allowed not to be deleted, some article belongs to this category.' => '不允许被删除，还有文章属于此分类',
     'Secret article must set a password' => '加密文章必须设置密码',
     'Article Id' => '文章Id',
+    'Article Images' => '文章配图',
+    'Choose Image Multi' => '选择多图',
+    "Page Sign" => "单页地址",
     /*Article*/
 
     /*Comment*/
@@ -138,11 +143,14 @@ return [
     'Article Title' => '文章标题',
     'Website' => '网址',
     'Replay User Id' => '原评论用户Id',
+    'Comment Message' => '评论内容',
     /*Comment*/
 
     /*Category*/
     'Parent Category Id' => '父分类Id',
     'Parent Category Name' => '父分类名称',
+    'Category Template' => '分类模板',
+    'Article Template' => '文章模板',
     /*Category*/
 
     /*friend link*/
@@ -155,8 +163,9 @@ return [
     'HTTP Method' => '请求方式',
     'Input new' => '输入',
     'Sub Menu exists, cannot be deleted' => '该菜单还有子菜单，不能被删除',
-    'Select from article category' => '从文章分类选择',
+    'Chose from article category' => '从文章分类选择',
     'Parent Menu Name' => '父分类菜单名称',
+    'Url is not a correct json format' => '地址的json格式错误',
     /*menu*/
 
     /*setting*/
@@ -274,7 +283,7 @@ return [
     'Permissions' => '权限',
     'Group' => '组',
     'Assign Permission' => '分配权限',
-    'Select from exists' => '从已有选择',
+    'Chose from exists' => '从已有选择',
     /*rbac*/
 
     /*js*/
@@ -284,6 +293,7 @@ return [
     'None item selected!' => '啊哦,神马都都没有选中!',
     'Only picture file be permitted.' => '只能选择图片类型',
     'Choose File' => '选择文件',
+    'Choose Image' => '选择图片',
     /*js*/
 
     /*error*/
@@ -347,4 +357,16 @@ return [
     'Ad' => '广告',
     'Ad Explain' => '广告描述',
     /*ad*/
+
+    /*webuploader*/
+    'or dragged picture here' => '或将照片拖到这里',
+    'Confirm use' => '确定使用',
+    'Pause uploading' => '暂停上传',
+    'Continue uploading' => '继续上传',
+    'Start uploading' => '开始上传',
+    'Upload Image' => '上传图片',
+    'Click select image' => '点击选择图片',
+    'File cannot be empty' => '文件不能为空',
+    'Only picture allowed' => '仅允许上传图片'
+    /*webuploader*/
 ];

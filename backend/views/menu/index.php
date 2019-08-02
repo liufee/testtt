@@ -63,6 +63,9 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Backend Menus');
                         ],
                         [
                             'class' => SortColumn::className(),
+                            'primaryKey' => function($model){
+                                return ["id" => $model["id"]];
+                            },
                             'label' => Yii::t('app', 'Sort')
                         ],
                         [
@@ -87,13 +90,13 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Backend Menus');
                             'width' => '190px',
                             'buttons' => [
                                 'create' => function ($url, $model, $key) {
-                                    return Html::a('<i class="fa  fa-plus" aria-hidden="true"></i> ' . Yii::t('app', 'Create'), Url::to([
+                                    return Html::a('<i class="fa  fa-plus" aria-hidden="true"></i> ', Url::to([
                                         'create',
                                         'parent_id' => $model['id']
                                     ]), [
                                         'title' => Yii::t('app', 'Create'),
                                         'data-pjax' => '0',
-                                        'class' => 'btn btn-white btn-sm J_menuItem',
+                                        'class' => 'btn-sm J_menuItem',
                                     ]);
                                 }
                             ],
