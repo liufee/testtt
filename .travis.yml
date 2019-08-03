@@ -31,6 +31,8 @@ before_script:
   - echo "extension = imagick.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - printf "\n" | pecl install -f imagick
   - php yii_test migrate --interactive=0 frontendUri=//localhost
+  - cp api/tests/acceptance.suite.yml.example api/tests/acceptance.suite.yml
+  - cp api/tests/functional.suite.yml.example api/tests/functional.suite.yml
 
 script:
-  - vendor/bin/codecept run
+  - vendor/bin/codecept run -vvv
