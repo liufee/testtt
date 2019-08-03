@@ -16,6 +16,8 @@ sudo: false
 cache:
   directories:
     - $HOME/.composer/cache
+services:
+- mysql
 
 install:
   - travis_retry composer self-update && composer --version
