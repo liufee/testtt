@@ -52,7 +52,7 @@ fi
 # Build the default nginx config files.
 tpl "$DIR/nginx.tpl.conf" "$DIR/nginx/nginx.conf"
 tpl "$DIR/fastcgi.tpl.conf" "$DIR/nginx/fastcgi.conf"
-tpl "$DIR/fastcgi_params" "$DIR/nginx/fastcgi_params.tpl"
+tpl "$DIR/fastcgi_params.tpl" "$DIR/nginx/fastcgi_params"
 tpl "$DIR/default-site.tpl.conf" "$DIR/nginx/sites-enabled/default-site.conf"
 sudo chmod -R 777 /var/log/nginx
 
