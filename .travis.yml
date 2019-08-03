@@ -36,6 +36,6 @@ before_script:
   - php yii_test migrate --interactive=0 frontendUri=//localhost
   - cp api/tests/acceptance.suite.yml.example api/tests/acceptance.suite.yml
   - cp api/tests/functional.suite.yml.example api/tests/functional.suite.yml
-  - cd frontend/web && php -S 0.0.0.0:8888 &
+
 script:
   - vendor/bin/codecept run
