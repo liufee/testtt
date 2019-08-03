@@ -57,4 +57,6 @@ tpl "$DIR/default-site.tpl.conf" "$DIR/nginx/sites-enabled/default-site.conf"
 sudo chmod -R 777 /var/log/nginx
 
 # Start nginx.
+ls $DIR/nginx/
+cat $DIR/nginx/nginx.conf
 nginx -c "$DIR/nginx/nginx.conf"
