@@ -10,25 +10,19 @@ php:
 #  - hhvm
 
 # faster builds on new travis setup not using sudo
-sudo: true
+sudo: false
 
 # cache vendor dirs
 cache:
   directories:
     - $HOME/.composer/cache
-services:
-- mysql
 
-addons:
-  apt:
-    packages:
-    - nginx
-    - realpath
+services:
+  - mysql
 
 install:
   - travis_retry composer self-update && composer --version
   - travis_retry composer update --prefer-dist --no-interaction
-  - chmod +x travis/install-nginx.sh && travis/install-nginx.sh
 # setup application:
   - |
     ./init --env=Development
@@ -42,7 +36,6 @@ before_script:
   - php yii_test migrate --interactive=0 frontendUri=//localhost
   - cp api/tests/acceptance.suite.yml.example api/tests/acceptance.suite.yml
   - cp api/tests/functional.suite.yml.example api/tests/functional.suite.yml
-  - curl localhost/a.html
-
+  - cd frontend/web && php -S 0.0.0.0:80
 script:
-  - vendor/bin/codecept run -vvv
+  - vendor/bin/codecept run
