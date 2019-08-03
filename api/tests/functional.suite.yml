@@ -3,6 +3,6 @@ modules:
   enabled:
   - REST:
       depends: PhpBrowser
-      url: http://localhost:8888/apitest
+      url: http://cms.test.docker/apitest
   - Yii2:
       part: init
