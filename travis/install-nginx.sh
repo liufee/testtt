@@ -53,6 +53,7 @@ fi
 tpl "$DIR/nginx.tpl.conf" "$DIR/nginx/nginx.conf"
 tpl "$DIR/fastcgi.tpl.conf" "$DIR/nginx/fastcgi.conf"
 tpl "$DIR/default-site.tpl.conf" "$DIR/nginx/sites-enabled/default-site.conf"
-chmod -R 777 /var/log/nginx
+sudo chmod -R 777 /var/log/nginx
+
 # Start nginx.
 nginx -c "$DIR/nginx/nginx.conf"
