@@ -28,7 +28,6 @@ addons:
 install:
   - travis_retry composer self-update && composer --version
   - travis_retry composer update --prefer-dist --no-interaction
-  - ~/.phpenv/versions/$(phpenv version-name)/sbin/php-fpm
   - chmod +x travis/install-nginx.sh && travis/install-nginx.sh
 # setup application:
   - |
