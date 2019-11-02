@@ -75,9 +75,9 @@ DNS服务商密钥获取
            --manual-cleanup-hook "/hook/certbot-feehi-hook.sh --type=aliyun --action=delete --ali_AccessKey_ID=阿里云ACCESS_KEY_ID --ali_Access_Key_Secret=阿里云ACCESS_KEY_SECRET"
            --deploy-hook  "service nginx restart"
     ```
-       > 可以配置定时任务每个月执行一次: 0 0 1 * * 上面的命令
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
-       > 当且仅当成功更新证书后会执行--deploy-hook,根据自身web服务器情况进行重启web服务器重新加载新证书
+        可以配置定时任务每个月执行一次: 0 0 1 * * 上面的命令
+
+        当且仅当成功更新证书后会执行--deploy-hook,根据自身web服务器情况进行重启web服务器重新加载新证书
        
        
 帮助
