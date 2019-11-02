@@ -52,7 +52,7 @@ DNS服务商密钥获取
             $ wget https://dl.eff.org/certbot-auto && mv certbot-auto certbot && chmod +x certbot
             $ mv certbot /usr/bin
         ```
-    1.2 
+    1.2
         ```bash
         $ certbot certonly 
               -d *.您的域名.com --manual --preferred-challenges dns
