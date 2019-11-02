@@ -9,15 +9,6 @@ certbot验证域名是否属于某人，通过产生一个随机字符串，让�
 使用golang编写，服务器无需搭建运行环境，直接下载二进制分发程序即可。
 
 
-帮助
----------------
-1. QQ群 258780872
-
-2. 微信 <br> ![微信](http://img-1251086492.cosgz.myqcloud.com/github/wechat.png)
-
-3. Email job@feehi.com
-
-
 支持的DNS服务商
 -------
 - [x] 阿里云
@@ -84,6 +75,15 @@ DNS服务商密钥获取
            --manual-cleanup-hook "/hook/certbot-feehi-hook.sh --type=aliyun --action=delete --ali_AccessKey_ID=阿里云ACCESS_KEY_ID --ali_Access_Key_Secret=阿里云ACCESS_KEY_SECRET"
            --deploy-hook  "service nginx restart"
     ```
-       >可以配置定时任务每个月执行一次: 0 0 1 * * 上面的命令
+       > 可以配置定时任务每个月执行一次: 0 0 1 * * 上面的命令
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
-       >当且仅当成功更新证书后会执行--deploy-hook,根据自身web服务器情况进行重启web服务器重新加载新证书
+       > 当且仅当成功更新证书后会执行--deploy-hook,根据自身web服务器情况进行重启web服务器重新加载新证书
+       
+       
+帮助
+---------------
+1. QQ群 258780872
+
+2. 微信 <br> ![微信](http://img-1251086492.cosgz.myqcloud.com/github/wechat.png)
+
+3. Email job@feehi.com
