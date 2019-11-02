@@ -34,7 +34,7 @@ DNS服务商密钥获取
   
 获取插件
 ---------------
-1. 下载二进制发行版 [点此下载]https://resource-1251086492.cos.ap-shanghai.myqcloud.com/opensource/certbot-feehi-hook) ***下载后请记得chmod +x certbot-feehi-hook给予执行权限***
+1. 下载二进制发行版 [点此下载](https://resource-1251086492.cos.ap-shanghai.myqcloud.com/opensource/certbot-feehi-hook) ***下载后请记得chmod +x certbot-feehi-hook给予执行权限***
 
 2. 源码编译安装  
     ```bash
@@ -53,12 +53,12 @@ DNS服务商密钥获取
             $ mv certbot /usr/bin
         ```
     1.2
-        ```bash
-        $ certbot certonly 
-              -d *.您的域名.com --manual --preferred-challenges dns
-              --manual-auth-hook "/存放certbot-feehi-hook的目录(下载的certboot-feehi-hook存放目录)/certbot-feehi-hook --type=aliyun --action=add --ali_AccessKey_ID=阿里云ACCESS_KEY_ID --ali_Access_Key_Secret=阿里云ACCESS_KEY_SECRET" 
-              --manual-cleanup-hook "/hook/certbot-feehi-hook --type=aliyun --action=delete --ali_AccessKey_ID=阿里云ACCESS_KEY_ID --ali_Access_Key_Secret=阿里云ACCESS_KEY_SECRET"
-        ```
+      ```bash
+      $ certbot certonly 
+            -d *.您的域名.com --manual --preferred-challenges dns
+            --manual-auth-hook "/存放certbot-feehi-hook的目录(下载的certboot-feehi-hook存放目录)/certbot-feehi-hook --type=aliyun --action=add --ali_AccessKey_ID=阿里云ACCESS_KEY_ID --ali_Access_Key_Secret=阿里云ACCESS_KEY_SECRET" 
+            --manual-cleanup-hook "/hook/certbot-feehi-hook --type=aliyun --action=delete --ali_AccessKey_ID=阿里云ACCESS_KEY_ID --ali_Access_Key_Secret=阿里云ACCESS_KEY_SECRET"
+      ```
 
 2. 通过docker certbot/certbot官方镜像
     * 申请证书
