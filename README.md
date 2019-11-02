@@ -34,7 +34,7 @@ DNS服务商密钥获取
   
 获取插件
 ---------------
-1. 下载二进制发行版 [点此下载](https://resource-1251086492.cos.ap-shanghai.myqcloud.com/opensource/certbot-feehi-hook) ***下载后请记得chmod +x certbot-feehi-hook给予执行权限***
+1. 下载二进制发行版 [点此下载](https://resource-1251086492.cos.ap-shanghai.myqcloud.com/opensource/certbot-feehi-hook) 下载后请记得***chmod +x certbot-feehi-hook***给予执行权限
 
 2. 源码编译安装  
     ```bash
@@ -48,10 +48,10 @@ DNS服务商密钥获取
 >为了方便展示，以下shell命令安装均做了变形处理，如执行失败，请手动去掉换行符，将命令调整为单行
 1. 直接使用  
     1.1 安装certbot
-        ```bash
-            $ wget https://dl.eff.org/certbot-auto && mv certbot-auto certbot && chmod +x certbot
-            $ mv certbot /usr/bin
-        ```
+    ```bash
+      $ wget https://dl.eff.org/certbot-auto && mv certbot-auto certbot && chmod +x certbot
+      $ mv certbot /usr/bin
+    ```
     1.2
       ```bash
       $ certbot certonly 
