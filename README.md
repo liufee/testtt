@@ -20,9 +20,9 @@ certbot验证域名是否属于某人，通过产生一个随机字符串，让�
 
 支持的DNS服务商
 -------
--[x]阿里云
+- [x] 阿里云
 
--[ ]腾讯云
+- [ ] 腾讯云
 
 
 DNS服务商密钥获取
@@ -73,17 +73,17 @@ DNS服务商密钥获取
             --manual-cleanup-hook "/hook/certbot-feehi-hook --type=aliyun --action=delete --ali_AccessKey_ID=阿里云ACCESS_KEY_ID --ali_Access_Key_Secret=阿里云ACCESS_KEY_SECRET"
      ```
    * 更新证书
-       ```bash
-           $ /path/to/docker run -it --rm --name certbot \
-               -v "/宿主机证书存放目录:/etc/letsencrypt" \
-               -v "/tmp:/var/log/letsencrypt"
-               -v "/存放certbot-feehi-hook的目录(下载的certboot-feehi-hook存放目录):/hook" 
-               certbot/certbot renew 
-               --manual --preferred-challenges dns
-               --manual-auth-hook "/hook/certbot-feehi-hook.sh --type=aliyun --action=add --ali_AccessKey_ID=阿里云ACCESS_KEY_ID --ali_Access_Key_Secret=阿里云ACCESS_KEY_SECRET" 
-               --manual-cleanup-hook "/hook/certbot-feehi-hook.sh --type=aliyun --action=delete --ali_AccessKey_ID=阿里云ACCESS_KEY_ID --ali_Access_Key_Secret=阿里云ACCESS_KEY_SECRET"
-               --deploy-hook  "service nginx restart"
-        ```
+   ```bash
+       $ /path/to/docker run -it --rm --name certbot \
+           -v "/宿主机证书存放目录:/etc/letsencrypt" \
+           -v "/tmp:/var/log/letsencrypt"
+           -v "/存放certbot-feehi-hook的目录(下载的certboot-feehi-hook存放目录):/hook" 
+           certbot/certbot renew 
+           --manual --preferred-challenges dns
+           --manual-auth-hook "/hook/certbot-feehi-hook.sh --type=aliyun --action=add --ali_AccessKey_ID=阿里云ACCESS_KEY_ID --ali_Access_Key_Secret=阿里云ACCESS_KEY_SECRET" 
+           --manual-cleanup-hook "/hook/certbot-feehi-hook.sh --type=aliyun --action=delete --ali_AccessKey_ID=阿里云ACCESS_KEY_ID --ali_Access_Key_Secret=阿里云ACCESS_KEY_SECRET"
+           --deploy-hook  "service nginx restart"
+    ```
        >可以配置定时任务每个月执行一次: 0 0 1 * * 上面的命令
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
        >当且仅当成功更新证书后会执行--deploy-hook,根据自身web服务器情况进行重启web服务器重新加载新证书
