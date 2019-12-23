@@ -27,5 +27,5 @@ Hosts管理
 
 运行
 -------
-windows需要以管理员身份运行(操作c:\windows\system32\drivers\etc\hosts文件)
+windows需要以管理员身份运行(操作c:\windows\system32\drivers\etc\hosts文件)  
 macos、linux需要保证运行的用户能读写/etc/hosts文件
