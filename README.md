@@ -13,7 +13,7 @@ Hosts管理
 
 安装
 -------
- 1.下载可执行文件
+ 1. 下载可执行文件
    [点击进入](https://github.com/liufee/hosts/releases) 
    
    
