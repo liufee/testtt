@@ -13,16 +13,16 @@ Hosts管理
 
 安装
 -------
-1.下载可执行文件
+ 1.下载可执行文件
    [点击进入](https://github.com/liufee/hosts/releases) 
    
    
-2. 编译安装
-```bash 
-    $ git clone https://github.com/liufee/hosts.git
-    $ cd hosts
-    $ sh build.sh
-```
+ 2. 编译安装
+  ```bash 
+        $ git clone https://github.com/liufee/hosts.git
+        $ cd hosts
+        $ sh build.sh
+  ```
     
 
 运行
