@@ -16,6 +16,7 @@ Hosts管理
 1.下载可执行文件
    [点击进入](https://github.com/liufee/hosts/releases) 
    
+   
 2. 编译安装
 ```bash 
     $ git clone https://github.com/liufee/hosts.git
