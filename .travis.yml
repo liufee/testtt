@@ -22,7 +22,6 @@ services:
 
 install:
 - travis_retry composer self-update && composer --version
-- travis_retry composer global require "fxp/composer-asset-plugin:~1.1.1"
 - travis_retry composer update --prefer-dist --no-interaction
 # setup application:
 - |
