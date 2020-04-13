@@ -11,7 +11,7 @@ namespace backend\models\form;
 use Yii;
 use common\models\Options;
 
-class SettingSmtpForm extends \common\models\Options
+class SettingSMTPForm extends \common\models\Options
 {
     public $smtp_host;
 
@@ -59,15 +59,16 @@ class SettingSmtpForm extends \common\models\Options
      * 填充smtp配置
      *
      */
-    public function getSmtpConfig()
+    public function init()
     {
+        parent::init();
         $names = $this->getNames();
+        $models = Options::find()->where(["in", "name", $names])->indexBy("name")->all();
         foreach ($names as $name) {
-            $model = self::findOne(['name' => $name]);
-            if ($model != null) {
-                $this->$name = $model->value;
+            if (isset($models[$name])) {
+                $this->$name = $models[$name]->value;
             } else {
-                $this->$name = '';
+                $this->name = '';
             }
         }
     }
@@ -78,22 +79,24 @@ class SettingSmtpForm extends \common\models\Options
      *
      * @return bool
      */
-    public function setSmtpConfig()
+    public function setSMTPSettingConfig()
     {
         $names = $this->getNames();
         foreach ($names as $name) {
             $model = self::findOne(['name' => $name]);
             if ($model != null) {
-                $model->value = $this->$name;
+                $value = $this->$name;
+                $value === null && $value = '';
+                $model->value = $value;
                 $result = $model->save(false);
             } else {
-                $model = Yii::createObject( Options::className() );
+                $model = new Options();
                 $model->name = $name;
-                $model->value = $this->$name;
+                $model->value = '';
                 $result = $model->save(false);
             }
             if ($result == false) {
-                return $result;
+                return false;
             }
         }
         return true;
@@ -103,11 +106,11 @@ class SettingSmtpForm extends \common\models\Options
      * 获取smtp邮箱配置
      *
      * @return array
+     * @throws \yii\base\InvalidConfigException
      */
     public static function getComponentConfig()
     {
         $config = Yii::createObject( self::className() );
-        $config->getSmtpConfig();
         return [
             'useFileTransport' => false,
             'transport' => [

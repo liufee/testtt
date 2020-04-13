@@ -42,7 +42,7 @@ AppAsset::register($this);
 </head>
 <?php $this->beginBody() ?>
 <body class="home blog">
-<?= $this->render('/widgets/_flash') ?>
+<?= $this->render('_flash') ?>
 <header id="masthead" class="site-header">
     <nav id="top-header">
         <div class="top-nav">
@@ -133,6 +133,7 @@ AppAsset::register($this);
             <select onchange="location.href=this.options[this.selectedIndex].value;" style="height: 30px">
                 <option <?php if (Yii::$app->language == 'zh-CN') {echo 'selected';} ?> value="<?= Url::to(['site/language', 'lang' => 'zh-CN']) ?>">简体中文</option>
                 <option <?php if (Yii::$app->language == 'en-US') {echo "selected";} ?> value="<?= Url::to(['site/language', 'lang' => 'en-US']) ?>">English</option>
+                <option <?php if (Yii::$app->language == 'pt-BR') {echo "selected";} ?> value="<?= Url::to(['site/language', 'lang' => 'pt-BR']) ?>">Português</option>
             </select>
         </p>
         <p><?=Yii::$app->feehi->website_icp?> Powered by Feehi CMS <a title="飞嗨" target="_blank" href="http://blog.feehi.com">飞嗨</a></p>

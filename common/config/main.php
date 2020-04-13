@@ -1,13 +1,13 @@
 <?php
 return [
     'name' => 'Feehi CMS',
-    'version' => '2.0.7.1',
+    'version' => '2.1.0-beta',
     'vendorPath' => dirname(dirname(__DIR__)) . '/vendor',
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
         '@npm'   => '@vendor/npm-asset',
     ],
-    'components' => [
+    'components' => array_merge([
         'db' => [//数据库配置，这里的配置可能会被conf/db.local main-local.php配置覆盖
             'class' => yii\db\Connection::className(),
             'dsn' => 'mysql:host=localhost;dbname=feehi',
@@ -19,7 +19,7 @@ return [
             'class' => feehi\cdn\DummyTarget::className(),//不使用cdn
         ],
         'cache' => [//缓存组件 具体配置请参考 http://doc.feehi.com/configs.html
-            'class' => yii\caching\DummyCache::className(),//不使用缓存
+            'class' => yii\caching\FileCache::className(),//不使用缓存
         ],
         'formatter' => [//格式显示配置
             'dateFormat' => 'php:Y-m-d H:i',
@@ -97,5 +97,5 @@ return [
                 ],
             ],
         ],
-    ],
+    ], require "services.php")
 ];

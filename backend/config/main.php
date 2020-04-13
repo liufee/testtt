@@ -16,7 +16,7 @@ return [
     'modules' => [],
     'components' => [
         'user' => [
-            'identityClass' => backend\models\User::className(),
+            'identityClass' => common\models\AdminUser::className(),
             'enableAutoLogin' => false,
             'identityCookie' => ['name' => '_backend_identity'],
             'idParam' => '__backend__id',
@@ -158,7 +158,7 @@ return [
             'site/language',
             'admin-user/request-password-reset',
             'admin-user/reset-password',
-            'admin-user/update-self',
+            'admin-user/self-update',
             'assets/*',
             'debug/*',
             'gii/*',

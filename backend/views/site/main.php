@@ -12,6 +12,7 @@ use yii\helpers\Url;
 /**
  * @var $statics array
  * @var $this yii\web\View
+ * @var array $comments latest comments
  */
 $this->registerCss("
      .environment .list-group-item > .badge {float: left}
@@ -66,8 +67,8 @@ $this->registerCss("
                 <h5><?= Yii::t('app', 'Friendly Links') ?></h5>
             </div>
             <div class="ibox-content openContab" href="<?=Url::to(['friendly-link/index'])?>" title="<?= Yii::t('app', 'Friendly Links')?>" style="cursor: pointer">
-                <h1 class="no-margins"><?= $statics['FRIEND_LINK'][0] ?></h1>
-                <div class="stat-percent font-bold text-info"><?= $statics['FRIEND_LINK'][1] ?>% <i class="fa fa-level-up"></i></div>
+                <h1 class="no-margins"><?= $statics['FRIENDLY_LINK'][0] ?></h1>
+                <div class="stat-percent font-bold text-info"><?= $statics['FRIENDLY_LINK'][1] ?>% <i class="fa fa-level-up"></i></div>
                 <small><?= Yii::t('app', 'Total') ?></small>
             </div>
         </div>
@@ -231,7 +232,7 @@ $this->registerCss("
                                     <small class="pull-right"><?= Yii::$app->getFormatter()->asRelativeTime($comment->created_at) ?></small>
                                     <strong><?= $comment->nickname ?></strong>
                                     <br>
-                                    <small class="text-muted"><?= Yii::$app->getFormatter()->asDate($comment->created_at) ?> <?= Yii::t('app', 'at')?> <a class="openContab" data-index="0" title="<?=yii::t('app',"Articles")?>" href="<?=Url::toRoute(['article/view-layer', 'id'=>$comment->article->id]) ?>"><?= $comment->article->title ?></a></small>
+                                    <small class="text-muted"><?= Yii::$app->getFormatter()->asDate($comment->created_at) ?> <?=Yii::t('app', 'at')?> <a class="openContab" data-index="0" title="<?=yii::t('app',"Articles")?>" href="<?= isset($comment->article->id) ? Url::toRoute(['article/view-layer', 'id'=>$comment->article->id]) : '#' ?>"><?= isset($comment->article->title) ? $comment->article->title : '' ?></a></small>
                                     <div data-index="0" class="openContab well" href="<?=Url::toRoute(['comment/index']) ?>" title="<?= Yii::t('app', 'Comments')?>" style="cursor: pointer">
                                         <?= $comment->content ?>
                                     </div>
@@ -251,7 +252,7 @@ $(document).ready(function () {
     var notify = $("#notify");
     $.ajax({
         dataType:"jsonp",
-        url:"//api.feehi.com/cms/notify",
+        url:"//api.feehi.com/cms/notify?ver=<?=Yii::$app->getVersion()?>",
         success:function (dataAll) {
             data = dataAll.rows;
             notify.empty();

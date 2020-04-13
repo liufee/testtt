@@ -10,22 +10,34 @@ namespace backend\controllers;
 
 use Yii;
 use Exception;
-use common\models\Comment;
+use common\services\ArticleServiceInterface;
+use common\services\UserServiceInterface;
+use common\services\CommentServiceInterface;
+use common\services\FriendlyLinkServiceInterface;
+use common\services\MenuService;
 use backend\models\form\LoginForm;
 use common\libs\ServerInfo;
-use backend\models\Article as ArticleModel;
-use backend\models\Comment as BackendComment;
-use common\models\FriendlyLink;
-use frontend\models\User;
 use yii\base\UserException;
 use yii\db\Query;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
+use yii\helpers\Html;
 use yii\web\HttpException;
 use yii\captcha\CaptchaAction;
 
 /**
- * Site controller
+ * Site default controller
+ *
+ * - description:
+ *          - site/index is index page(framework)
+ *          - site/main is the iframe default page
+ *          - site/login backend login page
+ *          - site/logout backend user logout
+ *          - site/language multi language change
+ *          - site/error backend error unify handler
+ *
+ * Class SiteController
+ * @package backend\controllers
  */
 class SiteController extends \yii\web\Controller
 {
@@ -35,18 +47,18 @@ class SiteController extends \yii\web\Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'except' =>['login', 'captcha', 'language'],
+                'except' =>['login', 'captcha', 'language'],//no need login actions
                 'rules' => [
                     [
                         'allow' => true,
-                        'roles' => ['@'],
+                        'roles' => ['@'],//"@" represent authenticated user; "?" means guest user (not authenticated yet).
                     ],
                 ],
             ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    'logout' => ['post'],
+                    'logout' => ['post'],//logout action only permit POST request
                 ],
             ],
         ];
@@ -56,14 +68,14 @@ class SiteController extends \yii\web\Controller
     {
         $captcha = [
             'class' => CaptchaAction::className(),
-            'backColor' => 0x66b3ff,//背景颜色
-            'maxLength' => 4,//最大显示个数
-            'minLength' => 4,//最少显示个数
-            'padding' => 6,//验证码字体大小，数值越小字体越大
-            'height' => 34,//高度
-            'width' => 100,//宽度
-            'foreColor' => 0xffffff,//字体颜色
-            'offset' => 13,//设置字符偏移量
+            'backColor' => 0x66b3ff,//captcha background color
+            'maxLength' => 4,//captcha max count of characters
+            'minLength' => 4,//captcha min count of characters
+            'padding' => 6,
+            'height' => 34,
+            'width' => 100,
+            'foreColor' => 0xffffff,//captcha character color
+            'offset' => 13,//offset between characters
         ];
         if( YII_ENV_TEST ) $captcha = array_merge($captcha, ['fixedVerifyCode'=>'testme']);
         return [
@@ -72,22 +84,39 @@ class SiteController extends \yii\web\Controller
     }
 
     /**
-     * 后台首页
+     * backend index page(backend default action)
      *
      * @return string
+     * @throws \yii\base\InvalidConfigException
+     * @throws \Throwable
      */
     public function actionIndex()
     {
-        return $this->renderPartial('index');
+        $service = new MenuService();
+       $menus = $service->getAuthorizedBackendMenusByUserId(Yii::$app->getUser()->getId());
+        return $this->renderPartial('index', [
+            "menus" => $menus,
+            'identity' => Yii::$app->getUser()->getIdentity(),
+        ]);
     }
 
     /**
-     * 主页
+     * backend main info page(default right iframe page)
      *
      * @return string
+     * @throws \yii\base\InvalidConfigException
      */
     public function actionMain()
     {
+        /** @var ArticleServiceInterface $articleService */
+        $articleService = Yii::$app->get(ArticleServiceInterface::ServiceName);
+        /** @var CommentServiceInterface $commentService */
+        $commentService = Yii::$app->get(CommentServiceInterface::ServiceName);
+        /** @var UserServiceInterface $userService */
+        $userService = Yii::$app->get(UserServiceInterface::ServiceName);
+        /** @var FriendlyLinkServiceInterface $friendlyLinkService */
+        $friendlyLinkService = Yii::$app->get(FriendlyLinkServiceInterface::ServiceName);
+
         switch (Yii::$app->getDb()->driverName) {
             case "mysql":
                 $dbInfo = 'MySQL ' . (new Query())->select('version()')->one()['version()'];
@@ -122,51 +151,33 @@ class SiteController extends \yii\web\Controller
             ],
         ];
         $temp = [
-            'ARTICLE' => ArticleModel::find()->where(['type' => ArticleModel::ARTICLE])->count('id'),
-            'COMMENT' => Comment::find()->count('id'),
-            'USER' => User::find()->count('id'),
-            'FRIEND_LINK' => FriendlyLink::find()->count('id'),
+            'ARTICLE' => $articleService->getArticlesCountByPeriod(),
+            'COMMENT' => $commentService->getCommentCountByPeriod(),
+            'USER' => $userService->getUserCountByPeriod(),
+            'FRIENDLY_LINK' => $friendlyLinkService->getFriendlyLinkCountByPeriod(),
         ];
         $percent = '0.00';
         $statics = [
             'ARTICLE' => [
                 $temp['ARTICLE'],
-                $temp['ARTICLE'] ? number_format(ArticleModel::find()->where([
-                        'between',
-                        'created_at',
-                        strtotime(date('Y-m-01')),
-                        strtotime(date('Y-m-01 23:59:59') . " +1 month -1 day")
-                    ])->count('id') / $temp['ARTICLE'] * 100, 2) : $percent
+                $temp['ARTICLE'] ? sprintf("%01.2f",($articleService->getArticlesCountByPeriod(strtotime(date('Y-m-01 00:00:00')), strtotime(date('Y-m-01 23:59:59') . " +1 month -1 day")) / $temp['USER']) * 100) : $percent
             ],
             'COMMENT' => [
                 $temp['COMMENT'],
-                $temp['COMMENT'] ? number_format(Comment::find()->where([
-                        'between',
-                        'created_at',
-                        strtotime(date('Y-m-d 00:00:00')),
-                        time()
-                    ])->count('id') / $temp['COMMENT'] * 100, 2) : $percent
+                $temp['COMMENT'] ? sprintf("%01.2f",($commentService->getCommentCountByPeriod(strtotime(date('Y-m-01 00:00:00')), strtotime(date('Y-m-01 23:59:59'))) / $temp['USER']) * 100) : $percent
             ],
             'USER' => [
                 $temp['USER'],
-                $temp['USER'] ? number_format(User::find()->where([
-                        'between',
-                        'created_at',
-                        strtotime(date('Y-m-01')),
-                        strtotime(date('Y-m-01 23:59:59') . " +1 month -1 day")
-                    ])->count('id') / 1 * 100, 2) : $percent
+                $temp['USER'] ? sprintf("%01.2f",($userService->getUserCountByPeriod(strtotime(date('Y-m-01 00:00:00')), strtotime(date('Y-m-01 23:59:59') . " +1 month -1 day")) / $temp['USER']) * 100) : $percent
             ],
-            'FRIEND_LINK' => [
-                $temp['FRIEND_LINK'],
-                $temp['FRIEND_LINK'] ? number_format(FriendlyLink::find()->where([
-                        'between',
-                        'created_at',
-                        strtotime(date('Y-m-01')),
-                        strtotime(date('Y-m-01 23:59:59') . " +1 month -1 day")
-                    ])->count('id') / $temp['FRIEND_LINK'] * 100, 2) : $percent
+            'FRIENDLY_LINK' => [
+                $temp['FRIENDLY_LINK'],
+                $temp['FRIENDLY_LINK'] ? sprintf("%01.2f",($friendlyLinkService->getFriendlyLinkCountByPeriod(strtotime(date('Y-m-01 00:00:00')), strtotime(date('Y-m-01 23:59:59') . " +1 month -1 day")) / $temp['USER']) * 100) : $percent
             ],
         ];
-        $comments = BackendComment::getRecentComments(6);
+        /** @var CommentServiceInterface $commentService */
+        $commentService = Yii::$app->get(CommentServiceInterface::ServiceName);
+        $comments = $commentService->getRecentComments(6);
         return $this->render('main', [
             'info' => $info,
             'status' => $status,
@@ -176,7 +187,7 @@ class SiteController extends \yii\web\Controller
     }
 
     /**
-     * 管理员登录
+     * admin login
      *
      * @return string|\yii\web\Response
      */
@@ -197,7 +208,7 @@ class SiteController extends \yii\web\Controller
     }
 
     /**
-     * 管理员退出登录
+     * admin logout
      *
      * @return \yii\web\Response
      */
@@ -209,21 +220,21 @@ class SiteController extends \yii\web\Controller
     }
 
     /**
-     * 切换语言
      *
+     * language change
      */
     public function actionLanguage()
     {
         $language = Yii::$app->getRequest()->get('lang');
         if (isset($language)) {
             $session = Yii::$app->getSession();
-            $session->set("language", $language);
+            $session->set("language", Html::encode($language));
         }
         $this->goBack(Yii::$app->getRequest()->headers['referer']);
     }
 
     /**
-     * http异常捕捉后处理
+     * backend unify exception handler
      *
      * @return string
      */
@@ -242,7 +253,7 @@ class SiteController extends \yii\web\Controller
         if ($exception instanceof Exception) {
             $name = $exception->getName();
         } else {
-            $name = $this->defaultName ?: Yii::t('yii', 'Error');
+            $name = Yii::t('yii', 'Error');
         }
         if ($code) {
             $name .= " (#$code)";
@@ -251,7 +262,7 @@ class SiteController extends \yii\web\Controller
         if ($exception instanceof UserException) {
             $message = $exception->getMessage();
         } else {
-            $message = $this->defaultMessage ?: Yii::t('yii', 'An internal server error occurred.');
+            $message = Yii::t('yii', 'An internal server error occurred.');
         }
         $statusCode = $exception->statusCode ? $exception->statusCode : 500;
         if (Yii::$app->getRequest()->getIsAjax()) {

@@ -8,9 +8,9 @@
 
 namespace feehi\components;
 
+use Yii;
 use common\models\Category;
 use feehi\cdn\DummyTarget;
-use Yii;
 use common\helpers\FileDependencyHelper;
 use backend\components\CustomLog;
 use yii\base\Component;
@@ -46,14 +46,14 @@ class Feehi extends Component
                 'type' => Options::TYPE_CUSTOM,
                 'autoload' => Options::CUSTOM_AUTOLOAD_YES,
             ])->asArray()->indexBy("name")->all();
+            /** @var FileDependencyHelper $cacheDependencyObject */
             $cacheDependencyObject = Yii::createObject([
                 'class' => FileDependencyHelper::className(),
-                'rootDir' => '@backend/runtime/cache/file_dependency/',
-                'fileName' => 'options.txt',
+                'fileName' => Options::CACHE_DEPENDENCY_TYPE_SYSTEM_FILE_NAME,
             ]);
-            $fileName = $cacheDependencyObject->createFile();
+            $fileName = $cacheDependencyObject->createFileIfNotExists();
             $dependency = new FileDependency(['fileName' => $fileName]);
-            $cache->set($key, $data, 0, $dependency);
+            $cache->set($key, $data, 30*60, $dependency);
         }
 
         foreach ($data as $v) {
@@ -122,8 +122,9 @@ class Feehi extends Component
         }
         if(isset(Yii::$app->session['view'])) Yii::$app->viewPath = Yii::getAlias('@frontend/view') . Yii::$app->session['view'];
 
+        $category = new Category();
         Yii::configure(Yii::$app->getUrlManager(), [
-            'rules' => array_merge(Yii::$app->getUrlManager()->rules, Category::getUrlRules())
+            'rules' => array_merge(Yii::$app->getUrlManager()->rules, $category->getUrlRules())
         ]);
         Yii::$app->getUrlManager()->init();
 

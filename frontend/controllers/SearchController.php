@@ -8,9 +8,11 @@
 
 namespace frontend\controllers;
 
-use common\models\meta\ArticleMetaTag;
 use Yii;
-use frontend\models\Article;
+use frontend\controllers\helpers\Helper;
+use common\models\meta\ArticleMetaTag;
+use common\models\Article;
+use yii\helpers\Html;
 use yii\web\Controller;
 use yii\data\ActiveDataProvider;
 
@@ -21,12 +23,13 @@ class SearchController extends Controller
      * 搜索
      *
      * @return string
+     * @throws \yii\base\InvalidConfigException
      */
     public function actionIndex()
     {
         $where = ['type' => Article::ARTICLE];
         $query = Article::find()->select([])->where($where);
-        $keyword = htmlspecialchars(Yii::$app->getRequest()->get('q'));
+        $keyword = Yii::$app->getRequest()->get('q');
         $query->andFilterWhere(['like', 'title', $keyword]);
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -37,10 +40,11 @@ class SearchController extends Controller
                 ]
             ]
         ]);
-        return $this->render('/article/index', [
+        $data = array_merge([
             'dataProvider' => $dataProvider,
-            'type' => Yii::t('frontend', 'Search keyword {keyword} results', ['keyword'=>$keyword]),
-        ]);
+            'type' => Yii::t('frontend', 'Search keyword {keyword} results', ['keyword'=>Html::encode($keyword)]),
+        ], Helper::getCommonInfos());
+        return $this->render('/article/index', $data);
     }
 
     public function actionTag($tag='')
@@ -58,9 +62,11 @@ class SearchController extends Controller
                 ]
             ]
         ]);
-        return $this->render('/article/index', [
+        $data = array_merge([
             'dataProvider' => $dataProvider,
             'type' => Yii::t('frontend', 'Tag {tag} related articles', ['tag'=>$tag]),
-        ]);
+
+        ], Helper::getCommonInfos());
+        return $this->render('/article/index', $data);
     }
 }
